@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navbar_menu_item1"
+        android:id="@+id/navbar_menu_chats"
         android:icon="@drawable/sharp_chat_24"
-        android:title="ITEM1"
+        android:title="Wiadomości"
         />
     <item
-        android:id="@+id/navbar_menu_item2"
+        android:id="@+id/navbar_menu_channels"
         android:icon="@drawable/sharp_adaptive_audio_mic_24"
-        android:title="ITEM2"
+        android:title="Kanały"
         />
     <item
-        android:id="@+id/navbar_menu_item3"
+        android:id="@+id/navbar_menu_users"
         android:icon="@drawable/sharp_account_circle_24"
-        android:title="ITEM3"
+        android:title="Użytkownicy"
         />
     <item
-        android:id="@+id/navbar_menu_item4"
+        android:id="@+id/navbar_menu_settings"
         android:icon="@drawable/sharp_manufacturing_24"
-        android:title="ITEM4"
+        android:title="Ustawienia"
         />
 </menu>
