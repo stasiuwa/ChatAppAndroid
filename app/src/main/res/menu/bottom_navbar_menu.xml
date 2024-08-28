@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navbar_menu_item1"
+        android:icon="@drawable/sharp_chat_24"
+        android:title="ITEM1"
+        />
+    <item
+        android:id="@+id/navbar_menu_item2"
+        android:icon="@drawable/sharp_adaptive_audio_mic_24"
+        android:title="ITEM2"
+        />
+    <item
+        android:id="@+id/navbar_menu_item3"
+        android:icon="@drawable/sharp_account_circle_24"
+        android:title="ITEM3"
+        />
+    <item
+        android:id="@+id/navbar_menu_item4"
+        android:icon="@drawable/sharp_manufacturing_24"
+        android:title="ITEM4"
+        />
+</menu>

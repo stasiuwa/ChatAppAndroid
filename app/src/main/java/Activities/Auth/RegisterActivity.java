@@ -1,4 +1,4 @@
-package com.szampchat.Auth;
+package Activities.Auth;
 
 import android.os.Bundle;
 
