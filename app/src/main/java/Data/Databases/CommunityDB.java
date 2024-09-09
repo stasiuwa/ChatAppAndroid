@@ -52,16 +52,21 @@ public abstract class CommunityDB extends RoomDatabase {
             super.onCreate(db);
             databaseWriteExecutor.execute(() -> {
                 CommunityDAO dao = INSTANCE.communityDAO();
-//                testowe spolecznosci do wyswietlenia, trzeba bedzie tutaj pobrac z serwera liste spolecznosci i wczytac
+                dao.addCommunity(new CommunityModel("Dołącz"));
+//                testowe spolecznosci do wyswietlenia
                 dao.addCommunity(new CommunityModel("Spolecznosc 1"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 2"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 3"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 4"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 5"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 6"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 7"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 8"));
             });
+        }
+
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+//            TODO zweryfikować spolecznosci zapisane w bazie z tmyi pobranymi z serwera
+//            tj. jak admin usunie z serwera to usumnąc z Room'ów u uzytkownikow
         }
     };
 }

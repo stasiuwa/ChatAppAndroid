@@ -3,6 +3,7 @@ package Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
             super(itemView);
 
             mTextView = itemView.findViewById(R.id.itemGridCommunityName);
-
+            itemView.setTag(this);
             itemView.setOnClickListener(this);
         }
         public void setCommunityName(String communityName){
@@ -80,6 +81,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
+//                Log.d("TESTOWANIE FUNKCJONALNOSCI", "test pozycji adaptera: " + String.valueOf(position));
                 CommunityModel community = mCommunitiesList.get(position);
                 mOnItemClickListener.onItemClickListener(community);
             }

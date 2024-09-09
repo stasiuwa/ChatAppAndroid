@@ -1,30 +1,34 @@
 package Activities.MainMenu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
-import java.util.List;
+import java.util.Collections;
 
 import Activities.Community.CommunityActivity;
+import Activities.Settings.SettingsActivity;
 import Adapters.CommunityAdapter;
 import Data.Models.CommunityModel;
 import Data.ViewModels.CommunityViewModel;
 
 public class MainActivity extends AppCompatActivity implements CommunityAdapter.OnItemClickListener{
-    List<CommunityModel> mCommunitiesList;
     CommunityViewModel mCommunityViewModel;
     CommunityAdapter adapter;
 
@@ -39,6 +43,20 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("SPOŁECZNOŚCI");
+
+        Button settingsButton = findViewById(R.id.mainSettingsButton);
+        settingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
+
+        Button createCommunityButton = findViewById(R.id.createCommunityButton);
+        createCommunityButton.setOnClickListener( v -> {
+            callCreateCommunityDialog();
+        });
 
         RecyclerView recyclerView = findViewById(R.id.communitiesGrid);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -46,14 +64,59 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         adapter = new CommunityAdapter(this);
         recyclerView.setAdapter(adapter);
 
+
         mCommunityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-        mCommunityViewModel.getAllCommunities().observe(this, communityModels -> adapter.setCommunitiesList(communityModels));
+        mCommunityViewModel.getAllCommunities().observe(this, communityModels -> {
+//            odwrócenie kolejności, aby ostatnio dodane były pierwsze od góry
+            Collections.reverse(communityModels);
+            adapter.setCommunitiesList(communityModels);
+        });
     }
 
+    private void callAddCommunityDialog() {
+        final Dialog addCommunityDialog = new Dialog(this);
+        addCommunityDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        addCommunityDialog.setContentView(R.layout.join_community_dialog);
+        TextView tittle = addCommunityDialog.findViewById(R.id.dialogTittle);
+        EditText joinCode = addCommunityDialog.findViewById(R.id.communityDialogInput);
+        Button joinButton = addCommunityDialog.findViewById(R.id.communityDialogButton);
+//        TODO zmienic na pobranie spolecznosci z serwera i dołączenie do niej
+        joinButton.setOnClickListener(v -> {
+            mCommunityViewModel.addCommunity(new CommunityModel(joinCode.getText().toString()));
+            addCommunityDialog.dismiss();
+        });
+        tittle.setText("DOŁĄCZ DO SPOŁECZNOŚCI");
+        joinCode.setHint("podaj kod dołączenia");
+        joinButton.setText("DOŁĄCZ");
+        addCommunityDialog.show();
+    }
+    private void callCreateCommunityDialog() {
+        final Dialog createCommunityDialog = new Dialog(this);
+        createCommunityDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        createCommunityDialog.setContentView(R.layout.join_community_dialog);
+        TextView tittle = createCommunityDialog.findViewById(R.id.dialogTittle);
+        EditText communityName = createCommunityDialog.findViewById(R.id.communityDialogInput);
+        Button createButton = createCommunityDialog.findViewById(R.id.communityDialogButton);
+//        TODO wysłać requesta na stworzenie społecznosci na serwer
+//        TODO dodac wgranie zdjecia na ikonke spolecznosci
+        createButton.setOnClickListener(v -> {
+            mCommunityViewModel.addCommunity(new CommunityModel(communityName.getText().toString()));
+            createCommunityDialog.dismiss();
+        });
+        tittle.setText("STWÓRZ SPOŁECZNOŚĆ");
+        communityName.setHint("podaj nazwę społeczności");
+        createButton.setText("STWÓRZ");
+        createCommunityDialog.show();
+    }
 
     @Override
     public void onItemClickListener(CommunityModel community) {
-        Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
-        startActivity(intent);
+        if (community.getCommunityID() == 1) {
+            callAddCommunityDialog();
+        }
+        else {
+            Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/dialogTittle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TYTUŁ"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            />
+        <EditText
+            android:layout_marginTop="20dp"
+            android:id="@+id/communityDialogInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="wartość od użytkownika"
+            android:textSize="15sp"
+            />
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/communityDialogButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DALEJ"
+            />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
