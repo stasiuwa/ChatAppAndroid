@@ -1,4 +1,4 @@
-package Activities.MainMenu;
+package Activities;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,8 +22,6 @@ import com.szampchat.R;
 
 import java.util.Collections;
 
-import Activities.Community.CommunityActivity;
-import Activities.Settings.SettingsActivity;
 import Adapters.CommunityAdapter;
 import Data.Models.CommunityModel;
 import Data.ViewModels.CommunityViewModel;

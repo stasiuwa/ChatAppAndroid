@@ -13,25 +13,19 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
-            android:name="Activities.Community.VoiceChannel.VoiceChannelsActivity"
+            android:name="Activities.SettingsActivity"
+            android:exported="false"/>
+        <activity
+            android:name="Activities.MainActivity"
             android:exported="false" />
         <activity
-            android:name="Activities.Community.TextChannel.TextChannelsActivity"
+            android:name="Activities.CommunityActivity"
             android:exported="false" />
         <activity
-            android:name="Activities.Settings.SettingsActivity"
+            android:name="Activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name="Activities.MainMenu.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name="Activities.Community.CommunityActivity"
-            android:exported="false" />
-        <activity
-            android:name="Activities.Auth.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name="Activities.Auth.LoginActivity"
+            android:name="Activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

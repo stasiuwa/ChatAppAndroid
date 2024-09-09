@@ -1,4 +1,4 @@
-package Activities.Community;
+package Activities;
 
 import android.os.Bundle;
 

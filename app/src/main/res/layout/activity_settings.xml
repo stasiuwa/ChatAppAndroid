@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Activities.Settings.SettingsActivity">
+    tools:context="Activities.SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,79 +14,14 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="20dp"
         >
-
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/settingsFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:layout_marginTop="20dp"
-        >
-        <LinearLayout
-            android:id="@+id/settingsUserProfile"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="30dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-            <Button
-                android:clickable="false"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/baseline_manage_accounts_24"
-                />
-            <TextView
-                android:clickable="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PROFIL UŻYTKOWNIKA"
-                android:textSize="18sp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/settingsOption2"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="30dp"
-            app:layout_constraintTop_toBottomOf="@id/settingsUserProfile"
-            app:layout_constraintStart_toStartOf="parent">
-            <Button
-                android:clickable="false"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/sharp_adaptive_audio_mic_24"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PROFIL UŻYTKOWNIKA2"
-                android:textSize="18sp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/settingsOption3"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="30dp"
-            app:layout_constraintTop_toBottomOf="@id/settingsOption2"
-            app:layout_constraintStart_toStartOf="parent">
-            <Button
-                android:clickable="false"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/sharp_chat_24"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PROFIL UŻYTKOWNIKA3"
-                android:textSize="18sp"
-                />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:name="Fragments.Settings.SettingsFragment">
+
+    </androidx.fragment.app.FragmentContainerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
