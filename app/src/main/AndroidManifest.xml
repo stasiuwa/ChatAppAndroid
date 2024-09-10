@@ -22,10 +22,7 @@
             android:name="Activities.CommunityActivity"
             android:exported="false" />
         <activity
-            android:name="Activities.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name="Activities.LoginActivity"
+            android:name="Activities.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

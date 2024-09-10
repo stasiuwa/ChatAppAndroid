@@ -18,8 +18,6 @@ import Fragments.Settings.ProfileFragment;
 import Fragments.Settings.TechFragment;
 
 public class SettingsActivity extends AppCompatActivity {
-    ProfileFragment profileFragment;
-    TechFragment techFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +31,14 @@ public class SettingsActivity extends AppCompatActivity {
         });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("USTAWIENIA");
+        getSupportActionBar().setTitle("Ustawienia");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

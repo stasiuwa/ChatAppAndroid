@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("SPOŁECZNOŚCI");
+        getSupportActionBar().setTitle("Społeczności");
 
         Button settingsButton = findViewById(R.id.mainSettingsButton);
         settingsButton.setOnClickListener(v -> {

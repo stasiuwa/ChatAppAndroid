@@ -1,0 +1,68 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="Fragments.Auth.LoginFragment">
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:id="@+id/logoImg"
+            android:gravity="center"
+            android:textSize="70sp"
+            android:text="🤔"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/loginTextField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:hint="nazwa uzytkownika"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImg" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/passwordTextField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:hint="haslo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginTextField" />
+
+    <CheckBox
+        android:id="@+id/keepLoggedInCheckBox"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:text="Nie wylogowywuj mnie"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordTextField" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/loginButton"
+            app:layout_constraintTop_toBottomOf="@id/keepLoggedInCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Zaloguj"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:id="@+id/registerButton"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:text="załóż konto!"
+            app:layout_constraintTop_toBottomOf="@id/loginButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+</androidx.constraintlayout.widget.ConstraintLayout>

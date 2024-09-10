@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import com.szampchat.R;
 
+import java.util.Set;
+
 import Activities.SettingsActivity;
 
 public class SettingsFragment extends Fragment {
@@ -30,13 +32,17 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        ((SettingsActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((SettingsActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         LinearLayout profileSettings = view.findViewById(R.id.settingsUserProfile);
         profileSettings.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.settingsFragmentContainer, new ProfileFragment())
                     .addToBackStack(null)
                     .commit();
-            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle("PROFIL");
+//            TODO coś zrobic z szybkoscia zmieniania tytułu toolbara
+            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle("Profil użytkownika");
         });
         LinearLayout appSettings = view.findViewById(R.id.settingsApplication);
         appSettings.setOnClickListener(v -> {
@@ -44,7 +50,7 @@ public class SettingsFragment extends Fragment {
                     .replace(R.id.settingsFragmentContainer, new TechFragment())
                     .addToBackStack(null)
                     .commit();
-            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle("USTAWIENIA APKI");
+            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle("Coś do pozmieniania");
         });
         return view;
     }
@@ -52,6 +58,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((SettingsActivity) getActivity()).getSupportActionBar().setTitle("USTAWIENIA");
+        ((SettingsActivity) getActivity()).getSupportActionBar().setTitle("Ustawienia");
     }
 }

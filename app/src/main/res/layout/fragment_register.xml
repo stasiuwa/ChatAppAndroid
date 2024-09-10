@@ -1,0 +1,75 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="Fragments.Auth.RegisterFragment">
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:id="@+id/logoImg"
+        android:gravity="center"
+        android:textSize="70sp"
+        android:text="🤔"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/usernameTextField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:hint="nazwa uzytkownika"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImg" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/emailTextField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:hint="adres email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameTextField" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/passwordTextField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:hint="haslo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailTextField" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/passwordCheckTextField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:hint="powtorz haslo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordTextField" />
+
+    <CheckBox
+        android:id="@+id/termsCheckbox"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        android:text="Oddaję duszę szatanowi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordCheckTextField" />
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/createAccountButton"
+        app:layout_constraintTop_toBottomOf="@id/termsCheckbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Zaloz konto"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
