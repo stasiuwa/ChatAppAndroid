@@ -12,9 +12,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import Data.DAO.CommunityDAO;
+import Data.Models.ChannelModel;
+import Data.Models.ChatModel;
 import Data.Models.CommunityModel;
 
-@androidx.room.Database(entities = {CommunityModel.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {CommunityModel.class, ChannelModel.class, ChatModel.class}, version = 1, exportSchema = false)
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();
 
@@ -26,9 +28,9 @@ public abstract class CommunityDB extends RoomDatabase {
     public static CommunityDB getDataBase(final Context context){
         if (INSTANCE == null){
             synchronized (CommunityDB.class) {
-                INSTANCE = Room.databaseBuilder(context.getApplicationContext(), CommunityDB.class, "communities")
+                INSTANCE = Room.databaseBuilder(context.getApplicationContext(), CommunityDB.class, "ChatAppDB")
 //                        migracja bazy danych
-                        .addCallback(sRoomDatabaseCallback)
+                        .addCallback(roomDatabaseCallback)
                         .fallbackToDestructiveMigration()
                         .build();
             }
@@ -45,7 +47,7 @@ public abstract class CommunityDB extends RoomDatabase {
     /**
      * obiekt obsługujący callback'i zwiazane ze zdarzeniami bazy danych np onCreate, onOpen
      */
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback() {
 //        pierwsze uruchomienie gdy baza nie istnieje = stworzenie bazy danych
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {

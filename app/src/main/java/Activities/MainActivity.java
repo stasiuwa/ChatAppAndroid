@@ -3,6 +3,8 @@ package Activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,8 +27,10 @@ import java.util.Collections;
 import Adapters.CommunityAdapter;
 import Data.Models.CommunityModel;
 import Data.ViewModels.CommunityViewModel;
+import Fragments.MainFragment;
+import Fragments.Settings.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity implements CommunityAdapter.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements CommunityAdapter.OnItemClickListener, MainFragment.MainFragmentListener {
     CommunityViewModel mCommunityViewModel;
     CommunityAdapter adapter;
 
@@ -45,23 +49,21 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Społeczności");
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            String value = "Witaj " + extras.getString("username");
+            getSupportActionBar().setTitle(value);
+        }
+
         Button settingsButton = findViewById(R.id.mainSettingsButton);
         settingsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new SettingsFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
-
-        Button createCommunityButton = findViewById(R.id.createCommunityButton);
-        createCommunityButton.setOnClickListener( v -> {
-            callCreateCommunityDialog();
-        });
-
-        RecyclerView recyclerView = findViewById(R.id.communitiesGrid);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         adapter = new CommunityAdapter(this);
-        recyclerView.setAdapter(adapter);
-
 
         mCommunityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
         mCommunityViewModel.getAllCommunities().observe(this, communityModels -> {
@@ -69,11 +71,18 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
             Collections.reverse(communityModels);
             adapter.setCommunitiesList(communityModels);
         });
+
+        MainFragment mainFragment = new MainFragment(adapter);
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, mainFragment)
+                .addToBackStack(null)
+                .commit();
+
     }
 
-    private void callAddCommunityDialog() {
+    @Override
+    public void callAddCommunityDialog() {
         final Dialog addCommunityDialog = new Dialog(this);
-        addCommunityDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         addCommunityDialog.setContentView(R.layout.join_community_dialog);
         TextView tittle = addCommunityDialog.findViewById(R.id.dialogTittle);
         EditText joinCode = addCommunityDialog.findViewById(R.id.communityDialogInput);
@@ -88,9 +97,10 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         joinButton.setText("DOŁĄCZ");
         addCommunityDialog.show();
     }
-    private void callCreateCommunityDialog() {
+
+    @Override
+    public void callCreateCommunityDialog() {
         final Dialog createCommunityDialog = new Dialog(this);
-        createCommunityDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         createCommunityDialog.setContentView(R.layout.join_community_dialog);
         TextView tittle = createCommunityDialog.findViewById(R.id.dialogTittle);
         EditText communityName = createCommunityDialog.findViewById(R.id.communityDialogInput);

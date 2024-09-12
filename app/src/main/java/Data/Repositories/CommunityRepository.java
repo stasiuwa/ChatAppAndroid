@@ -11,25 +11,25 @@ import Data.Databases.CommunityDB;
 import Data.Models.CommunityModel;
 
 public class CommunityRepository {
-    private CommunityDAO mCommunityDAO;
-    private LiveData<List<CommunityModel>> mAllCommunities;
+    private CommunityDAO communityDAO;
+    private LiveData<List<CommunityModel>> allCommunities;
 
     public CommunityRepository(Application application){
         CommunityDB mCommunityDB = CommunityDB.getDataBase(application);
-        mCommunityDAO = mCommunityDB.communityDAO();
-        mAllCommunities = mCommunityDAO.getAllCommunities();
+        communityDAO = mCommunityDB.communityDAO();
+        allCommunities = communityDAO.getAllCommunities();
     }
     public void addCommunity(CommunityModel community){
         CommunityDB.databaseWriteExecutor.execute(() -> {
-            mCommunityDAO.addCommunity(community);
+            communityDAO.addCommunity(community);
         });
     }
     public LiveData<List<CommunityModel>> getAllCommunities() {
-        return mAllCommunities;
+        return allCommunities;
     }
     public void deleteCommunity(CommunityModel community) {
         CommunityDB.databaseWriteExecutor.execute(() -> {
-            mCommunityDAO.deleteCommunity(community);
+            communityDAO.deleteCommunity(community);
         });
     }
 }

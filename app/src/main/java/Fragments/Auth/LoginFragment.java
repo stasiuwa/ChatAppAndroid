@@ -1,21 +1,43 @@
 package Fragments.Auth;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
 
 import com.szampchat.R;
 
-import Activities.MainActivity;
+import Data.ViewModels.UserViewModel;
 
 public class LoginFragment extends Fragment {
+
+    UserViewModel userViewModel;
+    LoginListener loginListener;
+
+    public interface LoginListener {
+        void verifyLogin(String username, String password);
+        void switchToRegister();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            loginListener = (LoginListener) context;
+        }catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement LoginListener interface");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,23 +45,23 @@ public class LoginFragment extends Fragment {
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.slide_left));
         setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
-    }
 
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        EditText login = view.findViewById(R.id.loginTextField);
+        EditText password = view.findViewById(R.id.passwordTextField);
+
         Button registerButton = (Button) view.findViewById(R.id.registerButton);
         registerButton.setOnClickListener( v -> {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.authFragmentContainer, new RegisterFragment())
-                    .addToBackStack(null)
-                    .setReorderingAllowed(true)
-                    .commit();
+            loginListener.switchToRegister();
         });
         Button loginButton = (Button) view.findViewById(R.id.loginButton);
         loginButton.setOnClickListener( v -> {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
+            loginListener.verifyLogin(login.getText().toString(), password.getText().toString());
         });
         return view;
     }

@@ -1,13 +1,9 @@
 package Adapters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,18 +17,18 @@ import Data.Models.CommunityModel;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
     Activity activity;
-    List<CommunityModel> mCommunitiesList;
-    private LayoutInflater mLayoutInflater;
-    private OnItemClickListener mOnItemClickListener;
+    List<CommunityModel> communitiesList;
+    private LayoutInflater layoutInflater;
+    private OnItemClickListener onItemClickListener;
 
-    public CommunityAdapter(Activity context) {
-        this.mLayoutInflater = LayoutInflater.from(context);
-        this.activity = context;
-        mCommunitiesList = null;
+    public CommunityAdapter(Activity activity) {
+        this.layoutInflater = LayoutInflater.from(activity);
+        this.activity = activity;
+        communitiesList = null;
         try {
-            mOnItemClickListener = (OnItemClickListener) context;
+            onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
-            e.printStackTrace();
+            throw new ClassCastException(e.getMessage() + " must implements CommunityAdapter.OnItemClickListener interface");
         }
     }
 
@@ -43,38 +39,38 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     @NonNull
     @Override
     public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.item_grid_community, parent, false);
+        View view = layoutInflater.inflate(R.layout.item_grid_community, parent, false);
         return new CommunityViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
-        CommunityModel community = mCommunitiesList.get(position);
+        CommunityModel community = communitiesList.get(position);
         holder.setCommunityName(community.getCommunityName());
     }
 
     @Override
     public int getItemCount() {
-        return (mCommunitiesList != null) ? mCommunitiesList.size() : 0;
+        return (communitiesList != null) ? communitiesList.size() : 0;
     }
     public void setCommunitiesList(List<CommunityModel> communitiesList) {
-        this.mCommunitiesList = communitiesList;
+        this.communitiesList = communitiesList;
         notifyDataSetChanged();
     }
 
     public class CommunityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView mTextView;
+        TextView textView;
 
         public CommunityViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            mTextView = itemView.findViewById(R.id.itemGridCommunityName);
+            textView = itemView.findViewById(R.id.itemGridCommunityName);
             itemView.setTag(this);
             itemView.setOnClickListener(this);
         }
         public void setCommunityName(String communityName){
-            mTextView.setText(communityName);
+            textView.setText(communityName);
         }
 
         @Override
@@ -82,8 +78,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
 //                Log.d("TESTOWANIE FUNKCJONALNOSCI", "test pozycji adaptera: " + String.valueOf(position));
-                CommunityModel community = mCommunitiesList.get(position);
-                mOnItemClickListener.onItemClickListener(community);
+                CommunityModel community = communitiesList.get(position);
+                onItemClickListener.onItemClickListener(community);
             }
         }
     }

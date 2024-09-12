@@ -13,10 +13,17 @@ public class UserModel {
     @NonNull
     @ColumnInfo(name = "Username")
     String username;
-//    TODO dodac awatar uzytkownika
+    @NonNull
+    @ColumnInfo(name = "Password")
+    String password;
+    @NonNull
+    @ColumnInfo(name = "Email")
+    String email;
 
-    public UserModel(@NonNull String username) {
+    public UserModel(@NonNull String username, @NonNull String password, @NonNull String email) {
         this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public long getUserID() {
@@ -34,5 +41,23 @@ public class UserModel {
 
     public void setUsername(@NonNull String username) {
         this.username = username;
+    }
+
+    @NonNull
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NonNull String password) {
+        this.password = password;
+    }
+
+    @NonNull
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@NonNull String email) {
+        this.email = email;
     }
 }
