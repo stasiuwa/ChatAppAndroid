@@ -39,6 +39,20 @@ public abstract class ChatDB extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+            databaseWriteExecutor.execute(() -> {
+                ChatDAO dao = INSTANCE.chatDAO();
+                dao.addChat(new ChatModel("czat tekst1 com3", 3));
+                dao.addChat(new ChatModel("czat tekst2 com3", 3));
+                dao.addChat(new ChatModel("czat tekst1 com2", 2));
+                dao.addChat(new ChatModel("czat tekst2 com2", 2));
+                dao.addChat(new ChatModel("czat tekst3 com3", 3));
+                dao.addChat(new ChatModel("czat tekst1 com4", 4));
+                dao.addChat(new ChatModel("czat tekst2 com4", 4));
+                dao.addChat(new ChatModel("czat tekst3 com4", 4));
+                dao.addChat(new ChatModel("czat tekst4 com4", 4));
+                dao.addChat(new ChatModel("czat tekst1 com5", 5));
+                dao.addChat(new ChatModel("czat tekst1 com6", 6));
+            });
         }
     };
 }

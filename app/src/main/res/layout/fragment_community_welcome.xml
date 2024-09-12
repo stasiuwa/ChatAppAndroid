@@ -1,0 +1,31 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="Fragments.Community.CommunityWelcomeFragment"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="WELCOME PAGE"
+        android:layout_marginTop="50dp"
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/test"
+        >
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dawno dawno tymu, za siedmioma chujami, za siedmioma zekami, w okolicach Gubałówki mieszkał Tomisław Apoloniusz Curuś Bachleda Farrell, jak ten piecyk z dmuchawą. Pewnego dnia Tomisław wysedł na halę i pomyśloł: Krucafuks dość! Ile mozna wpierdalać łoscypek! Ani to dobre, ani śwarne a jakie drogie jebane! No i sracka murowana, toć to gołymi łapami ługniotane. Zeby to jeszcze z krowiego mleka było; a weź tu łodróznij barana od łowiecki. Stąd ten słonawy posmak. Tfu, łohydne. Co te turysty w tym widzą. Podczas, gdy Bachleda zajadał się łoscypkiem, smród baraniego nabiału niósł się po łokolicy. Nawet pod wiater jebało napletkiem hej! Bekasy nie wytsymały. Fetor przepłoszył je z terenów lęgowych. Ryby, w Morskim Łoku zdechły, a w Carnym Stawie, zdechły. Niedźwiedź Gąsienica łobudził się ze snu zimowego i łod razu poszedł pod prysznic. Lecz to nie tylko łod niego tak popierdalało. Niby po kąpieli smród bełta i gówna ustąpił, ale przez to woń łoctówy stała się jeszcze bardziej nieznośna. Lecz specyficzny zapach łobudził nie tyko misia, łobudził też ządze, łobrzydliwe homoseksualne żądze. Śniezny Kockodan, przez niektórych nazywany też Yeti, dostaje smergla, gdy pocuje woń fiuta hej. Tak się składo, że łoscypek pachnie tożsamo, koniec.Bestia normalnie żywi się owocami, ale łocet budzi w niej zboczenie. Tamtej nocy zeszła z wierchu na hale wiedziona zapachem rozporka. Nieświadomy nicego Bachleda Farrell zajadoł właśnie syr. Pierwsze razy posły w dupe hej! Little Boy małpy rozdupcył Hirosimę Bachledy. Potem Kockodan założył strapona Big Ben i dzwonił jajami o brodę Curusia. Koszmar małpy trwał kilka dni. Bachleda nie chciał puścić. Donosił tylko sprzęty, od których małpie robiły się wielkie łoczy. Yeti nie wytsymał, gdy Bachleda przyniósł słoik. A gdy słój pękł, a Bachleda zabronił wzywać karetkę, tylko kazał nagrywać dalej, małpa zwariowała. I grasuje po łokolicy po dziś dzień. A film ze słoikiem dostępny jest w sieci."
+            />
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

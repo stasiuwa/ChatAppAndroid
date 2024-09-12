@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 
 import Data.DAO.ChannelDAO;
 import Data.Models.ChannelModel;
+import Data.Models.ChatModel;
 
 @androidx.room.Database(entities = {ChannelModel.class}, version = 1, exportSchema = false)
 public abstract class ChannelDB extends RoomDatabase {
@@ -39,6 +40,20 @@ public abstract class ChannelDB extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+            databaseWriteExecutor.execute(() -> {
+                ChannelDAO dao = INSTANCE.channelDAO();
+                dao.addChannel(new ChannelModel("czat głosowy1 com3", 3));
+                dao.addChannel(new ChannelModel("czat głosowy2 com3", 3));
+                dao.addChannel(new ChannelModel("czat głosowy1 com2", 2));
+                dao.addChannel(new ChannelModel("czat głosowy2 com2", 2));
+                dao.addChannel(new ChannelModel("czat głosowy3 com3", 3));
+                dao.addChannel(new ChannelModel("czat głosowy1 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy2 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy3 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy4 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy1 com5", 5));
+                dao.addChannel(new ChannelModel("czat głosowy1 com6", 6));
+            });
         }
     };
 }

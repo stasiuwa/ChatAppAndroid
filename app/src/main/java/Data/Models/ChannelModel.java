@@ -28,8 +28,9 @@ public class ChannelModel {
     @ColumnInfo(name = "communityOwnerID")
     public long communityID;
 
-    public ChannelModel(@NonNull String channelName) {
+    public ChannelModel(@NonNull String channelName, long communityID) {
         this.channelName = channelName;
+        this.communityID = communityID;
     }
 
     public long getChannelID() {
@@ -47,5 +48,13 @@ public class ChannelModel {
 
     public void setChannelName(@NonNull String channelName) {
         this.channelName = channelName;
+    }
+
+    public long getCommunityID() {
+        return communityID;
+    }
+
+    public void setCommunityID(long communityID) {
+        this.communityID = communityID;
     }
 }

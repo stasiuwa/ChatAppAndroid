@@ -3,7 +3,6 @@ package Data.Models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "chats"
@@ -28,8 +27,9 @@ public class ChatModel {
     @ColumnInfo(name = "communityOwnerID")
     public long communityID;
 
-    public ChatModel(@NonNull String chatName) {
+    public ChatModel(@NonNull String chatName, long communityID) {
         this.chatName = chatName;
+        this.communityID = communityID;
     }
 
     public long getChatID() {
@@ -47,5 +47,13 @@ public class ChatModel {
 
     public void setChatName(@NonNull String chatName) {
         this.chatName = chatName;
+    }
+
+    public long getCommunityID() {
+        return communityID;
+    }
+
+    public void setCommunityID(long communityID) {
+        this.communityID = communityID;
     }
 }
