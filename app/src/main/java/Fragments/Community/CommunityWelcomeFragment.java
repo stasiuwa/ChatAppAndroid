@@ -17,8 +17,8 @@ public class CommunityWelcomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.slide_up));
-        setEnterTransition(inflater.inflateTransition(R.transition.slide_down));
+//        setExitTransition(inflater.inflateTransition(R.transition.slide_up));
+//        setEnterTransition(inflater.inflateTransition(R.transition.slide_down));
     }
 
     @Override

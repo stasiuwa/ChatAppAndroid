@@ -1,6 +1,8 @@
 package Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -9,17 +11,34 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.szampchat.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Adapters.ChannelAdapter;
+import Adapters.ChatAdapter;
+import Data.Models.ChannelModel;
+import Data.Models.ChatModel;
+import Data.Relations.CommunityWithChannels;
+import Data.Relations.CommunityWithChats;
+import Data.ViewModels.CommunityViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.ChatsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Settings.SettingsFragment;
 
-public class CommunityActivity extends AppCompatActivity  {
+public class CommunityActivity extends AppCompatActivity implements ChannelAdapter.OnItemClickListener, ChatAdapter.OnItemClickListener {
+
+    CommunityViewModel communityViewModel;
+    long communityID;
+
+    ChannelAdapter channelAdapter;
+    ChatAdapter chatAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +49,39 @@ public class CommunityActivity extends AppCompatActivity  {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("CommunityID")) {
+            communityID = intent.getLongExtra("CommunityID", 1);
+        }
+
+        chatAdapter = new ChatAdapter(this);
+        channelAdapter = new ChannelAdapter(this);
+
+        communityViewModel.getChannels(communityID).observe(this, channelModels -> {
+            Log.d("KANAŁY", "communityID: " + communityID + " communityName: ");
+            for (CommunityWithChannels community : channelModels) {
+                List<ChannelModel> channelsList = new ArrayList<>();
+                for (ChannelModel channel : community.channels) {
+                    channelsList.add(channel);
+                    Log.d("KANAŁY", "Kanał: " + channel.getChannelName()+ "idcom: " + channel.getCommunityID());
+                }
+                channelAdapter.setChannelsList(channelsList);
+            }
+        });
+        communityViewModel.getChats(communityID).observe(this, chatModels -> {
+            Log.d("CZATY", "communityID: " + communityID + " communityName: ");
+            for (CommunityWithChats community : chatModels) {
+                List<ChatModel> chatsList = new ArrayList<>();
+                for (ChatModel chat : community.chats) {
+                    chatsList.add(chat);
+                    Log.d("CZATY", "Kanał: " + chat.getChatName() + "idcom: " + chat.getCommunityID());
+                }
+                chatAdapter.setChatsList(chatsList);
+            }
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -59,29 +111,25 @@ public class CommunityActivity extends AppCompatActivity  {
         navbar.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.navbar_menu_chats) {
                 this.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, new ChatsFragment())
-                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, new ChatsFragment(chatAdapter))
                         .commit();
                 return true;
             }
             else if (item.getItemId() == R.id.navbar_menu_channels) {
                 this.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, new ChannelsFragment())
-                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, new ChannelsFragment(channelAdapter))
                         .commit();
                 return true;
             }
             else if (item.getItemId() == R.id.navbar_menu_users) {
                 this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new UsersFragment())
-                        .addToBackStack(null)
                         .commit();
                 return true;
             }
             else if (item.getItemId() == R.id.navbar_menu_settings) {
                 this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new SettingsFragment())
-                        .addToBackStack(null)
                         .commit();
                 return true;
             } else return false;
@@ -91,5 +139,15 @@ public class CommunityActivity extends AppCompatActivity  {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onItemClickListener(ChannelModel channel) {
+
+    }
+
+    @Override
+    public void onItemClickListener(ChatModel chat) {
+
     }
 }

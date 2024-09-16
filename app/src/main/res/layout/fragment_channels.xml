@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     tools:context="Fragments.Community.ChannelsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/channelsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="LIST KANALOW GLOSOWYCH" />
+        tools:listitem="@layout/item_list_channel"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

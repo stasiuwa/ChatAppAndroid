@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import Data.Models.CommunityModel;
+import Data.Relations.CommunityWithChannels;
+import Data.Relations.CommunityWithChats;
 import Data.Repositories.CommunityRepository;
 
 public class CommunityViewModel extends AndroidViewModel {
@@ -28,5 +30,12 @@ public class CommunityViewModel extends AndroidViewModel {
     }
     public void deleteCommunity(CommunityModel community){
         communityRepository.deleteCommunity(community);
+    }
+    public LiveData<List<CommunityWithChannels>> getChannels(long id){
+        return communityRepository.getChannels(id);
+    }
+
+    public LiveData<List<CommunityWithChats>> getChats(long id){
+        return communityRepository.getChats(id);
     }
 }

@@ -3,9 +3,6 @@ package Activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,8 +14,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
@@ -31,7 +26,7 @@ import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity implements CommunityAdapter.OnItemClickListener, MainFragment.MainFragmentListener {
-    CommunityViewModel mCommunityViewModel;
+    CommunityViewModel mCommunitiesViewModel;
     CommunityAdapter adapter;
 
     @Override
@@ -65,12 +60,29 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
 
         adapter = new CommunityAdapter(this);
 
-        mCommunityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-        mCommunityViewModel.getAllCommunities().observe(this, communityModels -> {
+        mCommunitiesViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+        mCommunitiesViewModel.getAllCommunities().observe(this, communityModels -> {
 //            odwrócenie kolejności, aby ostatnio dodane były pierwsze od góry
             Collections.reverse(communityModels);
             adapter.setCommunitiesList(communityModels);
         });
+
+//        mCommunitiesViewModel.getChannels(2).observe(this, channelModels -> {
+//            Log.d("KANAŁY", "communityID: " + "2" + " communityName: ");
+//            for (CommunityWithChannels c : channelModels) {
+//                for (ChannelModel d : c.channels) {
+//                    Log.d("KANAŁY", "Kanał: " + d.getChannelName()+ "idcom: " + d.getCommunityID());
+//                }
+//            }
+//        });
+//        mCommunitiesViewModel.getChats(2).observe(this, chatModels -> {
+//            Log.d("CZATY", "communityID: " + "2" + " communityName: ");
+//            for (CommunityWithChats c : chatModels) {
+//                for (ChatModel d : c.chats) {
+//                    Log.d("CZATY", "Kanał: " + d.getChatName() + "idcom: " + d.getCommunityID());
+//                }
+//            }
+//        });
 
         MainFragment mainFragment = new MainFragment(adapter);
         this.getSupportFragmentManager().beginTransaction()
@@ -89,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         Button joinButton = addCommunityDialog.findViewById(R.id.communityDialogButton);
 //        TODO zmienic na pobranie spolecznosci z serwera i dołączenie do niej
         joinButton.setOnClickListener(v -> {
-            mCommunityViewModel.addCommunity(new CommunityModel(joinCode.getText().toString()));
+            mCommunitiesViewModel.addCommunity(new CommunityModel(joinCode.getText().toString()));
             addCommunityDialog.dismiss();
         });
         tittle.setText("DOŁĄCZ DO SPOŁECZNOŚCI");
@@ -108,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
 //        TODO wysłać requesta na stworzenie społecznosci na serwer
 //        TODO dodac wgranie zdjecia na ikonke spolecznosci
         createButton.setOnClickListener(v -> {
-            mCommunityViewModel.addCommunity(new CommunityModel(communityName.getText().toString()));
+            mCommunitiesViewModel.addCommunity(new CommunityModel(communityName.getText().toString()));
             createCommunityDialog.dismiss();
         });
         tittle.setText("STWÓRZ SPOŁECZNOŚĆ");
@@ -119,11 +131,13 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
 
     @Override
     public void onItemClickListener(CommunityModel community) {
+//        Log.d("COMMUNITY-MAIN", "id: " + community.getCommunityID());
         if (community.getCommunityID() == 1) {
             callAddCommunityDialog();
         }
         else {
             Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
+            intent.putExtra("CommunityID", community.getCommunityID());
             startActivity(intent);
         }
     }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/channelIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/outline_mic_24"
+        />
+    <TextView
+        android:id="@+id/channelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/channelIcon"
+        android:text="NAZWA KANAŁU GŁOSOWEGO"
+        android:textSize="17sp"
+        />
+    <TextView
+        android:id="@+id/channelSubname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/channelIcon"
+        app:layout_constraintTop_toBottomOf="@id/channelName"
+        android:text="Ilość użytkowników online czy cos?"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

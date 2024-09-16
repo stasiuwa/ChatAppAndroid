@@ -14,4 +14,5 @@ public class CommunityWithChats {
 
     @Relation(parentColumn = "communityID", entityColumn = "communityOwnerID")
     public List<ChatModel> chats;
+
 }

@@ -15,8 +15,9 @@ import Data.DAO.CommunityDAO;
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.CommunityModel;
+import Data.Models.UserModel;
 
-@androidx.room.Database(entities = {CommunityModel.class, ChannelModel.class, ChatModel.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {CommunityModel.class, ChannelModel.class, ChatModel.class, UserModel.class}, version = 1, exportSchema = false)
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();
 
@@ -54,6 +55,10 @@ public abstract class CommunityDB extends RoomDatabase {
             super.onCreate(db);
             databaseWriteExecutor.execute(() -> {
                 CommunityDAO dao = INSTANCE.communityDAO();
+
+                dao.addUser(new UserModel("admin", "123", "admin@gmail.com"));
+
+//                społeczność ktora po kliknieciu odpala dialog dołączenia do spolecznosci
                 dao.addCommunity(new CommunityModel("Dołącz"));
 //                testowe spolecznosci do wyswietlenia
                 dao.addCommunity(new CommunityModel("Spolecznosc 1"));
@@ -61,6 +66,30 @@ public abstract class CommunityDB extends RoomDatabase {
                 dao.addCommunity(new CommunityModel("Spolecznosc 3"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 4"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 5"));
+
+                dao.addChat(new ChatModel("czat tekst1 com3", 3));
+                dao.addChat(new ChatModel("czat tekst2 com3", 3));
+                dao.addChat(new ChatModel("czat tekst1 com2", 2));
+                dao.addChat(new ChatModel("czat tekst2 com2", 2));
+                dao.addChat(new ChatModel("czat tekst3 com3", 3));
+                dao.addChat(new ChatModel("czat tekst1 com4", 4));
+                dao.addChat(new ChatModel("czat tekst2 com4", 4));
+                dao.addChat(new ChatModel("czat tekst3 com4", 4));
+                dao.addChat(new ChatModel("czat tekst4 com4", 4));
+                dao.addChat(new ChatModel("czat tekst1 com5", 5));
+                dao.addChat(new ChatModel("czat tekst1 com6", 6));
+
+                dao.addChannel(new ChannelModel("czat głosowy1 com3", 3));
+                dao.addChannel(new ChannelModel("czat głosowy2 com3", 3));
+                dao.addChannel(new ChannelModel("czat głosowy1 com2", 2));
+                dao.addChannel(new ChannelModel("czat głosowy2 com2", 2));
+                dao.addChannel(new ChannelModel("czat głosowy3 com3", 3));
+                dao.addChannel(new ChannelModel("czat głosowy1 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy2 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy3 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy4 com4", 4));
+                dao.addChannel(new ChannelModel("czat głosowy1 com5", 5));
+                dao.addChannel(new ChannelModel("czat głosowy1 com6", 6));
             });
         }
 

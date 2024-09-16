@@ -4,9 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,15 +16,16 @@ import android.widget.Button;
 
 import com.szampchat.R;
 
-import java.util.Collections;
-
 import Adapters.CommunityAdapter;
-import Data.ViewModels.CommunityViewModel;
 
 public class MainFragment extends Fragment {
 
     CommunityAdapter adapter;
     MainFragmentListener mainFragmentListener;
+
+    public MainFragment(CommunityAdapter adapter) {
+        this.adapter = adapter;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -37,14 +36,10 @@ public class MainFragment extends Fragment {
             throw new ClassCastException(e.getMessage() + " must implements MainFragment.MainFragmentListener");
         }
     }
-
     public interface MainFragmentListener {
         void callCreateCommunityDialog();
         void callAddCommunityDialog();
-    }
 
-    public MainFragment(CommunityAdapter adapter) {
-        this.adapter = adapter;
     }
 
     @Override

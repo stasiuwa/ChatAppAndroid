@@ -29,10 +29,6 @@ public class CommunityModel {
         return communityID;
     }
 
-    public void setCommunityID(long communityID) {
-        this.communityID = communityID;
-    }
-
     @NonNull
     public String getCommunityName() {
         return communityName;

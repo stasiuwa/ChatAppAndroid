@@ -2,7 +2,6 @@ package Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -10,15 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.szampchat.R;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import Data.Repositories.UserRepository;
 import Data.ViewModels.UserViewModel;
 import Fragments.Auth.LoginFragment;
 import Fragments.Auth.RegisterFragment;

@@ -29,22 +29,4 @@
         >
 
     </androidx.fragment.app.FragmentContainerView>
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/communitiesGrid"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/toolbar"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            tools:listitem="@layout/item_grid_community"-->
-<!--            />-->
-<!--    <Button-->
-<!--        android:id="@+id/createCommunityButton"-->
-<!--        android:layout_width="110dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_margin="15dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:text="STWORZ"-->
-<!--        />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

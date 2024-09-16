@@ -18,7 +18,7 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.slide_left));
+        setExitTransition(inflater.inflateTransition(R.transition.slide_right));
         setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
     }
 
@@ -28,14 +28,14 @@ public class SettingsFragment extends Fragment {
 
         LinearLayout profileSettings = view.findViewById(R.id.settingsUserProfile);
         profileSettings.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction()
+            requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new ProfileFragment())
                     .addToBackStack(null)
                     .commit();
         });
         LinearLayout appSettings = view.findViewById(R.id.settingsApplication);
         appSettings.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction()
+            requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new TechFragment())
                     .addToBackStack(null)
                     .commit();
