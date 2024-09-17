@@ -36,10 +36,11 @@ public class MainFragment extends Fragment {
             throw new ClassCastException(e.getMessage() + " must implements MainFragment.MainFragmentListener");
         }
     }
+
+//    Functions required by this fragment to implement
     public interface MainFragmentListener {
         void callCreateCommunityDialog();
         void callAddCommunityDialog();
-
     }
 
     @Override
@@ -55,6 +56,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+//        Setup RecyclerView for showing communities in grid
         RecyclerView recyclerView = view.findViewById(R.id.communitiesGrid);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);

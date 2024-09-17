@@ -36,10 +36,6 @@ public class ChatModel {
         return chatID;
     }
 
-    public void setChatID(long chatID) {
-        this.chatID = chatID;
-    }
-
     @NonNull
     public String getChatName() {
         return chatName;
@@ -53,7 +49,4 @@ public class ChatModel {
         return communityID;
     }
 
-    public void setCommunityID(long communityID) {
-        this.communityID = communityID;
-    }
 }

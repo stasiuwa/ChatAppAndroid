@@ -34,9 +34,14 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.Log
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
     }
 
+    /**
+     * TODO dokonczyc funkcje i doksa
+     * @param username
+     * @param password
+     */
     @Override
     public void verifyLogin(String username, String password) {
-//        narazie tak zostaje, bo nie ma co sie z tym meczycz jak potem trzeba bedzie zmienic na serwer
+//       TODO narazie tak zostaje, bo nie ma co sie z tym meczycz jak potem trzeba bedzie zmienic na serwer
         if (true) {
             Intent intent = new Intent(AuthActivity.this, MainActivity.class);
             Bundle bundle = new Bundle();
@@ -48,6 +53,9 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.Log
         }
     }
 
+    /**
+     * Replace fragment container in AuthActivity with Register From Framgent
+     */
     @Override
     public void switchToRegister() {
         getSupportFragmentManager().beginTransaction()

@@ -2,8 +2,8 @@ package Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.szampchat.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
@@ -51,61 +50,49 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
             return insets;
         });
 
-        communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-
-        Intent intent = getIntent();
-        if (intent.hasExtra("CommunityID")) {
-            communityID = intent.getLongExtra("CommunityID", 1);
-        }
-
-        chatAdapter = new ChatAdapter(this);
-        channelAdapter = new ChannelAdapter(this);
-
-        communityViewModel.getChannels(communityID).observe(this, channelModels -> {
-            Log.d("KANAŁY", "communityID: " + communityID + " communityName: ");
-            for (CommunityWithChannels community : channelModels) {
-                List<ChannelModel> channelsList = new ArrayList<>();
-                for (ChannelModel channel : community.channels) {
-                    channelsList.add(channel);
-                    Log.d("KANAŁY", "Kanał: " + channel.getChannelName()+ "idcom: " + channel.getCommunityID());
-                }
-                channelAdapter.setChannelsList(channelsList);
-            }
-        });
-        communityViewModel.getChats(communityID).observe(this, chatModels -> {
-            Log.d("CZATY", "communityID: " + communityID + " communityName: ");
-            for (CommunityWithChats community : chatModels) {
-                List<ChatModel> chatsList = new ArrayList<>();
-                for (ChatModel chat : community.chats) {
-                    chatsList.add(chat);
-                    Log.d("CZATY", "Kanał: " + chat.getChatName() + "idcom: " + chat.getCommunityID());
-                }
-                chatAdapter.setChatsList(chatsList);
-            }
-        });
-
+//        Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null){
-            String value = extras.getString("communityName");
-            getSupportActionBar().setTitle(value);
+        communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
+//        Load Community id and name from intent
+        Intent intent = getIntent();
+        if (intent.hasExtra("CommunityID")) {
+            communityID = intent.getLongExtra("CommunityID", 1);
+        }
+        if (intent.hasExtra("communityName")){
+            getSupportActionBar().setTitle(intent.getStringExtra("communityName"));
         }
 
+        chatAdapter = new ChatAdapter(this);
+        channelAdapter = new ChannelAdapter(this);
+
+//        Load channels from community to adapter
+        communityViewModel.getChannels(communityID).observe(this, channelModels -> {
+            for (CommunityWithChannels community : channelModels) {
+                channelAdapter.setChannelsList(new ArrayList<>(community.channels));
+            }
+        });
+//        Load Chats from community to adapter
+        communityViewModel.getChats(communityID).observe(this, chatModels -> {
+            for (CommunityWithChats community : chatModels) {
+                chatAdapter.setChatsList(new ArrayList<>(community.chats));
+            }
+        });
+
+//        Button displaying welcome page of community (fragment)
         Button homeButton = findViewById(R.id.communityHomeButton);
         homeButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
-                    .addToBackStack(null)
                     .commit();
         });
 
-//        Obśługa zdarzeń dolnego paska nawigacji
+//        Handle bottom navbar events
 //        TODO na wejściu jest pusto i jedna opcja jest zaznaczona, trzeba dorzucic jakiś default fragment do wyświetlania na start
-//        do tego ewentualnie jakis przycisk domku na toolbarze aby wyswietlic go na wezwanie
 //        TODO ogarnac transition bo jak klikasz w lewo a slide w prawo to troche gryzie w oczy, dac slide in i out
         NavigationBarView navbar = findViewById(R.id.bottom_navbar);
         navbar.setOnItemSelectedListener( item -> {
@@ -143,11 +130,11 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
 
     @Override
     public void onItemClickListener(ChannelModel channel) {
-
+        Toast.makeText(this, channel.getChannelName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemClickListener(ChatModel chat) {
-
+        Toast.makeText(this, chat.getChatName(), Toast.LENGTH_SHORT).show();
     }
 }

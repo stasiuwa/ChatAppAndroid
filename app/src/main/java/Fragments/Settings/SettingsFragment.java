@@ -26,6 +26,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+//        Setup onClickListener to replace current fragment with ProfileFragment
         LinearLayout profileSettings = view.findViewById(R.id.settingsUserProfile);
         profileSettings.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()
@@ -33,6 +34,8 @@ public class SettingsFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
+//        Setup onClickListener to replace current fragment with TechFragment
         LinearLayout appSettings = view.findViewById(R.id.settingsApplication);
         appSettings.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()

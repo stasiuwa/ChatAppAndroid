@@ -40,16 +40,20 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+//        Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Społeczności");
 
+//       TODO raczej do wywalenia?
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             String value = "Witaj " + extras.getString("username");
             getSupportActionBar().setTitle(value);
         }
 
+//        Button displaying Settings section (fragment)
         Button settingsButton = findViewById(R.id.mainSettingsButton);
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
@@ -58,32 +62,16 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
                     .commit();
         });
 
+//        Setup adapter for communities
         adapter = new CommunityAdapter(this);
-
         mCommunitiesViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
         mCommunitiesViewModel.getAllCommunities().observe(this, communityModels -> {
-//            odwrócenie kolejności, aby ostatnio dodane były pierwsze od góry
+//            reverse so the earliest added Community will be displayed on top
             Collections.reverse(communityModels);
             adapter.setCommunitiesList(communityModels);
         });
 
-//        mCommunitiesViewModel.getChannels(2).observe(this, channelModels -> {
-//            Log.d("KANAŁY", "communityID: " + "2" + " communityName: ");
-//            for (CommunityWithChannels c : channelModels) {
-//                for (ChannelModel d : c.channels) {
-//                    Log.d("KANAŁY", "Kanał: " + d.getChannelName()+ "idcom: " + d.getCommunityID());
-//                }
-//            }
-//        });
-//        mCommunitiesViewModel.getChats(2).observe(this, chatModels -> {
-//            Log.d("CZATY", "communityID: " + "2" + " communityName: ");
-//            for (CommunityWithChats c : chatModels) {
-//                for (ChatModel d : c.chats) {
-//                    Log.d("CZATY", "Kanał: " + d.getChatName() + "idcom: " + d.getCommunityID());
-//                }
-//            }
-//        });
-
+//        Initial setup fragment with communities recyclerview, passed adapter to constructor
         MainFragment mainFragment = new MainFragment(adapter);
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, mainFragment)
@@ -92,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
 
     }
 
+    /**
+     * Showing dialog with join community form.
+     */
     @Override
     public void callAddCommunityDialog() {
         final Dialog addCommunityDialog = new Dialog(this);
@@ -110,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         addCommunityDialog.show();
     }
 
+    /**
+     * Showing dialog with create community form
+     */
     @Override
     public void callCreateCommunityDialog() {
         final Dialog createCommunityDialog = new Dialog(this);

@@ -35,6 +35,7 @@ public class ChannelsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channels, container, false);
 
+//        Setup RecyclerView to show channels from specific community
         RecyclerView recyclerView = view.findViewById(R.id.channelsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

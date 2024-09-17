@@ -26,7 +26,7 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-        //        TODO dodać logike rejestracji
+//        TODO dokonczyc xd
         Button registerButton = view.findViewById(R.id.createAccountButton);
         registerButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Zalozone konto", Toast.LENGTH_SHORT);
