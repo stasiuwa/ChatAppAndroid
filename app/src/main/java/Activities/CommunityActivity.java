@@ -28,7 +28,9 @@ import Data.ViewModels.CommunityViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.ChatsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
+import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
+import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.SettingsFragment;
 
 public class CommunityActivity extends AppCompatActivity implements ChannelAdapter.OnItemClickListener, ChatAdapter.OnItemClickListener {
@@ -49,6 +51,10 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
+                .commit();
 
 //        Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -117,6 +123,7 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
             else if (item.getItemId() == R.id.navbar_menu_settings) {
                 this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new SettingsFragment())
+                        .addToBackStack(null)
                         .commit();
                 return true;
             } else return false;
@@ -130,11 +137,31 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
 
     @Override
     public void onItemClickListener(ChannelModel channel) {
-        Toast.makeText(this, channel.getChannelName(), Toast.LENGTH_SHORT).show();
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, new VoiceChatFragment(channel))
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onItemClickListener(ChatModel chat) {
-        Toast.makeText(this, chat.getChatName(), Toast.LENGTH_SHORT).show();
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, new TextChatFragment(chat))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+            while (this.getSupportFragmentManager().getBackStackEntryCount() >= 1)
+                this.getSupportFragmentManager().popBackStack();
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
+                    .commit();
+        }
+
     }
 }

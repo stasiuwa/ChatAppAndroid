@@ -11,7 +11,9 @@ import Data.Databases.CommunityDB;
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.CommunityModel;
+import Data.Models.MessageModel;
 import Data.Models.UserModel;
+import Data.Relations.ChatWithMessages;
 import Data.Relations.CommunityWithChannels;
 import Data.Relations.CommunityWithChats;
 
@@ -84,6 +86,20 @@ public class CommunityRepository {
         CommunityDB.databaseWriteExecutor.execute(() -> {
             dao.deleteChat(chat);
         });
+    }
+
+//    Messages
+    public void addMessage(MessageModel message){
+        CommunityDB.databaseWriteExecutor.execute(() -> {
+            dao.addMessage(message);
+        });
+    }
+    public LiveData<List<ChatWithMessages>> getMessages(long chatId){
+        return dao.getMessages(chatId);
+    }
+//    TODO dokonczyc
+    public void editMessage(MessageModel message){
+
     }
 
 //    Users

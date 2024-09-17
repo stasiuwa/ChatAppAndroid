@@ -7,13 +7,16 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.CommunityModel;
+import Data.Models.MessageModel;
 import Data.Models.UserModel;
+import Data.Relations.ChatWithMessages;
 import Data.Relations.CommunityWithChats;
 import Data.Relations.CommunityWithChannels;
 
@@ -39,6 +42,12 @@ public interface CommunityDAO {
     @Delete
     void deleteChat(ChatModel chat);
 
+//    Messages
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addMessage(MessageModel message);
+    @Update(entity = ChatModel.class)
+    void editMessage(MessageModel message);
+
 //    Channels
     @Insert(onConflict = OnConflictStrategy.ABORT)
     void addChannel(ChannelModel channel);
@@ -52,6 +61,7 @@ public interface CommunityDAO {
     LiveData<List<UserModel>> getAllUsers();
     @Query("SELECT * FROM users WHERE Username LIKE :username AND Password LIKE :password")
     boolean readLoginData(String username, String password);
+
 
 //    Relations
     @Transaction
@@ -70,5 +80,9 @@ public interface CommunityDAO {
     @Transaction
     @Query("SELECT * FROM communities WHERE communityID = :communityId")
     LiveData<List<CommunityWithChannels>> getChannels(long communityId);
+
+    @Transaction
+    @Query("SELECT * FROM chats WHERE chatID = :chatId")
+    LiveData<List<ChatWithMessages>> getMessages(long chatId);
 
 }

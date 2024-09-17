@@ -46,13 +46,6 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Społeczności");
 
-//       TODO raczej do wywalenia?
-        Bundle extras = getIntent().getExtras();
-        if (extras != null){
-            String value = "Witaj " + extras.getString("username");
-            getSupportActionBar().setTitle(value);
-        }
-
 //        Button displaying Settings section (fragment)
         Button settingsButton = findViewById(R.id.mainSettingsButton);
         settingsButton.setOnClickListener(v -> {
@@ -75,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         MainFragment mainFragment = new MainFragment(adapter);
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, mainFragment)
-                .addToBackStack(null)
                 .commit();
 
     }
