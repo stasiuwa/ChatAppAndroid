@@ -22,11 +22,31 @@
                     android:background="@drawable/baseline_home_filled_24"
                     />
         </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:id="@+id/searchBar"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="horizontal"
+            >
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/baseline_search_24"
+                    />
+                <EditText
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:hint="search"
+                    />
+        </LinearLayout>
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/searchBar"
             >
         </androidx.fragment.app.FragmentContainerView>
         <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -54,6 +54,7 @@ public class TextChatFragment extends Fragment {
                 adapter.setMessagesList(new ArrayList<>(chatWithMessages1.messages));
             }
         });
+
         RecyclerView recyclerView = view.findViewById(R.id.chatsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
@@ -67,7 +68,8 @@ public class TextChatFragment extends Fragment {
                             textChat.getChatID(),
                             messageText.getText().toString(),
                             String.valueOf(Date.from(Instant.now())),
-                            "userTEST"
+//                            TODO poprawic logike do pobrania nazwy uzytkownika zalogowanego do aplikacji
+                            "TEST"
                     ));
         });
 

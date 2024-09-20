@@ -94,6 +94,7 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
         homeButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
+                    .addToBackStack(null)
                     .commit();
         });
 

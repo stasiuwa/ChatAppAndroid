@@ -62,9 +62,7 @@ public class MainFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         Button createCommunityButton = view.findViewById(R.id.createCommunityButton);
-        createCommunityButton.setOnClickListener(v -> {
-            mainFragmentListener.callCreateCommunityDialog();
-        });
+        createCommunityButton.setOnClickListener(v -> mainFragmentListener.callCreateCommunityDialog());
 
         return view;
     }

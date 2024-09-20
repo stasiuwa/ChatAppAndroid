@@ -16,7 +16,11 @@ import java.util.List;
 
 import Data.Models.MessageModel;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int VIEW_TYPE_MESSAGE_SENT = 1;
+    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static final int VIEW_TYPE_SYSTEM_MESSAGE = 3;
 
     Activity activity;
     List<MessageModel> messagesList;
@@ -43,59 +47,103 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        MessageModel message = (MessageModel) messagesList.get(position);
+//        TODO poprawic logige xd sprawdzania czy wiadomosc wyslana przez uzytkownika zalogowanego do aplikacji.
+        if (message.getUsername().equals("TEST")) {
+            return VIEW_TYPE_MESSAGE_SENT;
+        } else if (message.getUsername().equals("SYSTEM")){
+            return VIEW_TYPE_SYSTEM_MESSAGE;
+        } else {
+            return VIEW_TYPE_MESSAGE_RECEIVED;
+        }
+    }
+
     @NonNull
     @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_messages, parent, false);
-        return new MessageViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+//        Setup message layout depending who sent it
+        if (viewType == VIEW_TYPE_MESSAGE_SENT){
+            view = layoutInflater.inflate(R.layout.item_list_message_sent, parent, false);
+            return new SentMessageHolder(view);
+        } else if (viewType == VIEW_TYPE_SYSTEM_MESSAGE) {
+            view = layoutInflater.inflate(R.layout.item_list_message_system, parent, false);
+            return new ReceivedMessageHolder(view);
+        } else
+//            if (viewType == VIEW_TYPE_MESSAGE_RECEIVED)
+            {
+            view = layoutInflater.inflate(R.layout.item_list_message_received, parent, false);
+            return new ReceivedMessageHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MessageModel message = messagesList.get(position);
-        holder.setMessageText(message.getText());
-        holder.setMessageUser(message.getUsername());
-
+        switch (holder.getItemViewType()) {
+            case VIEW_TYPE_MESSAGE_SENT:
+                ((SentMessageHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_MESSAGE_RECEIVED:
+                ((ReceivedMessageHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_SYSTEM_MESSAGE:
+                ((SystemMessageHolder) holder).bind(message);
+                break;
+        }
     }
 
     @Override
     public int getItemCount() {
         return messagesList.size();
     }
-    public class MessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class SentMessageHolder extends RecyclerView.ViewHolder {
+
+        TextView messageText, messageTimestamp;
+
+        public SentMessageHolder(@NonNull View itemView) {
+            super(itemView);
+
+            messageText = (TextView) itemView.findViewById(R.id.messageText);
+            messageTimestamp = (TextView) itemView.findViewById(R.id.messageTimestamp);
+            itemView.setTag(this);
+        }
+        public void bind(MessageModel message) {
+            messageText.setText(message.getText());
+            messageTimestamp.setText(message.getSentTime());
+        }
+    }
+
+    public class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
         TextView messageText, messageUser, messageTimestamp;
 
-        public MessageViewHolder(@NonNull View itemView) {
+        public ReceivedMessageHolder(@NonNull View itemView) {
             super(itemView);
             messageText = itemView.findViewById(R.id.messageText);
             messageUser = itemView.findViewById(R.id.messageUser);
             messageTimestamp = itemView.findViewById(R.id.messageTimestamp);
             itemView.setTag(this);
-            itemView.setOnClickListener(this);
         }
+        public void bind(MessageModel message) {
+            messageText.setText(message.getText());
+            messageTimestamp.setText(message.getSentTime());
+            messageUser.setText(message.getUsername());
+        }
+    }
 
-        public void setMessageText(String messageText) {
-            this.messageText.setText(messageText);
-        }
+    public class SystemMessageHolder extends RecyclerView.ViewHolder {
 
-        public void setMessageUser(String messageUser) {
-            this.messageUser.setText(messageUser);
-        }
-        public void setMessageTimestamp(String timestamp){
-            this.messageTimestamp.setText(timestamp);
-        }
-        public void setMessageTimestamp(Date date){
-            this.messageTimestamp.setText(String.valueOf(date));
-        }
+        TextView systemMessage;
 
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            if (position!=RecyclerView.NO_POSITION){
-                MessageModel message = messagesList.get(position);
-                onItemClickListener.onItemClickListener(message);
-            }
+        public SystemMessageHolder(@NonNull View itemView) {
+            super(itemView);
+            systemMessage = itemView.findViewById(R.id.systemMessageText);
+        }
+        public void bind(MessageModel message){
+            systemMessage.setText(message.getText());
         }
     }
 }
