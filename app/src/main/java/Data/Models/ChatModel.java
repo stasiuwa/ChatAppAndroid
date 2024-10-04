@@ -21,7 +21,7 @@ public class ChatModel {
     public long chatID;
     @NonNull
     @ColumnInfo(name = "Chat Name")
-    String chatName;
+    public String chatName;
 //    TODO dodac liste uzytkownikow
 
     @ColumnInfo(name = "communityOwnerID")

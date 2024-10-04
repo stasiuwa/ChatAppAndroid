@@ -15,9 +15,18 @@ import Data.DAO.CommunityDAO;
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.CommunityModel;
+import Data.Models.MessageModel;
+import Data.Models.RoleModel;
 import Data.Models.UserModel;
 
-@androidx.room.Database(entities = {CommunityModel.class, ChannelModel.class, ChatModel.class, UserModel.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {
+        CommunityModel.class,
+        ChannelModel.class,
+        ChatModel.class,
+        UserModel.class,
+        MessageModel.class,
+        RoleModel.class,
+}, version = 1, exportSchema = false)
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();
 
@@ -49,14 +58,14 @@ public abstract class CommunityDB extends RoomDatabase {
      * obiekt obsługujący callback'i zwiazane ze zdarzeniami bazy danych np onCreate, onOpen
      */
     private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback() {
-//        pierwsze uruchomienie gdy baza nie istnieje = stworzenie bazy danych
+        //        pierwsze uruchomienie gdy baza nie istnieje = stworzenie bazy danych
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             databaseWriteExecutor.execute(() -> {
                 CommunityDAO dao = INSTANCE.communityDAO();
 
-                dao.addUser(new UserModel("admin", "123", "admin@gmail.com"));
+                dao.addUser(new UserModel("admin"));
 
 //                społeczność ktora po kliknieciu odpala dialog dołączenia do spolecznosci
                 dao.addCommunity(new CommunityModel("Dołącz"));
@@ -101,3 +110,6 @@ public abstract class CommunityDB extends RoomDatabase {
         }
     };
 }
+
+
+

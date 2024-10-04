@@ -10,7 +10,7 @@ public class MessageModel {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "messageID")
     public long messageID;
-    @ColumnInfo(name = "chatID")
+    @ColumnInfo(name = "chatOwnerID")
     public long chatID;
     @NonNull
     @ColumnInfo(name = "Text")

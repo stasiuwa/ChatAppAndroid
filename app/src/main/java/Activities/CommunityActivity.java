@@ -54,6 +54,7 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
 
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
+                .addToBackStack("")
                 .commit();
 
 //        Setup toolbar
@@ -94,7 +95,6 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
         homeButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
-                    .addToBackStack(null)
                     .commit();
         });
 
@@ -152,17 +152,17 @@ public class CommunityActivity extends AppCompatActivity implements ChannelAdapt
                 .commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            super.onBackPressed();
-        } else {
-            while (this.getSupportFragmentManager().getBackStackEntryCount() >= 1)
-                this.getSupportFragmentManager().popBackStack();
-            this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
-                    .commit();
-        }
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+//            super.onBackPressed();
+//        } else {
+//            while (this.getSupportFragmentManager().getBackStackEntryCount() >= 1)
+//                this.getSupportFragmentManager().popBackStack();
+//            this.getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
+//                    .commit();
+//        }
+//
+//    }
 }

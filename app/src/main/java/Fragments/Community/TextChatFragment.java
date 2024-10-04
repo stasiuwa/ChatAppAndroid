@@ -71,6 +71,7 @@ public class TextChatFragment extends Fragment {
 //                            TODO poprawic logike do pobrania nazwy uzytkownika zalogowanego do aplikacji
                             "TEST"
                     ));
+//            adapter.notifyDataSetChanged();
         });
 
 //        Chat name in top side of the view

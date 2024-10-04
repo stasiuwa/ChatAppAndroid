@@ -64,7 +64,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-//        Setup message layout depending who sent it
+//        Setup message layout depending on type
         if (viewType == VIEW_TYPE_MESSAGE_SENT){
             view = layoutInflater.inflate(R.layout.item_list_message_sent, parent, false);
             return new SentMessageHolder(view);
@@ -99,13 +99,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return messagesList.size();
     }
+
+//    ViewHolder for messages sent by user in app
     public class SentMessageHolder extends RecyclerView.ViewHolder {
 
         TextView messageText, messageTimestamp;
 
         public SentMessageHolder(@NonNull View itemView) {
             super(itemView);
-
             messageText = (TextView) itemView.findViewById(R.id.messageText);
             messageTimestamp = (TextView) itemView.findViewById(R.id.messageTimestamp);
             itemView.setTag(this);
@@ -116,6 +117,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+//    ViewHolder for messages received by user from server
     public class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
         TextView messageText, messageUser, messageTimestamp;
@@ -134,6 +136,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+//    ViewHolder for messages sent by SYSTEM (new user joined etc.)
     public class SystemMessageHolder extends RecyclerView.ViewHolder {
 
         TextView systemMessage;

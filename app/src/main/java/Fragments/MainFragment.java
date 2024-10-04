@@ -41,6 +41,7 @@ public class MainFragment extends Fragment {
     public interface MainFragmentListener {
         void callCreateCommunityDialog();
         void callAddCommunityDialog();
+        void showSettingsButton();
     }
 
     @Override
@@ -65,5 +66,11 @@ public class MainFragment extends Fragment {
         createCommunityButton.setOnClickListener(v -> mainFragmentListener.callCreateCommunityDialog());
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mainFragmentListener.showSettingsButton();
     }
 }

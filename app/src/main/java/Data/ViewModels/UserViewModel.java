@@ -26,7 +26,7 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<List<UserModel>> getAllUsers() {
         return allUsers;
     }
-    public boolean readLoginData(String username, String password) {
-        return repository.readLoginData(username,password);
+    public boolean readLoginData(String username) {
+        return repository.readLoginData(username);
     }
 }

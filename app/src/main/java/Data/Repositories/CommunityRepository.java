@@ -108,8 +108,8 @@ public class CommunityRepository {
             dao.addUser(user);
         });
     }
-    public boolean readLoginData(String username, String password) {
-        return dao.readLoginData(username, password);
+    public boolean readLoginData(String username) {
+        return dao.readLoginData(username);
     }
     public LiveData<List<UserModel>> getAllUsers() {
         return allUsers;

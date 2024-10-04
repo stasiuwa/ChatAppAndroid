@@ -15,6 +15,7 @@ import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.CommunityModel;
 import Data.Models.MessageModel;
+import Data.Models.RoleModel;
 import Data.Models.UserModel;
 import Data.Relations.ChatWithMessages;
 import Data.Relations.CommunityWithChats;
@@ -45,7 +46,7 @@ public interface CommunityDAO {
 //    Messages
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addMessage(MessageModel message);
-    @Update(entity = ChatModel.class)
+    @Update(entity = MessageModel.class)
     void editMessage(MessageModel message);
 
 //    Channels
@@ -59,9 +60,14 @@ public interface CommunityDAO {
     void addUser(UserModel user);
     @Query("SELECT * FROM users")
     LiveData<List<UserModel>> getAllUsers();
-    @Query("SELECT * FROM users WHERE Username LIKE :username AND Password LIKE :password")
-    boolean readLoginData(String username, String password);
+    @Query("SELECT * FROM users WHERE Username LIKE :username")
+    boolean readLoginData(String username);
 
+//    Role
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    void addRole(RoleModel role);
+    @Query("SELECT * FROM roles WHERE roleCommunityID LIKE :communityId")
+    LiveData<List<RoleModel>> getAllRoles(long communityId);
 
 //    Relations
     @Transaction
@@ -84,5 +90,9 @@ public interface CommunityDAO {
     @Transaction
     @Query("SELECT * FROM chats WHERE chatID = :chatId")
     LiveData<List<ChatWithMessages>> getMessages(long chatId);
+
+    @Transaction
+    @Query("SELECT * FROM roles WHERE roleUserID = :roleUserId")
+    LiveData<RoleModel> getRole(long roleUserId);
 
 }

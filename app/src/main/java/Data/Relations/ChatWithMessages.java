@@ -11,6 +11,6 @@ import Data.Models.MessageModel;
 public class ChatWithMessages {
     @Embedded
     public ChatModel chat;
-    @Relation(parentColumn = "chatID", entityColumn = "messageID")
+    @Relation(parentColumn = "chatID", entityColumn = "chatOwnerID")
     public List<MessageModel> messages;
 }

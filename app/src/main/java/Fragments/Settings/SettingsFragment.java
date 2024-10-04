@@ -13,12 +13,11 @@ import android.widget.LinearLayout;
 import com.szampchat.R;
 
 public class SettingsFragment extends Fragment {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.slide_right));
+        setExitTransition(inflater.inflateTransition(R.transition.slide_left));
         setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
     }
 

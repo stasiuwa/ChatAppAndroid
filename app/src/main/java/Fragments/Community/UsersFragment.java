@@ -16,9 +16,9 @@ public class UsersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.slide_up));
-        setEnterTransition(inflater.inflateTransition(R.transition.slide_down));
+//        TransitionInflater inflater = TransitionInflater.from(requireContext());
+//        setExitTransition(inflater.inflateTransition(R.transition.slide_up));
+//        setEnterTransition(inflater.inflateTransition(R.transition.slide_down));
     }
 
     @Override

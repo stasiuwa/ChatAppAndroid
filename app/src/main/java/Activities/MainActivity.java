@@ -3,6 +3,7 @@ package Activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,9 +26,14 @@ import Data.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity implements CommunityAdapter.OnItemClickListener, MainFragment.MainFragmentListener {
+public class MainActivity extends AppCompatActivity implements
+        CommunityAdapter.OnItemClickListener,
+        MainFragment.MainFragmentListener
+{
     CommunityViewModel mCommunitiesViewModel;
     CommunityAdapter adapter;
+
+    Button settingsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +53,14 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         getSupportActionBar().setTitle("Społeczności");
 
 //        Button displaying Settings section (fragment)
-        Button settingsButton = findViewById(R.id.mainSettingsButton);
+        settingsButton = findViewById(R.id.mainSettingsButton);
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new SettingsFragment())
                     .addToBackStack(null)
                     .commit();
+//            Hide settings button after displaying SettingsFragment
+            settingsButton.setVisibility(View.INVISIBLE);
         });
 
 //        Setup adapter for communities
@@ -115,6 +123,13 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
         createCommunityDialog.show();
     }
 
+    /**
+     * Changing visibility of settings button after resuming main fragment
+     */
+    @Override
+    public void showSettingsButton() {
+        settingsButton.setVisibility(View.VISIBLE);
+    }
     @Override
     public void onItemClickListener(CommunityModel community) {
 //        Log.d("COMMUNITY-MAIN", "id: " + community.getCommunityID());
@@ -127,4 +142,6 @@ public class MainActivity extends AppCompatActivity implements CommunityAdapter.
             startActivity(intent);
         }
     }
+
+
 }
