@@ -1,4 +1,4 @@
-package Data.ViewModels;
+package DataAccess.ViewModels;
 
 import android.app.Application;
 
@@ -8,9 +8,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import DataAccess.Repositories.CommunityRepository;
 import Data.Models.MessageModel;
 import Data.Relations.ChatWithMessages;
-import Data.Repositories.CommunityRepository;
 
 public class MessagesViewModel extends AndroidViewModel {
 

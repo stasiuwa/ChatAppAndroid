@@ -14,15 +14,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.szampchat.R;
 
-import java.util.Collections;
-
 import Adapters.CommunityAdapter;
 import Data.Models.CommunityModel;
-import Data.ViewModels.CommunityViewModel;
+import DataAccess.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
 

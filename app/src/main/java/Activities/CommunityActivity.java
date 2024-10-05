@@ -4,23 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ScrollView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.szampchat.R;
-
-import java.util.ArrayList;
 
 import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
@@ -28,9 +24,6 @@ import Adapters.MessageAdapter;
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.MessageModel;
-import Data.Relations.CommunityWithChannels;
-import Data.Relations.CommunityWithChats;
-import Data.ViewModels.CommunityViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.ChatsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
@@ -46,24 +39,12 @@ public class CommunityActivity extends AppCompatActivity implements
 {
     long communityID;
     Button settingsButton;
-    FragmentContainerView fragmentContainerView;
-    ConstraintLayout.LayoutParams layoutParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_community);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-//        Setup to manipulate view params in code
-        fragmentContainerView = findViewById(R.id.fragmentContainer);
-        layoutParams = (ConstraintLayout.LayoutParams) fragmentContainerView.getLayoutParams();
-
 //        Setup startup fragment in container
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
@@ -72,7 +53,6 @@ public class CommunityActivity extends AppCompatActivity implements
         Button homeButton = findViewById(R.id.communityHomeButton);
         settingsButton = findViewById(R.id.communitySettingsButton);
         settingsButton.setOnClickListener(v -> {
-//            this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new SettingsFragment())
                     .addToBackStack("uniqueFrag")
@@ -80,38 +60,38 @@ public class CommunityActivity extends AppCompatActivity implements
 //            Hide settings button after displaying SettingsFragment
             settingsButton.setVisibility(View.INVISIBLE);
         });
+
+//        Bundle storing community data
+        Bundle communityBundle = new Bundle();
+
 //        Load Community id and name from intent
         Intent intent = getIntent();
         if (intent.hasExtra("communityID")) {
             communityID = intent.getLongExtra("communityID", 1);
+            communityBundle.putLong("communityID", communityID);
         }
         if (intent.hasExtra("communityName")){
-            homeButton.setText(intent.getStringExtra("communityName"));
+            String communityName = intent.getStringExtra("communityName");
+            homeButton.setText(communityName);
+            communityBundle.putString("communityName", communityName);
         }
-        Bundle bundle = new Bundle();
-        bundle.putLong("communityID", communityID);
 
         homeButton.setOnClickListener(v -> {
+            CommunityWelcomeFragment communityWelcomeFragment = new CommunityWelcomeFragment();
+            communityWelcomeFragment.setArguments(communityBundle);
             this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
+                    .replace(R.id.fragmentContainer, communityWelcomeFragment)
                     .commit();
         });
 
 //        Handle bottom navbar events
-//        TODO na wejściu jest pusto i jedna opcja jest zaznaczona, trzeba dorzucic jakiś default fragment do wyświetlania na start
-//        TODO ogarnac transition bo jak klikasz w lewo a slide w prawo to troche gryzie w oczy, dac slide in i out
         NavigationBarView navbar = findViewById(R.id.bottom_navbar);
         navbar.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.navbar_menu_chats) {
-
-//                Zmiana wyswietlania fragmentContainer aby fragment zaczynał sie od góry
-                layoutParams.bottomToTop = ConstraintLayout.LayoutParams.UNSET;
-                fragmentContainerView.setLayoutParams(layoutParams);
-
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 ChatsFragment chatsFragment = new ChatsFragment();
-                chatsFragment.setArguments(bundle);
+                chatsFragment.setArguments(communityBundle);
                 this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, chatsFragment)
                         .addToBackStack("uniqueFrag")
@@ -119,14 +99,9 @@ public class CommunityActivity extends AppCompatActivity implements
                 return true;
             }
             else if (item.getItemId() == R.id.navbar_menu_channels) {
-                
-//                Zmiana wyswietlania fragmentContainer aby fragment zaczynał sie od góry
-                layoutParams.bottomToTop = ConstraintLayout.LayoutParams.UNSET;
-                fragmentContainerView.setLayoutParams(layoutParams);
-
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 ChannelsFragment channelsFragment = new ChannelsFragment();
-                channelsFragment.setArguments(bundle);
+                channelsFragment.setArguments(communityBundle);
                 this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, channelsFragment)
                         .addToBackStack("uniqueFrag")
@@ -136,7 +111,7 @@ public class CommunityActivity extends AppCompatActivity implements
             else if (item.getItemId() == R.id.navbar_menu_users) {
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 UsersFragment usersFragment = new UsersFragment();
-                usersFragment.setArguments(bundle);
+                usersFragment.setArguments(communityBundle);
                 this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, usersFragment)
                         .addToBackStack("uniqueFrag")
@@ -152,6 +127,10 @@ public class CommunityActivity extends AppCompatActivity implements
         return true;
     }
 
+    /**
+     * Allows user to join a specific voice channel of available channels in RecyclerView from ChannelsFragment
+     * @param channel - specific channel selected from a list
+     */
     @Override
     public void onItemClickListener(ChannelModel channel) {
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -166,6 +145,10 @@ public class CommunityActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    /**
+     * Allows user to join a specific text chat of available chats in RecyclerView from ChatsFragment
+     * @param chat - specific chat selected from a list
+     */
     @Override
     public void onItemClickListener(ChatModel chat) {
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -174,11 +157,6 @@ public class CommunityActivity extends AppCompatActivity implements
         chatBundle.putString("chatName", chat.getChatName());
         TextChatFragment textChatFragment = new TextChatFragment();
         textChatFragment.setArguments(chatBundle);
-
-//        Zmiana wyswietlania fragmentContainer aby fragment zajal cala wolna przestrzen
-        layoutParams.bottomToTop = R.id.bottom_navbar;
-        fragmentContainerView.setLayoutParams(layoutParams);
-
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, textChatFragment)
                 .addToBackStack("uniqueSubFrag")

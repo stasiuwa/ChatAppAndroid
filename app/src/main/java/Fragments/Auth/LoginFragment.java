@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.szampchat.R;
 
-import Data.ViewModels.UserViewModel;
+import DataAccess.ViewModels.UserViewModel;
 
 public class LoginFragment extends Fragment {
 

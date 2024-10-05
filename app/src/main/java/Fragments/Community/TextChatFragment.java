@@ -1,18 +1,24 @@
 package Fragments.Community;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.szampchat.R;
@@ -24,7 +30,7 @@ import java.util.Date;
 import Adapters.MessageAdapter;
 import Data.Models.MessageModel;
 import Data.Relations.ChatWithMessages;
-import Data.ViewModels.MessagesViewModel;
+import DataAccess.ViewModels.MessagesViewModel;
 
 public class TextChatFragment extends Fragment{
 
@@ -32,6 +38,9 @@ public class TextChatFragment extends Fragment{
     MessageAdapter messageAdapter;
     String chatName;
     long chatID;
+
+    FragmentContainerView fragmentContainerView;
+    ConstraintLayout.LayoutParams layoutParams;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +63,6 @@ public class TextChatFragment extends Fragment{
                 chatName = "Chat name not found!";
             }
         }
-
 //        Displaying messages
         messagesViewModel = new ViewModelProvider(this).get(MessagesViewModel.class);
         messageAdapter = new MessageAdapter(requireActivity());
@@ -82,11 +90,20 @@ public class TextChatFragment extends Fragment{
                             "TEST"
                     ));
             messageAdapter.notifyDataSetChanged();
+//            Clear messageText value and focus
+            messageText.getText().clear();
+            messageText.clearFocus();
+//            Hide system keyboard
+            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//            TODO nie działa, poprawic
+            ScrollView scrollView = view.findViewById(R.id.messagesScrollView);
+            scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
         });
 
 //        Chat name in top side of the view
-        TextView test1 = view.findViewById(R.id.textChatName);
-        test1.setText(getArguments().getString("chatName"));
+        TextView chatName = view.findViewById(R.id.textChatName);
+        chatName.setText(getArguments().getString("chatName"));
 
         return view;
     }
@@ -95,5 +112,13 @@ public class TextChatFragment extends Fragment{
     public void onStart() {
         super.onStart();
         requireActivity().findViewById(R.id.communitySettingsButton).setVisibility(View.VISIBLE);
+        requireActivity().findViewById(R.id.bottom_navbar).setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireActivity().findViewById(R.id.bottom_navbar).setVisibility(View.VISIBLE);
     }
 }

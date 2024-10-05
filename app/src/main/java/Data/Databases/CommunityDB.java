@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import Data.DAO.CommunityDAO;
+import DataAccess.DAO.CommunityDAO;
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;
 import Data.Models.CommunityModel;

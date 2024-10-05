@@ -8,22 +8,25 @@
         android:id="@+id/textChatName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
     <ScrollView
         android:id="@+id/messagesScrollView"
-        app:layout_constraintTop_toBottomOf="@id/textChatName"
+        android:padding="15dp"
+        app:layout_constraintBottom_toTopOf="@id/messageInput"
         android:layout_width="match_parent"
-        android:layout_height="550dp">
+        android:layout_height="620dp"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        >
         <androidx.recyclerview.widget.RecyclerView
+            android:isScrollContainer="false"
             android:id="@+id/messagesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/textChatName"
-            app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/item_list_message_received"
             >
         </androidx.recyclerview.widget.RecyclerView>
@@ -31,16 +34,17 @@
     <LinearLayout
         android:id="@+id/messageInput"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="55dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/cardview_dark_background"
         android:gravity="center"
         >
         <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/outline_add_circle_24"
             />
@@ -51,12 +55,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="14sp"
             />
         <Button
             android:id="@+id/messageSendButton"
             android:layout_marginStart="10dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             app:layout_constraintStart_toEndOf="@id/inputText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

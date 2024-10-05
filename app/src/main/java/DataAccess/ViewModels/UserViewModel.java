@@ -1,4 +1,4 @@
-package Data.ViewModels;
+package DataAccess.ViewModels;
 
 import android.app.Application;
 
@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import DataAccess.Repositories.CommunityRepository;
 import Data.Models.UserModel;
-import Data.Repositories.CommunityRepository;
 
 public class UserViewModel extends AndroidViewModel {
     private final CommunityRepository repository;

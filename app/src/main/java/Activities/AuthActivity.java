@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.szampchat.R;
 
-import Data.ViewModels.UserViewModel;
+import DataAccess.ViewModels.UserViewModel;
 import Fragments.Auth.LoginFragment;
 import Fragments.Auth.RegisterFragment;
 

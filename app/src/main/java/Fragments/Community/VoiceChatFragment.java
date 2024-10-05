@@ -15,7 +15,8 @@ import Data.Models.ChannelModel;
 
 public class VoiceChatFragment extends Fragment {
 
-    ChannelModel voiceChat;
+    long channelID;
+    String channelName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,8 +27,20 @@ public class VoiceChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_voice_chat, container, false);
 
+        Bundle receivedBundle = getArguments();
+        if (receivedBundle != null){
+            if (receivedBundle.containsKey("channelID")){
+                channelID = receivedBundle.getLong("channelID");
+            }
+            if (receivedBundle.containsKey("channelName")){
+                channelName = receivedBundle.getString("channelName");
+            } else {
+                channelName = "Channel name not found!";
+            }
+        }
+
         TextView test1 = view.findViewById(R.id.test1);
-        test1.setText("chuj2");
+        test1.setText(channelName);
 
         return view;
     }

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,7 @@ import com.szampchat.R;
 
 import Adapters.ChannelAdapter;
 import Data.Relations.CommunityWithChannels;
-import Data.Relations.CommunityWithChats;
-import Data.ViewModels.CommunityViewModel;
+import DataAccess.ViewModels.CommunityViewModel;
 
 public class ChannelsFragment extends Fragment {
 

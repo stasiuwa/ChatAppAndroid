@@ -1,4 +1,4 @@
-package Data.ViewModels;
+package DataAccess.ViewModels;
 
 import android.app.Application;
 
@@ -8,11 +8,10 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import Data.Models.ChannelModel;
+import DataAccess.Repositories.CommunityRepository;
 import Data.Models.CommunityModel;
 import Data.Relations.CommunityWithChannels;
 import Data.Relations.CommunityWithChats;
-import Data.Repositories.CommunityRepository;
 
 public class CommunityViewModel extends AndroidViewModel {
     private final CommunityRepository communityRepository;

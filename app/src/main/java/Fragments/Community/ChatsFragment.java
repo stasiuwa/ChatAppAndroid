@@ -7,24 +7,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.szampchat.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import Adapters.ChatAdapter;
-import Adapters.MessageAdapter;
-import Data.Models.ChatModel;
-import Data.Relations.CommunityWithChannels;
 import Data.Relations.CommunityWithChats;
-import Data.ViewModels.CommunityViewModel;
+import DataAccess.ViewModels.CommunityViewModel;
 
 public class ChatsFragment extends Fragment{
 

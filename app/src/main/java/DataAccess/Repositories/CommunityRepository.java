@@ -1,4 +1,4 @@
-package Data.Repositories;
+package DataAccess.Repositories;
 
 import android.app.Application;
 
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import Data.DAO.CommunityDAO;
+import DataAccess.DAO.CommunityDAO;
 import Data.Databases.CommunityDB;
 import Data.Models.ChannelModel;
 import Data.Models.ChatModel;

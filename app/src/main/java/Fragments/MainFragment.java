@@ -20,7 +20,7 @@ import com.szampchat.R;
 import java.util.Collections;
 
 import Adapters.CommunityAdapter;
-import Data.ViewModels.CommunityViewModel;
+import DataAccess.ViewModels.CommunityViewModel;
 
 public class MainFragment extends Fragment {
 
