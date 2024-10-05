@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,16 +17,16 @@ import android.widget.Button;
 
 import com.szampchat.R;
 
+import java.util.Collections;
+
 import Adapters.CommunityAdapter;
+import Data.ViewModels.CommunityViewModel;
 
 public class MainFragment extends Fragment {
 
     CommunityAdapter adapter;
+    CommunityViewModel communityViewModel;
     MainFragmentListener mainFragmentListener;
-
-    public MainFragment(CommunityAdapter adapter) {
-        this.adapter = adapter;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,7 +42,6 @@ public class MainFragment extends Fragment {
     public interface MainFragmentListener {
         void callCreateCommunityDialog();
         void callAddCommunityDialog();
-        void showSettingsButton();
     }
 
     @Override
@@ -57,6 +57,15 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+//        Setup adapter and loading communities list
+        adapter = new CommunityAdapter(requireActivity());
+        communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
+        communityViewModel.getAllCommunities().observe(requireActivity(), communityModels -> {
+//            reverse so the earliest added Community will be displayed on top
+            Collections.reverse(communityModels);
+            adapter.setCommunitiesList(communityModels);
+        });
+
 //        Setup RecyclerView for showing communities in grid
         RecyclerView recyclerView = view.findViewById(R.id.communitiesGrid);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -71,6 +80,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mainFragmentListener.showSettingsButton();
+        requireActivity().findViewById(R.id.mainSettingsButton).setVisibility(View.VISIBLE);
     }
 }

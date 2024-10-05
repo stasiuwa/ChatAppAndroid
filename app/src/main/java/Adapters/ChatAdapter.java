@@ -1,6 +1,7 @@
 package Adapters;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Data.Models.ChatModel;
 
-//TODO dokonczyc jak beda gotowe widoki
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder>  {
 
     Activity activity;
     List<ChatModel> chatsList;
@@ -25,9 +26,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     private OnItemClickListener onItemClickListener;
 
     public ChatAdapter(Activity activity) {
-        this.activity = activity;
         this.layoutInflater = LayoutInflater.from(activity);
-        chatsList = null;
+        this.activity = activity;
+        this.chatsList = null;
         try {
             onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
@@ -35,16 +36,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
     }
-
     public interface OnItemClickListener {
         void onItemClickListener(ChatModel chat);
     }
-
-    public void setChatsList(List<ChatModel> chatsList) {
-        this.chatsList = chatsList;
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,14 +50,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         ChatModel chat = chatsList.get(position);
         holder.setChatName(chat.getChatName());
+//        TODO przerobic
         holder.setChatSubname("Ilość nieprzeczytanych wiadomosci");
     }
 
-
-
     @Override
     public int getItemCount() {
-        return chatsList.size();
+//        Log.d("getItemCount", String.valueOf(chatsList.size()));
+        return (chatsList != null) ? chatsList.size() : 0;
+    }
+
+    public void setChatsList(List<ChatModel> chatsList) {
+        this.chatsList = chatsList;
+        notifyDataSetChanged();
     }
 
     public class ChatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

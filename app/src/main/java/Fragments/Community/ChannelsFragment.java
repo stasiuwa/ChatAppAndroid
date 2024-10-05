@@ -17,12 +17,6 @@ import Adapters.ChannelAdapter;
 
 public class ChannelsFragment extends Fragment {
 
-    ChannelAdapter adapter;
-
-    public ChannelsFragment(ChannelAdapter adapter) {
-        this.adapter = adapter;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +32,7 @@ public class ChannelsFragment extends Fragment {
 //        Setup RecyclerView to show channels from specific community
         RecyclerView recyclerView = view.findViewById(R.id.channelsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setAdapter(adapter);
 
         return view;
     }

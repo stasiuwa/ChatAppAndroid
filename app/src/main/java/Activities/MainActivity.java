@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements
         MainFragment.MainFragmentListener
 {
     CommunityViewModel mCommunitiesViewModel;
-    CommunityAdapter adapter;
 
     Button settingsButton;
 
@@ -63,19 +62,9 @@ public class MainActivity extends AppCompatActivity implements
             settingsButton.setVisibility(View.INVISIBLE);
         });
 
-//        Setup adapter for communities
-        adapter = new CommunityAdapter(this);
-        mCommunitiesViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-        mCommunitiesViewModel.getAllCommunities().observe(this, communityModels -> {
-//            reverse so the earliest added Community will be displayed on top
-            Collections.reverse(communityModels);
-            adapter.setCommunitiesList(communityModels);
-        });
-
 //        Initial setup fragment with communities recyclerview, passed adapter to constructor
-        MainFragment mainFragment = new MainFragment(adapter);
         this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, mainFragment)
+                .replace(R.id.fragmentContainer, new MainFragment())
                 .commit();
 
     }
@@ -122,14 +111,9 @@ public class MainActivity extends AppCompatActivity implements
         createButton.setText("STWÓRZ");
         createCommunityDialog.show();
     }
-
     /**
      * Changing visibility of settings button after resuming main fragment
      */
-    @Override
-    public void showSettingsButton() {
-        settingsButton.setVisibility(View.VISIBLE);
-    }
     @Override
     public void onItemClickListener(CommunityModel community) {
 //        Log.d("COMMUNITY-MAIN", "id: " + community.getCommunityID());

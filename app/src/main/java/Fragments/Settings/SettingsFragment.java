@@ -1,9 +1,7 @@
 package Fragments.Settings;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +11,7 @@ import android.widget.LinearLayout;
 import com.szampchat.R;
 
 public class SettingsFragment extends Fragment {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

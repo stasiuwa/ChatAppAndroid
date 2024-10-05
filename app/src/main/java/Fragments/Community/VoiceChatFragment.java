@@ -17,10 +17,6 @@ public class VoiceChatFragment extends Fragment {
 
     ChannelModel voiceChat;
 
-    public VoiceChatFragment(ChannelModel voiceChat) {
-        this.voiceChat = voiceChat;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +27,15 @@ public class VoiceChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_voice_chat, container, false);
 
         TextView test1 = view.findViewById(R.id.test1);
-        test1.setText(voiceChat.getChannelName());
+        test1.setText("chuj2");
 
         return view;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireActivity().findViewById(R.id.communitySettingsButton).setVisibility(View.VISIBLE);
     }
 }

@@ -39,7 +39,7 @@ public class CommunityRepository {
             dao.addCommunity(community);
         });
     }
-    public LiveData<List<CommunityModel>> getAllCommunities() {
+    public LiveData<List<CommunityModel>> getCommunities() {
         return allCommunities;
     }
     public void deleteCommunity(CommunityModel community) {
@@ -50,12 +50,15 @@ public class CommunityRepository {
     public LiveData<CommunityModel> getCommunity(long id){
         return dao.getCommunity(id);
     }
-    public LiveData<List<CommunityWithChannels>> getChannels(long id){
+
+    public LiveData<List<CommunityWithChannels>> getChannels(long id) {
         return dao.getChannels(id);
     }
-
     public LiveData<List<CommunityWithChats>> getChats(long id){
         return dao.getChats(id);
+    }
+    public LiveData<List<CommunityWithChats>> getAllChats(){
+        return allChats;
     }
 
 //    Channels
@@ -63,9 +66,6 @@ public class CommunityRepository {
         CommunityDB.databaseWriteExecutor.execute(() -> {
             dao.addChannel(channel);
         });
-    }
-    public LiveData<List<CommunityWithChannels>> getAllChannels() {
-        return allChannels;
     }
     public void deleteChannel(ChannelModel channel) {
         CommunityDB.databaseWriteExecutor.execute(() -> {
@@ -78,9 +78,6 @@ public class CommunityRepository {
         CommunityDB.databaseWriteExecutor.execute(() -> {
             dao.addChat(chat);
         });
-    }
-    public LiveData<List<CommunityWithChats>> getAllChats() {
-        return allChats;
     }
     public void deleteChat(ChatModel chat) {
         CommunityDB.databaseWriteExecutor.execute(() -> {

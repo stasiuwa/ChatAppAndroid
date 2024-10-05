@@ -15,9 +15,4 @@
         android:icon="@drawable/sharp_account_circle_24"
         android:title="Użytkownicy"
         />
-    <item
-        android:id="@+id/navbar_menu_settings"
-        android:icon="@drawable/sharp_manufacturing_24"
-        android:title="Ustawienia"
-        />
 </menu>

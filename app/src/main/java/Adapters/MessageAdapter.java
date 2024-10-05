@@ -14,6 +14,7 @@ import com.szampchat.R;
 import java.util.Date;
 import java.util.List;
 
+import Data.Models.ChatModel;
 import Data.Models.MessageModel;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -31,7 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public MessageAdapter(Activity activity) {
         this.activity = activity;
         this.layoutInflater = LayoutInflater.from(activity);
-        messagesList = null;
+        this.messagesList = null;
         try {
             onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
@@ -45,6 +46,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void setMessagesList(List<MessageModel> messagesList) {
         this.messagesList = messagesList;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return (messagesList != null) ? messagesList.size() : 0;
     }
 
     @Override
@@ -95,10 +101,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return messagesList.size();
-    }
+
 
 //    ViewHolder for messages sent by user in app
     public class SentMessageHolder extends RecyclerView.ViewHolder {

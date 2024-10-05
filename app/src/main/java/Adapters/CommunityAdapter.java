@@ -18,13 +18,14 @@ import Data.Models.CommunityModel;
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
     Activity activity;
     List<CommunityModel> communitiesList;
+
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
 
     public CommunityAdapter(Activity activity) {
         this.layoutInflater = LayoutInflater.from(activity);
         this.activity = activity;
-        communitiesList = null;
+        this.communitiesList = null;
         try {
             onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
