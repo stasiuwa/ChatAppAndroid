@@ -3,6 +3,7 @@ package Fragments.Community;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,14 +22,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import Adapters.MessageAdapter;
-import Data.Models.ChatModel;
 import Data.Models.MessageModel;
 import Data.Relations.ChatWithMessages;
-import Data.ViewModels.TextChatViewModel;
+import Data.ViewModels.MessagesViewModel;
 
 public class TextChatFragment extends Fragment{
 
-    TextChatViewModel messagesViewModel;
+    MessagesViewModel messagesViewModel;
     MessageAdapter messageAdapter;
     String chatName;
     long chatID;
@@ -41,6 +41,7 @@ public class TextChatFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_text_chat, container, false);
+
 //        Receive chat data from bundle
         Bundle receivedBundle = getArguments();
         if (receivedBundle != null){
@@ -55,7 +56,7 @@ public class TextChatFragment extends Fragment{
         }
 
 //        Displaying messages
-        messagesViewModel = new ViewModelProvider(this).get(TextChatViewModel.class);
+        messagesViewModel = new ViewModelProvider(this).get(MessagesViewModel.class);
         messageAdapter = new MessageAdapter(requireActivity());
 
         messagesViewModel.getMessages(chatID).observe(getViewLifecycleOwner(), chatModels -> {

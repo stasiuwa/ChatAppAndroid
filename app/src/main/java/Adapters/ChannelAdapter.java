@@ -42,6 +42,11 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemCount() {
+        return (channelsList != null) ? channelsList.size() : 0;
+    }
+
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,11 +59,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         ChannelModel channel = channelsList.get(position);
         holder.setChannelName(channel.getChannelName());
         holder.setChannelSubname("ilość użytkowników onlin");
-    }
-
-    @Override
-    public int getItemCount() {
-        return channelsList.size();
     }
 
     public class ChannelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

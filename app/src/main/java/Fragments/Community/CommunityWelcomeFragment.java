@@ -25,4 +25,10 @@ public class CommunityWelcomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_community_welcome, container, false);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireActivity().findViewById(R.id.communitySettingsButton).setVisibility(View.VISIBLE);
+    }
 }

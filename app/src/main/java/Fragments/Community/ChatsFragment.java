@@ -47,15 +47,15 @@ public class ChatsFragment extends Fragment{
         try {
             communityID = getArguments().getLong("communityID");
         } catch (NullPointerException e) {
-            throw new NullPointerException("communityID from fragment arguments is null");
+            throw new NullPointerException("communityID from fragment's arguments is null");
         }
         Log.d("ID", String.valueOf(communityID));
 
         chatAdapter = new ChatAdapter(requireActivity());
         communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
-        communityViewModel.getChats(communityID).observe(requireActivity(), chatModels -> {
-            if (!chatModels.isEmpty()) {
-                CommunityWithChats temp = chatModels.get(0);
+        communityViewModel.getChats(communityID).observe(getViewLifecycleOwner(), communityWithChats -> {
+            if (!communityWithChats.isEmpty()) {
+                CommunityWithChats temp = communityWithChats.get(0);
                 if (temp != null) {
                     chatAdapter.setChatsList(temp.chats);
                 }

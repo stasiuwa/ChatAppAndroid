@@ -9,9 +9,11 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -44,6 +46,8 @@ public class CommunityActivity extends AppCompatActivity implements
 {
     long communityID;
     Button settingsButton;
+    FragmentContainerView fragmentContainerView;
+    ConstraintLayout.LayoutParams layoutParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +60,16 @@ public class CommunityActivity extends AppCompatActivity implements
             return insets;
         });
 
+//        Setup to manipulate view params in code
+        fragmentContainerView = findViewById(R.id.fragmentContainer);
+        layoutParams = (ConstraintLayout.LayoutParams) fragmentContainerView.getLayoutParams();
+
+//        Setup startup fragment in container
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
                 .commit();
 
-//        Setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        Button homeButton = findViewById(R.id.communityHomeButton);
         settingsButton = findViewById(R.id.communitySettingsButton);
         settingsButton.setOnClickListener(v -> {
 //            this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -78,30 +82,15 @@ public class CommunityActivity extends AppCompatActivity implements
         });
 //        Load Community id and name from intent
         Intent intent = getIntent();
-        if (intent.hasExtra("CommunityID")) {
-            communityID = intent.getLongExtra("CommunityID", 1);
+        if (intent.hasExtra("communityID")) {
+            communityID = intent.getLongExtra("communityID", 1);
         }
         if (intent.hasExtra("communityName")){
-            getSupportActionBar().setTitle(intent.getStringExtra("communityName"));
+            homeButton.setText(intent.getStringExtra("communityName"));
         }
         Bundle bundle = new Bundle();
         bundle.putLong("communityID", communityID);
 
-//        Load channels from community to adapter
-//        communityViewModel.getChannels(communityID).observe(this, channelModels -> {
-//            for (CommunityWithChannels community : channelModels) {
-//                channelAdapter.setChannelsList(new ArrayList<>(community.channels));
-//            }
-//        });
-//        Load Chats from community to adapter
-//        communityViewModel.getChats(communityID).observe(this, chatModels -> {
-//            for (CommunityWithChats community : chatModels) {
-//                chatAdapter.setChatsList(new ArrayList<>(community.chats));
-//            }
-//        });
-
-//        Button displaying welcome page of community (fragment)
-        Button homeButton = findViewById(R.id.communityHomeButton);
         homeButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             this.getSupportFragmentManager().beginTransaction()
@@ -115,6 +104,11 @@ public class CommunityActivity extends AppCompatActivity implements
         NavigationBarView navbar = findViewById(R.id.bottom_navbar);
         navbar.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.navbar_menu_chats) {
+
+//                Zmiana wyswietlania fragmentContainer aby fragment zaczynał sie od góry
+                layoutParams.bottomToTop = ConstraintLayout.LayoutParams.UNSET;
+                fragmentContainerView.setLayoutParams(layoutParams);
+
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 ChatsFragment chatsFragment = new ChatsFragment();
                 chatsFragment.setArguments(bundle);
@@ -125,6 +119,11 @@ public class CommunityActivity extends AppCompatActivity implements
                 return true;
             }
             else if (item.getItemId() == R.id.navbar_menu_channels) {
+                
+//                Zmiana wyswietlania fragmentContainer aby fragment zaczynał sie od góry
+                layoutParams.bottomToTop = ConstraintLayout.LayoutParams.UNSET;
+                fragmentContainerView.setLayoutParams(layoutParams);
+
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 ChannelsFragment channelsFragment = new ChannelsFragment();
                 channelsFragment.setArguments(bundle);
@@ -156,8 +155,13 @@ public class CommunityActivity extends AppCompatActivity implements
     @Override
     public void onItemClickListener(ChannelModel channel) {
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle channelBundle = new Bundle();
+        channelBundle.putLong("channelID", channel.getChannelID());
+        channelBundle.putString("channelName", channel.getChannelName());
+        VoiceChatFragment voiceChatFragment = new VoiceChatFragment();
+        voiceChatFragment.setArguments(channelBundle);
         this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, new VoiceChatFragment())
+                .replace(R.id.fragmentContainer, voiceChatFragment)
                 .addToBackStack("uniqueSubFrag")
                 .commit();
     }
@@ -170,6 +174,11 @@ public class CommunityActivity extends AppCompatActivity implements
         chatBundle.putString("chatName", chat.getChatName());
         TextChatFragment textChatFragment = new TextChatFragment();
         textChatFragment.setArguments(chatBundle);
+
+//        Zmiana wyswietlania fragmentContainer aby fragment zajal cala wolna przestrzen
+        layoutParams.bottomToTop = R.id.bottom_navbar;
+        fragmentContainerView.setLayoutParams(layoutParams);
+
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, textChatFragment)
                 .addToBackStack("uniqueSubFrag")

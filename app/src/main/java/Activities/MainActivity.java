@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements
         }
         else {
             Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
-            intent.putExtra("CommunityID", community.getCommunityID());
+            intent.putExtra("communityID", community.getCommunityID());
+            intent.putExtra("communityName", community.getCommunityName());
             startActivity(intent);
         }
     }

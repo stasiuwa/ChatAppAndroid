@@ -8,16 +8,15 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import Data.Models.ChatModel;
 import Data.Models.MessageModel;
 import Data.Relations.ChatWithMessages;
 import Data.Repositories.CommunityRepository;
 
-public class TextChatViewModel extends AndroidViewModel {
+public class MessagesViewModel extends AndroidViewModel {
 
     private final CommunityRepository repository;
 
-    public TextChatViewModel(@NonNull Application application) {
+    public MessagesViewModel(@NonNull Application application) {
         super(application);
         this.repository = new CommunityRepository(application);
     }
