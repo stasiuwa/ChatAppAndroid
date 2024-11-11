@@ -8,21 +8,22 @@ import retrofit2.http.POST;
 
 public interface KeycloakService {
 
-//    @POST("/auth/realms/szampchat/protocol/openid-connect/token")
-//    @FormUrlEncoded
-//    Call<Token> getAccessToken(
-//            @Field("client_id") String client_id,
-//            @Field("grant_type") String grant_type,
-//            @Field("username") String username,
-//            @Field("password") String password
-//    );
-//
-//    @POST("token")
-//    @FormUrlEncoded
-//    Call<Token> refreshAccessToken(
-//            @Field("client_id") String client_id,
-//            @Field("grant_type") String grant_type
-//    );
+    @POST("/realms/szampchat/protocol/openid-connect/token")
+    @FormUrlEncoded
+    Call<Token> getAccessToken(
+            @Field("client_id") String clientId,
+            @Field("client_secret") String secret,
+            @Field("grant_type") String grantType,
+            @Field("username") String username,
+            @Field("password") String password
+    );
+
+    @POST("token")
+    @FormUrlEncoded
+    Call<Token> refreshAccessToken(
+            @Field("client_id") String client_id,
+            @Field("grant_type") String grant_type
+    );
 
     @GET("/")
     Call<String> authorize();

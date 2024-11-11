@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.szampchat.R;
 
 import Auth.KeycloakService;
+import Auth.Token;
 import Config.Environment;
 import DataAccess.ViewModels.UserViewModel;
 import Fragments.Auth.LoginFragment;
@@ -47,25 +48,61 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.Log
     protected void onResume() {
         super.onResume();
         Uri data = getIntent().getData();
-        if (data != null && data.toString().startsWith("com.app:/oauth2redirect")) {
-            String authcode = data.getQueryParameter("code");
-            if (authcode != null){
-                Log.d("CHUj", "chuj");
+        if (data != null) {
+            String authorizationCode = data.getQueryParameter("code");
+            if (authorizationCode != null) {
+                Log.d("AuthActivity", "Otrzymano kod autoryzacyjny: " + authorizationCode);
+            } else {
+                Log.e("AuthActivity", "Brak kodu autoryzacyjnego w URL.");
             }
+        } else {
+            Log.e("AuthActivity", "Przekierowanie nie zostało poprawnie odebrane.");
         }
     }
 
     @Override
-    public void verifyLogin() {
+    public void verifyLogin(String username, String password) {
 //       TODO narazie tak zostaje, bo nie ma co sie z tym meczycz jak potem trzeba bedzie zmienic na serwer
+//
+//        String keycloakURL = Environment.keycloakUrl +
+//                "/realms/szampchat/protocol/openid-connect/auth" +
+//                "?client_id=mobile" +
+//                "&response_type=code" +
+//                "&redirect_uri=com.szampchat:/oauth2redirect";
+//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(keycloakURL));
+//        browserIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//        startActivity(browserIntent);
 
-        String keycloakURL = Environment.keycloakUrl +
-                "/realms/szampchat/protocol/openid-connect/auth" +
-                "?client_id=mobile" +
-                "&response_type=code" +
-                "&redirect_uri=com.szampchat:/oauth2redirect";
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(keycloakURL));
-        startActivity(browserIntent);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Environment.keycloakUrl)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+        KeycloakService keycloakService = retrofit.create(KeycloakService.class);
+
+        Call<Token> call = keycloakService.getAccessToken(
+                Environment.keycloakClientId,
+                Environment.secret,
+                "password",
+                username,
+                password
+        );
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Token tokenResponse = response.body();
+                    Log.d("AuthActivity", "Token: " + tokenResponse.getAccessToken());
+                    Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Log.e("AuthActivity", "Błąd logowania: " + response.code() + " " + response.message());
+                }
+            }
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Log.e("AuthActivity", "Błąd podczas wywoływania usługi: " + t.getMessage());
+            }
+        });
     }
 
     /**

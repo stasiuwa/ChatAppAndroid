@@ -26,7 +26,7 @@ public class LoginFragment extends Fragment {
 
 //    Functions required by this fragment to implement
     public interface LoginListener {
-        void verifyLogin();
+        void verifyLogin(String username, String password);
         void switchToRegister();
     }
 
@@ -54,16 +54,16 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
 //        Setup login form view elements
-//        EditText login = view.findViewById(R.id.loginTextField);
-//        EditText password = view.findViewById(R.id.passwordTextField);
+        EditText login = view.findViewById(R.id.loginTextField);
+        EditText password = view.findViewById(R.id.passwordTextField);
 
-//        Button registerButton = (Button) view.findViewById(R.id.registerButton);
-//        registerButton.setOnClickListener( v -> {
-//            loginListener.switchToRegister();
-//        });
+        Button registerButton = (Button) view.findViewById(R.id.registerButton);
+        registerButton.setOnClickListener( v -> {
+            loginListener.switchToRegister();
+        });
         Button loginButton = (Button) view.findViewById(R.id.loginButton);
         loginButton.setOnClickListener( v -> {
-            loginListener.verifyLogin();
+            loginListener.verifyLogin(login.getText().toString(), password.getText().toString());
         });
         return view;
     }

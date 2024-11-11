@@ -11,6 +11,7 @@ public class Environment {
     public static String keycloakUrl = "http://192.168.1.15:8082";
     public static String keycloakRealm = "szampchat";
     public static String keycloakClientId = "mobile";
+    public static String secret = "KlsMk16MOuKhptSYloXVpSwFtZD4gSjh";
 
     public static String websocketUrl = "ws://localhost:8083/events";
 //    snowflakeEpoch =
