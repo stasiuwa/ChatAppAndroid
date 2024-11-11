@@ -8,11 +8,14 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "users")
 public class UserModel {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "ID")
+    @ColumnInfo(name = "userID")
     private long userID;
     @NonNull
     @ColumnInfo(name = "Username")
     String username;
+
+    @ColumnInfo(name = "communityOwnerID")
+    public long communityID;
 
     public UserModel(@NonNull String username) {
         this.username = username;
