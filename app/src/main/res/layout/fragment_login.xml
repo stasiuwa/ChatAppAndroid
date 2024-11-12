@@ -41,6 +41,7 @@
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:gravity="center"
+        android:inputType="textPassword"
         android:hint="haslo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

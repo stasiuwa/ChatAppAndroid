@@ -2,13 +2,16 @@ package Activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -17,39 +20,102 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.szampchat.R;
 
+import java.util.Arrays;
+
 import Adapters.CommunityAdapter;
+import Auth.Token;
+import Auth.UserService;
+import Config.Environment;
 import Data.Models.CommunityModel;
+import Data.DTO.UserInfo;
 import DataAccess.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements
         CommunityAdapter.OnItemClickListener,
         MainFragment.MainFragmentListener
 {
-    CommunityViewModel mCommunitiesViewModel;
 
+    CommunityViewModel mCommunitiesViewModel;
     Button settingsButton;
+    Token token = new Token();
+    UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-//        Setup toolbar
+        //        Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Społeczności");
 
+//        Load token from SharedPreferences
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
+        token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Environment.api)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+        userService = retrofit.create(UserService.class);
+        Call<UserInfo> userInfoCall = userService.getCurrentUser("Bearer "+token.getAccessToken());
+        userInfoCall.enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(@NonNull Call<UserInfo> call, @NonNull Response<UserInfo> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    if (response.body().getId() != null && response.body().getUsername() != null)
+                    {
+                        Log.d("UserInfo - id", response.body().getId());
+                        Log.d("UserInfo - username", response.body().getUsername());
+
+                        String id = response.body().getId();
+                        String username = response.body().getUsername();
+//                    TODO przerobic na proto DataStore np.
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("userId", id);
+                        editor.putString("username", username);
+                        getSupportActionBar().setTitle("YO! "+username);
+                        if (response.body().getDescription() != null) {
+                            String description = response.body().getDescription();
+                            Log.d("UserInfo - description:", description);
+                            editor.putString("description", description);
+                        }
+                        if (response.body().getImageUrl() != null){
+                            String imageUrl = response.body().getImageUrl();
+                            Log.d("UserInfo - imageUrl", imageUrl);
+                            editor.putString("imageUrl", imageUrl);
+                        }
+                        editor.apply();
+                    }
+                }
+                else {
+                    Log.d("BLAD@", "Błąd pobierania danych o użytkowniku" + response.message());
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<UserInfo> call, @NonNull Throwable t) {
+                Log.d("EXCEPT", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
+            }
+        });
+
+
+
 //        Button displaying Settings section (fragment)
         settingsButton = findViewById(R.id.mainSettingsButton);
+        SettingsFragment settingsFragment = new SettingsFragment();
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new SettingsFragment())
@@ -63,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, new MainFragment())
                 .commit();
-
     }
 
     /**

@@ -1,10 +1,10 @@
 package Activities;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,9 +27,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public class AuthActivity extends AppCompatActivity implements LoginFragment.LoginListener {
+public class AuthActivity extends AppCompatActivity
+        implements LoginFragment.LoginListener, RegisterFragment.RegisterListener {
 
     UserViewModel userViewModel;
+    KeycloakService keycloakService;
+    Token token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,57 +45,42 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.Log
             return insets;
         });
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Uri data = getIntent().getData();
-        if (data != null) {
-            String authorizationCode = data.getQueryParameter("code");
-            if (authorizationCode != null) {
-                Log.d("AuthActivity", "Otrzymano kod autoryzacyjny: " + authorizationCode);
-            } else {
-                Log.e("AuthActivity", "Brak kodu autoryzacyjnego w URL.");
-            }
-        } else {
-            Log.e("AuthActivity", "Przekierowanie nie zostało poprawnie odebrane.");
-        }
-    }
-
-    @Override
-    public void verifyLogin(String username, String password) {
-//       TODO narazie tak zostaje, bo nie ma co sie z tym meczycz jak potem trzeba bedzie zmienic na serwer
-//
-//        String keycloakURL = Environment.keycloakUrl +
-//                "/realms/szampchat/protocol/openid-connect/auth" +
-//                "?client_id=mobile" +
-//                "&response_type=code" +
-//                "&redirect_uri=com.szampchat:/oauth2redirect";
-//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(keycloakURL));
-//        browserIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//        startActivity(browserIntent);
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Environment.keycloakUrl)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
-        KeycloakService keycloakService = retrofit.create(KeycloakService.class);
+        keycloakService = retrofit.create(KeycloakService.class);
+    }
 
-        Call<Token> call = keycloakService.getAccessToken(
+    /**
+     * Function calling api for user authentication and receive token which is sent to MainActivity with Intent
+     * @param username username from login form
+     * @param password password from login form
+     */
+
+    @Override
+    public void verifyLogin(String username, String password) {
+        token = new Token();
+
+        Call<Token> tokenCall = keycloakService.getAccessToken(
                 Environment.keycloakClientId,
-                Environment.secret,
                 "password",
                 username,
                 password
         );
-        call.enqueue(new Callback<Token>() {
+        tokenCall.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Token tokenResponse = response.body();
-                    Log.d("AuthActivity", "Token: " + tokenResponse.getAccessToken());
+                    token.setAccessToken(response.body().getAccessToken());
+                    token.setExpiresIn(response.body().getExpiresIn());
+                    token.setRefreshExpiresIn(response.body().getRefreshExpiresIn());
+                    token.setRefreshToken(response.body().getRefreshToken());
+                    token.setTokenType(response.body().getTokenType());
+
+                    Log.d("AuthActivity", "Token: " + token.getAccessToken());
                     Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                    saveToken(getApplicationContext(), token.getAccessToken());
                     startActivity(intent);
                 } else {
                     Log.e("AuthActivity", "Błąd logowania: " + response.code() + " " + response.message());
@@ -115,5 +103,23 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.Log
                 .addToBackStack(null)
                 .setReorderingAllowed(true)
                 .commit();
+    }
+
+    @Override
+    public void registerUser(String username, String email, String password, String passwordCheck) {
+//        dodac POST na /api/users z username
+    }
+
+//    TODO przerobic aby nie przechowywac klucz wartosć tylko obiekt typu Token
+    /**
+     * Saving token to SharedPreferences
+     * @param context
+     * @param token
+     */
+    public void saveToken(Context context, String token){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("token", token);
+        editor.apply();
     }
 }

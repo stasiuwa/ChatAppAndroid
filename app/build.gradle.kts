@@ -42,6 +42,10 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-testing:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0-alpha06")
+
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.8.4")
 
@@ -49,4 +53,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
     implementation("com.auth0.android:jwtdecode:2.0.1")
     implementation("com.google.android.gms:play-services-auth:20.0.1")
+
+
 }

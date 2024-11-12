@@ -11,8 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.szampchat.R;
 public class RegisterFragment extends Fragment {
+
+    RegisterListener registerListener;
+
+    public interface RegisterListener {
+        void registerUser(String username, String email, String password, String passwordCheck);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,12 +33,46 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-//        TODO dokonczyc xd
+
+        TextInputEditText username = view.findViewById(R.id.usernameTextField);
+        TextInputEditText email = view.findViewById(R.id.emailTextField);
+        TextInputEditText password = view.findViewById(R.id.passwordTextField);
+        TextInputEditText passwordCheck = view.findViewById(R.id.passwordCheckTextField);
+
         Button registerButton = view.findViewById(R.id.createAccountButton);
         registerButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Zalozone konto", Toast.LENGTH_SHORT);
+            String
+                    usernameText = username.getText().toString(),
+                    emailText = email.getText().toString(),
+                    passwordText = password.getText().toString(),
+                    passwordCheckText = passwordCheck.getText().toString();
+
+            boolean validate = true;
+            if (usernameText.matches("")) {
+                username.setError("Podaj nazwe użytkownika!");
+                validate = false;
+            };
+            if (emailText.matches("")) {
+                email.setError("Podaj adres email!");
+                validate = false;
+            }
+            if (passwordText.matches("")) {
+                password.setError("Podaj hasło!");
+                validate = false;
+            }
+            if (passwordCheckText.matches("")) {
+                passwordCheck.setError("Powtórz hasło!");
+                validate = false;
+            }
+            if (validate){
+                if (passwordText.matches(passwordCheckText)){
+//                    Pass params to AuthActivity function
+                    registerListener.registerUser(usernameText,emailText,passwordText,passwordCheckText);
+                } else {
+                    Toast.makeText(getContext(), "Hasła się nie zgadzają!", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
         return view;
-
     }
 }
