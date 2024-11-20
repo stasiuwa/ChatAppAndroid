@@ -72,33 +72,37 @@ public abstract class CommunityDB extends RoomDatabase {
 //                testowe spolecznosci do wyswietlenia
                 dao.addCommunity(new CommunityModel("Spolecznosc 1"));
                 dao.addCommunity(new CommunityModel("Spolecznosc 2"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 3"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 4"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 5"));
+//                dao.addCommunity(new CommunityModel("Spolecznosc 3"));
+//                dao.addCommunity(new CommunityModel("Spolecznosc 4"));
+//                dao.addCommunity(new CommunityModel("Spolecznosc 5"));
+//
+//                dao.addChat(new ChatModel("czat tekst1 com3", 3));
+//                dao.addChat(new ChatModel("czat tekst2 com3", 3));
+//                dao.addChat(new ChatModel("czat tekst1 com2", 2));
+//                dao.addChat(new ChatModel("czat tekst2 com2", 2));
+//                dao.addChat(new ChatModel("czat tekst3 com3", 3));
+//                dao.addChat(new ChatModel("czat tekst1 com4", 4));
+//                dao.addChat(new ChatModel("czat tekst2 com4", 4));
+//                dao.addChat(new ChatModel("czat tekst3 com4", 4));
+//                dao.addChat(new ChatModel("czat tekst4 com4", 4));
+//                dao.addChat(new ChatModel("czat tekst1 com5", 5));
+//                dao.addChat(new ChatModel("czat tekst1 com6", 6));
+//
+//                dao.addChannel(new ChannelModel("czat głosowy1 com3", 3));
+//                dao.addChannel(new ChannelModel("czat głosowy2 com3", 3));
+//                dao.addChannel(new ChannelModel("czat głosowy1 com2", 2));
+//                dao.addChannel(new ChannelModel("czat głosowy2 com2", 2));
+//                dao.addChannel(new ChannelModel("czat głosowy3 com3", 3));
+//                dao.addChannel(new ChannelModel("czat głosowy1 com4", 4));
+//                dao.addChannel(new ChannelModel("czat głosowy2 com4", 4));
+//                dao.addChannel(new ChannelModel("czat głosowy3 com4", 4));
+//                dao.addChannel(new ChannelModel("czat głosowy4 com4", 4));
+//                dao.addChannel(new ChannelModel("czat głosowy1 com5", 5));
+//                dao.addChannel(new ChannelModel("czat głosowy1 com6", 6));
 
-                dao.addChat(new ChatModel("czat tekst1 com3", 3));
-                dao.addChat(new ChatModel("czat tekst2 com3", 3));
-                dao.addChat(new ChatModel("czat tekst1 com2", 2));
-                dao.addChat(new ChatModel("czat tekst2 com2", 2));
-                dao.addChat(new ChatModel("czat tekst3 com3", 3));
-                dao.addChat(new ChatModel("czat tekst1 com4", 4));
-                dao.addChat(new ChatModel("czat tekst2 com4", 4));
-                dao.addChat(new ChatModel("czat tekst3 com4", 4));
-                dao.addChat(new ChatModel("czat tekst4 com4", 4));
-                dao.addChat(new ChatModel("czat tekst1 com5", 5));
-                dao.addChat(new ChatModel("czat tekst1 com6", 6));
-
-                dao.addChannel(new ChannelModel("czat głosowy1 com3", 3));
-                dao.addChannel(new ChannelModel("czat głosowy2 com3", 3));
-                dao.addChannel(new ChannelModel("czat głosowy1 com2", 2));
-                dao.addChannel(new ChannelModel("czat głosowy2 com2", 2));
-                dao.addChannel(new ChannelModel("czat głosowy3 com3", 3));
-                dao.addChannel(new ChannelModel("czat głosowy1 com4", 4));
-                dao.addChannel(new ChannelModel("czat głosowy2 com4", 4));
-                dao.addChannel(new ChannelModel("czat głosowy3 com4", 4));
-                dao.addChannel(new ChannelModel("czat głosowy4 com4", 4));
-                dao.addChannel(new ChannelModel("czat głosowy1 com5", 5));
-                dao.addChannel(new ChannelModel("czat głosowy1 com6", 6));
+                dao.addMessage(new MessageModel(1, "coś tam o górach", "22:31", "user1"));
+                dao.addMessage(new MessageModel(1, "no góry, fajne, wysokie", "22:33", "user1"));
+                dao.addMessage(new MessageModel(1, "generalnie", "22:35", "user1"));
             });
         }
 

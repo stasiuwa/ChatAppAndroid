@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.szampchat.R;
 
 import java.time.Instant;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -85,9 +87,9 @@ public class TextChatFragment extends Fragment{
                     new MessageModel(
                             getArguments().getLong("chatID"),
                             messageText.getText().toString(),
-                            String.valueOf(Date.from(Instant.now())),
+                            String.valueOf(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))),
 //                            TODO poprawic logike do pobrania nazwy uzytkownika zalogowanego do aplikacji
-                            "TEST"
+                            "user2"
                     ));
             messageAdapter.notifyDataSetChanged();
 //            Clear messageText value and focus
@@ -112,13 +114,13 @@ public class TextChatFragment extends Fragment{
     public void onStart() {
         super.onStart();
         requireActivity().findViewById(R.id.communitySettingsButton).setVisibility(View.VISIBLE);
-        requireActivity().findViewById(R.id.bottom_navbar).setVisibility(View.GONE);
+//        requireActivity().findViewById(R.id.bottom_navbar).setVisibility(View.GONE);
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        requireActivity().findViewById(R.id.bottom_navbar).setVisibility(View.VISIBLE);
+//        requireActivity().findViewById(R.id.bottom_navbar).setVisibility(View.VISIBLE);
     }
 }

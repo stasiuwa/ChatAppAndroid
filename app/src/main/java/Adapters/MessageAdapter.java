@@ -57,7 +57,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         MessageModel message = (MessageModel) messagesList.get(position);
 //        TODO poprawic logige xd sprawdzania czy wiadomosc wyslana przez uzytkownika zalogowanego do aplikacji.
-        if (message.getUsername().equals("TEST")) {
+        if (message.getUsername().equals("user2")) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else if (message.getUsername().equals("SYSTEM")){
             return VIEW_TYPE_SYSTEM_MESSAGE;

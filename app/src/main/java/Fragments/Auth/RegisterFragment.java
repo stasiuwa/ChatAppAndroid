@@ -1,7 +1,9 @@
 package Fragments.Auth;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.transition.TransitionInflater;
@@ -19,6 +21,16 @@ public class RegisterFragment extends Fragment {
 
     public interface RegisterListener {
         void registerUser(String username, String email, String password, String passwordCheck);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            registerListener = (RegisterListener) context;
+        }catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement RegisterListener interface");
+        }
     }
 
     @Override

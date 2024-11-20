@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,12 +16,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.szampchat.R;
 
+import java.util.concurrent.TimeUnit;
+
 import Auth.KeycloakService;
 import Auth.Token;
 import Config.Environment;
 import DataAccess.ViewModels.UserViewModel;
 import Fragments.Auth.LoginFragment;
 import Fragments.Auth.RegisterFragment;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,9 +49,15 @@ public class AuthActivity extends AppCompatActivity
             return insets;
         });
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.MILLISECONDS)
+                .connectTimeout(60, TimeUnit.MILLISECONDS)
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Environment.keycloakUrl)
                 .addConverterFactory(JacksonConverterFactory.create())
+                .client(client)
                 .build();
         keycloakService = retrofit.create(KeycloakService.class);
     }
@@ -89,6 +99,7 @@ public class AuthActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
                 Log.e("AuthActivity", "Błąd podczas wywoływania usługi: " + t.getMessage());
+                Toast.makeText(AuthActivity.this, "Brak połączenia z serwerem!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -108,6 +119,29 @@ public class AuthActivity extends AppCompatActivity
     @Override
     public void registerUser(String username, String email, String password, String passwordCheck) {
 //        dodac POST na /api/users z username
+        token = new Token();
+
+        Call<Token> tokenCall = keycloakService.getAccessToken(
+                Environment.keycloakClientId,
+                "password",
+                username,
+                password
+        );
+        tokenCall.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("AuthActivity", "Rejestracja");
+                } else {
+                    Log.e("AuthActivity", "Błąd rejestracji: " + response.code() + " " + response.message());
+                }
+            }
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Log.e("AuthActivity", "Błąd podczas wywoływania usługi: " + t.getMessage());
+                Toast.makeText(AuthActivity.this, "Brak połączenia z serwerem!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 //    TODO przerobic aby nie przechowywac klucz wartosć tylko obiekt typu Token
