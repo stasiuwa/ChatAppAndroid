@@ -29,4 +29,8 @@
     <string name="emailAddress">Adres e-mail:</string>
     <string name="passwordCheck">Powtórz hasło</string>
     <string name="registerTerms">Oddaję duszę szatanowi</string>
+    <string name="backgroundimage"><![CDATA["Fale png, opacity <10%, tło "]]></string>
+    <string name="edit">EDYTUJ</string>
+    <string name="cancel">ODRZUĆ</string>
+    <string name="accept">ZATWIERDŹ</string>
 </resources>

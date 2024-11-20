@@ -1,6 +1,6 @@
-package Auth;
+package Services;
 
-import Config.Environment;
+import Data.DTO.Token;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -9,6 +9,8 @@ import retrofit2.http.POST;
 public interface KeycloakService {
 
     String realm = "szampchat";
+//    TODO ogarnac rejestracje
+//    @POST("/realms/" + realm + "/login-actions/registration")
 
     @POST("/realms/" + realm + "/protocol/openid-connect/token")
     @FormUrlEncoded

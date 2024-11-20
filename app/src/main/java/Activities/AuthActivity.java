@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,11 +19,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import Auth.KeycloakService;
-import Auth.Token;
+import Services.KeycloakService;
+import Data.DTO.Token;
+import Services.UserService;
 import Config.Environment;
+import Data.DTO.UserDTO;
 import DataAccess.ViewModels.UserViewModel;
 import Fragments.Auth.LoginFragment;
 import Fragments.Auth.RegisterFragment;
@@ -51,6 +55,7 @@ public class AuthActivity extends AppCompatActivity
             return insets;
         });
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(500, TimeUnit.MILLISECONDS)
                 .connectTimeout(500, TimeUnit.MILLISECONDS)
@@ -90,12 +95,12 @@ public class AuthActivity extends AppCompatActivity
                     token.setRefreshToken(response.body().getRefreshToken());
                     token.setTokenType(response.body().getTokenType());
 
-                    Log.d("AuthActivity", "Token: " + token.getAccessToken());
+                    Log.d("AuthActivity - login", "Token: " + token.getAccessToken());
                     Intent intent = new Intent(AuthActivity.this, MainActivity.class);
                     saveToken(getApplicationContext(), token.getAccessToken());
                     startActivity(intent);
                 } else {
-                    Log.e("AuthActivity", "Błąd logowania: " + response.code() + " " + response.message());
+                    Log.e("AuthActivity - login", "Błąd logowania: " + response.code() + " " + response.message());
                     if(response.code() == 401){
                         TextInputLayout passwordLayout = findViewById(R.id.passwordTextFieldLayout);
                         TextInputLayout loginLayout = findViewById(R.id.loginTextFieldLayout);
@@ -108,7 +113,7 @@ public class AuthActivity extends AppCompatActivity
             }
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                Log.e("AuthActivity", "Błąd podczas wywoływania usługi: " + t.getMessage());
+                Log.e("AuthActivity - login", "Błąd podczas wywoływania usługi: " + t.getMessage());
                 Toast.makeText(AuthActivity.this, "Brak połączenia z serwerem!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -141,15 +146,52 @@ public class AuthActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("AuthActivity", "Rejestracja");
+                    Log.d("AuthActivity - register", "Odpowiedź:" + response.code() + " - " + response.message());
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(Environment.api)
+                            .addConverterFactory(JacksonConverterFactory.create())
+                            .build();
+
+                    token.setAccessToken(response.body().getAccessToken());
+                    token.setExpiresIn(response.body().getExpiresIn());
+                    token.setRefreshExpiresIn(response.body().getRefreshExpiresIn());
+                    token.setRefreshToken(response.body().getRefreshToken());
+                    token.setTokenType(response.body().getTokenType());
+                    saveToken(getApplicationContext(), token.getAccessToken());
+                    Log.d("AuthActivity - register", "Token: " + token.getAccessToken());
+
+                    UserService userService = retrofit.create(UserService.class);
+                    Call<UserDTO> userInfoCall = userService.registerUser("Bearer "+token.getAccessToken(), username);
+                    userInfoCall.enqueue(new Callback<UserDTO>() {
+                        @Override
+                        public void onResponse(@NonNull Call<UserDTO> call, @NonNull Response<UserDTO> response) {
+                            if (response.isSuccessful() && response.body() != null){
+                                if (response.body().getId() != null && response.body().getUsername() != null)
+                                {
+                                    Log.d("UserInfo - id", response.body().getId());
+                                    Log.d("UserInfo - username", response.body().getUsername());
+
+                                    Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                            else {
+                                Log.d("AuthActivity - register", "Błąd rejestracji Spring: " + response.code() + response.message());
+                            }
+                        }
+                        @Override
+                        public void onFailure(@NonNull Call<UserDTO> call, @NonNull Throwable t) {
+                            Log.d("AuthActivity - register", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
+                        }
+                    });
                 } else {
-                    Log.e("AuthActivity", "Błąd rejestracji: " + response.code() + " " + response.message());
+                    Log.e("AuthActivity - register", "Błąd rejestracji Keycloak: " + response.code() + " " + response.message());
                 }
             }
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                Log.e("AuthActivity", "Błąd podczas wywoływania usługi: " + t.getMessage());
-                Toast.makeText(AuthActivity.this, "Brak połączenia z serwerem!", Toast.LENGTH_SHORT).show();
+                Log.e("AuthActivity - register", "Błąd podczas wywoływania usługi Keycloak: " + t.getMessage());
+                Toast.makeText(AuthActivity.this, "Brak połączenia z serwerem Keycloak!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,8 +199,8 @@ public class AuthActivity extends AppCompatActivity
 //    TODO przerobic aby nie przechowywac klucz wartosć tylko obiekt typu Token
     /**
      * Saving token to SharedPreferences
-     * @param context
-     * @param token
+     * @param context - interface where to save token
+     * @param token - jwt token
      */
     public void saveToken(Context context, String token){
         SharedPreferences sharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE);

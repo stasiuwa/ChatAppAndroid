@@ -5,6 +5,14 @@ package Config;
  */
 public class Environment {
 
+    /**
+     * W przypadku zmiany adresu IP komputera hostującego serwisy trzeba zmienić IP na aktualne w miejscach:
+     * Serwer Spring
+     * 1. SzampchatServerApplication.java - 30 linia
+     * 2. application.yml - 26 linia
+     * Serwis Keycloak
+     * 1. http://localhost:8082/admin/master/console/#/szampchat/realm-settings - pole Frontend URL
+     */
     private final static String IP = "192.168.0.227";
     public static String api = "http://" + IP + ":8081";
     public static String keycloakUrl = "http://" + IP + ":8082";

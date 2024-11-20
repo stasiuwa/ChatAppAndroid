@@ -43,6 +43,9 @@ dependencies {
     implementation("androidx.room:room-testing:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
 
+    implementation("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0-alpha06")
 

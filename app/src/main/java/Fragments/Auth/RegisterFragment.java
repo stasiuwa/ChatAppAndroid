@@ -20,7 +20,6 @@ import com.szampchat.R;
 public class RegisterFragment extends Fragment {
 
     RegisterListener registerListener;
-    TextWatcher textWatcher;
     boolean validate;
 
     public interface RegisterListener {

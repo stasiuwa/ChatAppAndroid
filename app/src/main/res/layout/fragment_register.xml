@@ -116,7 +116,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/createAccount"
-        android:backgroundTint="@color/light_green"
+        android:textColor="@color/light_green"
+
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

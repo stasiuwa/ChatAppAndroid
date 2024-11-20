@@ -23,11 +23,11 @@ import com.szampchat.R;
 import java.util.Arrays;
 
 import Adapters.CommunityAdapter;
-import Auth.Token;
-import Auth.UserService;
+import Data.DTO.Token;
+import Services.UserService;
 import Config.Environment;
 import Data.Models.CommunityModel;
-import Data.DTO.UserInfo;
+import Data.DTO.UserDTO;
 import DataAccess.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
@@ -71,15 +71,15 @@ public class MainActivity extends AppCompatActivity implements
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
         userService = retrofit.create(UserService.class);
-        Call<UserInfo> userInfoCall = userService.getCurrentUser("Bearer "+token.getAccessToken());
-        userInfoCall.enqueue(new Callback<UserInfo>() {
+        Call<UserDTO> userInfoCall = userService.getCurrentUser("Bearer "+token.getAccessToken());
+        userInfoCall.enqueue(new Callback<UserDTO>() {
             @Override
-            public void onResponse(@NonNull Call<UserInfo> call, @NonNull Response<UserInfo> response) {
+            public void onResponse(@NonNull Call<UserDTO> call, @NonNull Response<UserDTO> response) {
                 if (response.isSuccessful() && response.body() != null){
                     if (response.body().getId() != null && response.body().getUsername() != null)
                     {
-                        Log.d("UserInfo - id", response.body().getId());
-                        Log.d("UserInfo - username", response.body().getUsername());
+                        Log.d("MainActivity UserInfo - id", response.body().getId());
+                        Log.d("MainActivity UserInfo - username", response.body().getUsername());
 
                         String id = response.body().getId();
                         String username = response.body().getUsername();
@@ -102,15 +102,14 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
                 else {
-                    Log.d("BLAD@", "Błąd pobierania danych o użytkowniku" + response.message());
+                    Log.d("MainActivity", "Błąd pobierania danych o użytkowniku" + response.message());
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<UserInfo> call, @NonNull Throwable t) {
-                Log.d("EXCEPT", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
+            public void onFailure(@NonNull Call<UserDTO> call, @NonNull Throwable t) {
+                Log.d("MainActivity", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
             }
         });
-
 
 
 //        Button displaying Settings section (fragment)
@@ -189,6 +188,5 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(intent);
         }
     }
-
 
 }

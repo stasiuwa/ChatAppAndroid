@@ -1,0 +1,87 @@
+package Adapters;
+
+import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.szampchat.R;
+
+import java.util.List;
+
+import Data.Models.CommunityModel;
+
+public class CommunityDTOAdapter extends RecyclerView.Adapter<CommunityDTOAdapter.CommunityViewHolder> {
+    Activity activity;
+    List<CommunityModel> communitiesList;
+
+    private LayoutInflater layoutInflater;
+    private OnItemClickListener onItemClickListener;
+
+    public CommunityDTOAdapter(Activity activity) {
+        this.layoutInflater = LayoutInflater.from(activity);
+        this.activity = activity;
+        this.communitiesList = null;
+        try {
+            onItemClickListener = (OnItemClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.getMessage() + " must implements CommunityAdapter.OnItemClickListener interface");
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClickListener(CommunityModel community);
+    }
+
+    @NonNull
+    @Override
+    public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = layoutInflater.inflate(R.layout.item_grid_community, parent, false);
+        return new CommunityViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
+        CommunityModel community = communitiesList.get(position);
+        holder.setCommunityName(community.getCommunityName());
+    }
+
+    @Override
+    public int getItemCount() {
+        return (communitiesList != null) ? communitiesList.size() : 0;
+    }
+    public void setCommunitiesList(List<CommunityModel> communitiesList) {
+        this.communitiesList = communitiesList;
+        notifyDataSetChanged();
+    }
+
+    public class CommunityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        TextView textView;
+
+        public CommunityViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            textView = itemView.findViewById(R.id.itemGridCommunityName);
+            itemView.setTag(this);
+            itemView.setOnClickListener(this);
+        }
+        public void setCommunityName(String communityName){
+            textView.setText(communityName);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+//                Log.d("TESTOWANIE FUNKCJONALNOSCI", "test pozycji adaptera: " + String.valueOf(position));
+                CommunityModel community = communitiesList.get(position);
+                onItemClickListener.onItemClickListener(community);
+            }
+        }
+    }
+}

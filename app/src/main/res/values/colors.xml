@@ -14,11 +14,11 @@
     <color name="colorOnBackground">#000000</color>  <!-- Kolor tekstu na tle tła -->
 
     <!-- Definiowanie podstawowych kolorów aplikacji -->
-    <color name="colorPrimaryNight">#009688</color>  <!-- Główny kolor aplikacji -->
+    <color name="colorPrimaryNight">#008C70</color>  <!-- Główny kolor aplikacji -->
     <color name="colorPrimaryVariantNight">#005950</color>  <!-- Zmieniona wersja koloru głównego -->
-    <color name="colorSecondaryNight">#00FF7B</color>  <!-- Kolor dla elementów pomocniczych -->
-    <color name="colorSecondaryVariantNight">#007739</color>  <!-- Zmieniona wersja koloru pomocniczego -->
-    <color name="colorBackgroundNight">#00332E</color>  <!-- Kolor tła -->
+    <color name="colorSecondaryNight">#006020</color>  <!-- Kolor dla elementów pomocniczych -->
+    <color name="colorSecondaryVariantNight">#02351B</color>  <!-- Zmieniona wersja koloru pomocniczego -->
+    <color name="colorBackgroundNight">#00302B</color>  <!-- Kolor tła -->
     <color name="colorSurfaceNight">#FFFFFF</color>  <!-- Kolor powierzchni (np. tło kartki) -->
     <color name="colorErrorNight">#B00020</color>  <!-- Kolor dla błędów -->
     <color name="colorOnPrimaryNight">#FFFFFF</color>  <!-- Kolor tekstu na tle primary -->
