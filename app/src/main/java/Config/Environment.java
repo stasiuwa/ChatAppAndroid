@@ -5,7 +5,7 @@ package Config;
  */
 public class Environment {
 
-    private final static String IP = "localhost";
+    private final static String IP = "192.168.0.227";
     public static String api = "http://" + IP + ":8081";
     public static String keycloakUrl = "http://" + IP + ":8082";
     public static String keycloakClientId = "mobile2";

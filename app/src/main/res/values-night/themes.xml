@@ -2,6 +2,18 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ChatApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:windowBackground">@color/colorBackgroundNight</item>
+        <item name="colorPrimary">@color/colorPrimaryNight</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariantNight</item>
+        <item name="colorSecondary">@color/colorSecondaryNight</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariantNight</item>
+        <item name="colorSurface">@color/colorSurfaceNight</item>
+        <item name="colorError">@color/colorErrorNight</item>
+
+        <!-- Kolory tekstów na różnych powierzchniach -->
+        <item name="colorOnPrimary">@color/colorOnPrimaryNight</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryNight</item>
+        <item name="colorOnSurface">@color/colorOnSurfaceNight</item>
+        <item name="colorOnBackground">@color/colorOnBackgroundNight</item>
     </style>
 </resources>

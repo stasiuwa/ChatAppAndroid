@@ -6,18 +6,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 public class RegisterFragment extends Fragment {
 
     RegisterListener registerListener;
+    TextWatcher textWatcher;
+    boolean validate;
 
     public interface RegisterListener {
         void registerUser(String username, String email, String password, String passwordCheck);
@@ -51,6 +55,16 @@ public class RegisterFragment extends Fragment {
         TextInputEditText password = view.findViewById(R.id.passwordTextField);
         TextInputEditText passwordCheck = view.findViewById(R.id.passwordCheckTextField);
 
+        TextInputLayout usernameLayout = view.findViewById(R.id.usernameTextFieldLayout);
+        TextInputLayout emailLayout = view.findViewById(R.id.emailTextFieldLayout);
+        TextInputLayout passwordLayout = view.findViewById(R.id.passwordTextFieldLayout);
+        TextInputLayout passwordCheckLayout = view.findViewById(R.id.passwordCheckTextFieldLayout);
+
+        setTextWatcher(username, usernameLayout);
+        setTextWatcher(email, emailLayout);
+        setTextWatcher(password, passwordLayout);
+        setTextWatcher(passwordCheck, passwordCheckLayout);
+
         Button registerButton = view.findViewById(R.id.createAccountButton);
         registerButton.setOnClickListener(v -> {
             String
@@ -58,33 +72,54 @@ public class RegisterFragment extends Fragment {
                     emailText = email.getText().toString(),
                     passwordText = password.getText().toString(),
                     passwordCheckText = passwordCheck.getText().toString();
-
-            boolean validate = true;
+            validate = true;
             if (usernameText.matches("")) {
-                username.setError("Podaj nazwe użytkownika!");
-                validate = false;
+                usernameLayout.setError("Podaj nazwe użytkownika!");
+                deny();
             };
             if (emailText.matches("")) {
-                email.setError("Podaj adres email!");
-                validate = false;
+                emailLayout.setError("Podaj adres email!");
+                deny();
             }
             if (passwordText.matches("")) {
-                password.setError("Podaj hasło!");
-                validate = false;
+                passwordLayout.setError("Podaj hasło!");
+                deny();
             }
-            if (passwordCheckText.matches("")) {
-                passwordCheck.setError("Powtórz hasło!");
-                validate = false;
+            else if (passwordCheckText.matches("")) {
+                passwordCheckLayout.setError("Powtórz hasło!");
+                deny();
+            }
+            else if (!passwordText.matches(passwordCheckText)) {
+                passwordCheckLayout.setError("Hasła się nie zgadzają!");
+                deny();
             }
             if (validate){
-                if (passwordText.matches(passwordCheckText)){
 //                    Pass params to AuthActivity function
-                    registerListener.registerUser(usernameText,emailText,passwordText,passwordCheckText);
-                } else {
-                    Toast.makeText(getContext(), "Hasła się nie zgadzają!", Toast.LENGTH_SHORT).show();
-                }
+                registerListener.registerUser(usernameText,emailText,passwordText,passwordCheckText);
             }
         });
         return view;
     }
+    private void deny(){
+        validate = false;
+    }
+    private void setTextWatcher(TextInputEditText textInputEditText, TextInputLayout textInputLayout){
+        textInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                textInputLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
 }

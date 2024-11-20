@@ -14,6 +14,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
 import java.util.concurrent.TimeUnit;
@@ -50,8 +52,8 @@ public class AuthActivity extends AppCompatActivity
         });
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         OkHttpClient client = new OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.MILLISECONDS)
-                .connectTimeout(60, TimeUnit.MILLISECONDS)
+                .readTimeout(500, TimeUnit.MILLISECONDS)
+                .connectTimeout(500, TimeUnit.MILLISECONDS)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -94,6 +96,14 @@ public class AuthActivity extends AppCompatActivity
                     startActivity(intent);
                 } else {
                     Log.e("AuthActivity", "Błąd logowania: " + response.code() + " " + response.message());
+                    if(response.code() == 401){
+                        TextInputLayout passwordLayout = findViewById(R.id.passwordTextFieldLayout);
+                        TextInputLayout loginLayout = findViewById(R.id.loginTextFieldLayout);
+                        TextInputEditText password = findViewById(R.id.passwordTextField);
+                        password.setText("");
+                        passwordLayout.setError("Niepoprawne dane");
+                        loginLayout.setError("Niepoprawne dane");
+                    }
                 }
             }
             @Override

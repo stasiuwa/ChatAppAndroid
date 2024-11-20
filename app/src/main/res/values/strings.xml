@@ -18,4 +18,15 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appTitle">SZAMPCHAT</string>
+    <string name="hmmIcon">🤔</string>
+    <string name="username">Nazwa użytkownika</string>
+    <string name="password">Hasło</string>
+    <string name="keepLoggedIn">Nie wylogowywuj mnie</string>
+    <string name="login">ZALOGUJ</string>
+    <string name="createAccount">Załóż konto</string>
+    <string name="registerFromTittle">REJESTRACJA</string>
+    <string name="emailAddress">Adres e-mail:</string>
+    <string name="passwordCheck">Powtórz hasło</string>
+    <string name="registerTerms">Oddaję duszę szatanowi</string>
 </resources>
