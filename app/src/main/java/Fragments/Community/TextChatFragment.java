@@ -32,11 +32,9 @@ import java.util.Date;
 import Adapters.MessageAdapter;
 import Data.Models.MessageModel;
 import Data.Relations.ChatWithMessages;
-import DataAccess.ViewModels.MessagesViewModel;
 
 public class TextChatFragment extends Fragment{
 
-    MessagesViewModel messagesViewModel;
     MessageAdapter messageAdapter;
     String chatName;
     long chatID;
@@ -66,14 +64,13 @@ public class TextChatFragment extends Fragment{
             }
         }
 //        Displaying messages
-        messagesViewModel = new ViewModelProvider(this).get(MessagesViewModel.class);
         messageAdapter = new MessageAdapter(requireActivity());
 
-        messagesViewModel.getMessages(chatID).observe(getViewLifecycleOwner(), chatModels -> {
-            for (ChatWithMessages chatWithMessages1 : chatModels){
-                messageAdapter.setMessagesList(new ArrayList<>(chatWithMessages1.messages));
-            }
-        });
+//        messagesViewModel.getMessages(chatID).observe(getViewLifecycleOwner(), chatModels -> {
+//            for (ChatWithMessages chatWithMessages1 : chatModels){
+//                messageAdapter.setMessagesList(new ArrayList<>(chatWithMessages1.messages));
+//            }
+//        });
 
         RecyclerView recyclerView = view.findViewById(R.id.messagesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -82,26 +79,26 @@ public class TextChatFragment extends Fragment{
 //        Sending messagess
         EditText messageText = view.findViewById(R.id.inputText);
         Button sendMessageButton = view.findViewById(R.id.messageSendButton);
-        sendMessageButton.setOnClickListener(v -> {
-            messagesViewModel.addMessage(
-                    new MessageModel(
-                            getArguments().getLong("chatID"),
-                            messageText.getText().toString(),
-                            String.valueOf(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))),
-//                            TODO poprawic logike do pobrania nazwy uzytkownika zalogowanego do aplikacji
-                            "user2"
-                    ));
-            messageAdapter.notifyDataSetChanged();
-//            Clear messageText value and focus
-            messageText.getText().clear();
-            messageText.clearFocus();
-//            Hide system keyboard
-            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//            TODO nie działa, poprawic
-            ScrollView scrollView = view.findViewById(R.id.messagesScrollView);
-            scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
-        });
+//        sendMessageButton.setOnClickListener(v -> {
+//            messagesViewModel.addMessage(
+//                    new MessageModel(
+//                            getArguments().getLong("chatID"),
+//                            messageText.getText().toString(),
+//                            String.valueOf(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))),
+////                            TODO poprawic logike do pobrania nazwy uzytkownika zalogowanego do aplikacji
+//                            "user2"
+//                    ));
+//            messageAdapter.notifyDataSetChanged();
+////            Clear messageText value and focus
+//            messageText.getText().clear();
+//            messageText.clearFocus();
+////            Hide system keyboard
+//            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+////            TODO nie działa, poprawic
+//            ScrollView scrollView = view.findViewById(R.id.messagesScrollView);
+//            scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
+//        });
 
 //        Chat name in top side of the view
         TextView chatName = view.findViewById(R.id.textChatName);

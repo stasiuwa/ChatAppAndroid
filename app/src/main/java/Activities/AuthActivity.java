@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -25,9 +24,8 @@ import java.util.concurrent.TimeUnit;
 import Services.KeycloakService;
 import Data.DTO.Token;
 import Services.UserService;
-import Config.Environment;
+import Config.env;
 import Data.DTO.UserDTO;
-import DataAccess.ViewModels.UserViewModel;
 import Fragments.Auth.LoginFragment;
 import Fragments.Auth.RegisterFragment;
 import okhttp3.OkHttpClient;
@@ -40,7 +38,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class AuthActivity extends AppCompatActivity
         implements LoginFragment.LoginListener, RegisterFragment.RegisterListener {
 
-    UserViewModel userViewModel;
     KeycloakService keycloakService;
     Token token;
 
@@ -54,7 +51,6 @@ public class AuthActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(500, TimeUnit.MILLISECONDS)
@@ -62,11 +58,14 @@ public class AuthActivity extends AppCompatActivity
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Environment.keycloakUrl)
+                .baseUrl(env.keycloakUrl)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .client(client)
                 .build();
         keycloakService = retrofit.create(KeycloakService.class);
+
+//        skip login
+        verifyLogin("test", "test");
     }
 
     /**
@@ -80,7 +79,7 @@ public class AuthActivity extends AppCompatActivity
         token = new Token();
 
         Call<Token> tokenCall = keycloakService.getAccessToken(
-                Environment.keycloakClientId,
+                env.keycloakClientId,
                 "password",
                 username,
                 password
@@ -137,7 +136,7 @@ public class AuthActivity extends AppCompatActivity
         token = new Token();
 
         Call<Token> tokenCall = keycloakService.getAccessToken(
-                Environment.keycloakClientId,
+                env.keycloakClientId,
                 "password",
                 username,
                 password
@@ -148,7 +147,7 @@ public class AuthActivity extends AppCompatActivity
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("AuthActivity - register", "Odpowiedź:" + response.code() + " - " + response.message());
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(Environment.api)
+                            .baseUrl(env.api)
                             .addConverterFactory(JacksonConverterFactory.create())
                             .build();
 

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,20 +15,28 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
 import java.util.Arrays;
+import java.util.List;
 
 import Adapters.CommunityAdapter;
+import Data.DTO.CommunityDTO;
 import Data.DTO.Token;
+import Services.CommunityService;
 import Services.UserService;
-import Config.Environment;
+import Config.env;
 import Data.Models.CommunityModel;
 import Data.DTO.UserDTO;
 import DataAccess.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,11 +47,12 @@ public class MainActivity extends AppCompatActivity implements
         CommunityAdapter.OnItemClickListener,
         MainFragment.MainFragmentListener
 {
-
-    CommunityViewModel mCommunitiesViewModel;
+    Retrofit retrofit;
+    CommunityViewModel communitiesViewModel;
     Button settingsButton;
     Token token = new Token();
     UserService userService;
+    CommunityService communityService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +69,21 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Społeczności");
 
+
+        communitiesViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
 //        Load token from SharedPreferences
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
         token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Environment.api)
+        retrofit = new Retrofit.Builder()
+                .baseUrl(env.api)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
         userService = retrofit.create(UserService.class);
+        communityService = retrofit.create(CommunityService.class);
+
+
         Call<UserDTO> userInfoCall = userService.getCurrentUser("Bearer "+token.getAccessToken());
         userInfoCall.enqueue(new Callback<UserDTO>() {
             @Override
@@ -117,11 +130,35 @@ public class MainActivity extends AppCompatActivity implements
         SettingsFragment settingsFragment = new SettingsFragment();
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, new SettingsFragment())
+                    .replace(R.id.fragmentContainer, settingsFragment)
                     .addToBackStack(null)
                     .commit();
 //            Hide settings button after displaying SettingsFragment
             settingsButton.setVisibility(View.INVISIBLE);
+        });
+
+//        Download list of user's communities from API
+
+        Call<List<CommunityDTO>> communitiesCall = communityService.getCommunities("Bearer "+token.getAccessToken());
+        communitiesCall.enqueue(new Callback<List<CommunityDTO>>() {
+            @Override
+            public void onResponse(Call<List<CommunityDTO>> call, Response<List<CommunityDTO>> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    Log.d("POBRANE SPOŁECZNOSCI", "" + response.body().size());
+                    List<CommunityDTO> communityDTOList = response.body();
+                    for (CommunityDTO communityDTO : communityDTOList) {
+                        Log.d("COMM", communityDTO.getName());
+//                        If communities already exists in Room database update record, else update this record with data from API
+                        if (communitiesViewModel.getCommunity(communityDTO.getId()) == null) communitiesViewModel.addCommunity(communityDTO);
+                        else communitiesViewModel.updateCommunity(communityDTO);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CommunityDTO>> call, Throwable t) {
+                Log.d("MainActivity - communitiesCall", Arrays.toString(t.getStackTrace()));
+            }
         });
 
 //        Initial setup fragment with communities recyclerview, passed adapter to constructor
@@ -136,17 +173,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void callAddCommunityDialog() {
         final Dialog addCommunityDialog = new Dialog(this);
+        addCommunityDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         addCommunityDialog.setContentView(R.layout.join_community_dialog);
-        TextView tittle = addCommunityDialog.findViewById(R.id.dialogTittle);
-        EditText joinCode = addCommunityDialog.findViewById(R.id.communityDialogInput);
+        TextInputLayout joinCodeLayout = addCommunityDialog.findViewById(R.id.communityDialogInputLayout);
+        TextInputEditText joinCode = addCommunityDialog.findViewById(R.id.communityDialogInput);
         Button joinButton = addCommunityDialog.findViewById(R.id.communityDialogButton);
 //        TODO zmienic na pobranie spolecznosci z serwera i dołączenie do niej
         joinButton.setOnClickListener(v -> {
-            mCommunitiesViewModel.addCommunity(new CommunityModel(joinCode.getText().toString()));
+//            mCommunitiesViewModel.addCommunity(new CommunityModel(joinCode.getText().toString()));
             addCommunityDialog.dismiss();
         });
-        tittle.setText("DOŁĄCZ DO SPOŁECZNOŚCI");
-        joinCode.setHint("podaj kod dołączenia");
+        joinCodeLayout.setHint("Podaj kod dołączenia");
         joinButton.setText("DOŁĄCZ");
         addCommunityDialog.show();
     }
@@ -158,17 +195,43 @@ public class MainActivity extends AppCompatActivity implements
     public void callCreateCommunityDialog() {
         final Dialog createCommunityDialog = new Dialog(this);
         createCommunityDialog.setContentView(R.layout.join_community_dialog);
-        TextView tittle = createCommunityDialog.findViewById(R.id.dialogTittle);
-        EditText communityName = createCommunityDialog.findViewById(R.id.communityDialogInput);
+        createCommunityDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        TextInputLayout communityNameLayout = createCommunityDialog.findViewById(R.id.communityDialogInputLayout);
+        TextInputEditText communityName = createCommunityDialog.findViewById(R.id.communityDialogInput);
         Button createButton = createCommunityDialog.findViewById(R.id.communityDialogButton);
 //        TODO wysłać requesta na stworzenie społecznosci na serwer
 //        TODO dodac wgranie zdjecia na ikonke spolecznosci
-        createButton.setOnClickListener(v -> {
-            mCommunitiesViewModel.addCommunity(new CommunityModel(communityName.getText().toString()));
-            createCommunityDialog.dismiss();
-        });
-        tittle.setText("STWÓRZ SPOŁECZNOŚĆ");
-        communityName.setHint("podaj nazwę społeczności");
+        String name = communityName.getText().toString();
+        if (name.matches("")){
+            communityNameLayout.setError("Pole wymagane!");
+        } else {
+            RequestBody communityJson = RequestBody.create(
+                    MediaType.parse("application/json"),
+                    "{\"name\": \"" + name + "\"}"
+            );
+
+            createButton.setOnClickListener(v -> {
+                Call<CommunityDTO> createCommunityCall = communityService.createCommunity(
+                        "Bearer "+token.getAccessToken(), communityJson
+                );
+                createCommunityCall.enqueue(new Callback<CommunityDTO>() {
+                    @Override
+                    public void onResponse(Call<CommunityDTO> call, Response<CommunityDTO> response) {
+                        if (response.isSuccessful() && response.body()!=null){
+                            communitiesViewModel.addCommunity(response.body());
+                            Log.d("MainActivity - createCommunityDialog SUCCESS", response.body().getName());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CommunityDTO> call, Throwable t) {
+                        Log.d("MainActivity - createCommunityDialog ERROR", Arrays.toString(t.getStackTrace()));
+                    }
+                });
+                createCommunityDialog.dismiss();
+            });
+        }
+        communityNameLayout.setHint("Podaj nazwę społeczności");
         createButton.setText("STWÓRZ");
         createCommunityDialog.show();
     }

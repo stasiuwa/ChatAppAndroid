@@ -3,7 +3,7 @@ package Config;
 /**
  * Class containing addresses to Server Api
  */
-public class Environment {
+public class env {
 
     /**
      * W przypadku zmiany adresu IP komputera hostującego serwisy trzeba zmienić IP na aktualne w miejscach:

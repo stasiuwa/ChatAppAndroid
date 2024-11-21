@@ -7,7 +7,18 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.List;
+import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(tableName = "communities")
 public class CommunityModel {
     @PrimaryKey(autoGenerate = true)
@@ -15,26 +26,12 @@ public class CommunityModel {
     public long communityID;
     @NonNull
     @ColumnInfo(name = "Community Name")
-    String communityName;
-//    TODO dodać ikonke spolecznosci
-//    TODO dodac liste uzytkownikow
-//    TODO dodac uzytkownika-własciciela
+    public String communityName;
 
-
-    public CommunityModel(@NonNull String communityName) {
-        this.communityName = communityName;
-    }
-
-    public long getCommunityID() {
-        return communityID;
-    }
-
-    @NonNull
-    public String getCommunityName() {
-        return communityName;
-    }
-
-    public void setCommunityName(@NonNull String communityName) {
-        this.communityName = communityName;
-    }
+    @ColumnInfo(name = "Owner ID")
+    public long ownerID;
+    @ColumnInfo(name = "Image URL")
+    public UUID imageUrl;
+    @ColumnInfo(name = "Base Permissions")
+    public int basePermissions;
 }

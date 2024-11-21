@@ -19,7 +19,7 @@
     <color name="colorSecondaryNight">#006020</color>  <!-- Kolor dla elementów pomocniczych -->
     <color name="colorSecondaryVariantNight">#02351B</color>  <!-- Zmieniona wersja koloru pomocniczego -->
     <color name="colorBackgroundNight">#00302B</color>  <!-- Kolor tła -->
-    <color name="colorSurfaceNight">#FFFFFF</color>  <!-- Kolor powierzchni (np. tło kartki) -->
+    <color name="colorSurfaceNight">#001B18</color>  <!-- Kolor powierzchni (np. tło kartki) -->
     <color name="colorErrorNight">#B00020</color>  <!-- Kolor dla błędów -->
     <color name="colorOnPrimaryNight">#FFFFFF</color>  <!-- Kolor tekstu na tle primary -->
     <color name="colorOnSecondaryNight">#FFFFFF</color>  <!-- Kolor tekstu na tle secondary -->
@@ -27,6 +27,7 @@
     <color name="colorOnBackgroundNight">#FFFFFF</color>  <!-- Kolor tekstu na tle tła -->
 
     <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
     <color name="sea">#009688</color>
     <color name="light_green">#00FF7B</color>
     <color name="white">#FFFFFFFF</color>

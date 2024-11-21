@@ -45,14 +45,14 @@ public class ChatsFragment extends Fragment{
 
         chatAdapter = new ChatAdapter(requireActivity());
         communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
-        communityViewModel.getChats(communityID).observe(getViewLifecycleOwner(), communityWithChats -> {
-            if (!communityWithChats.isEmpty()) {
-                CommunityWithChats temp = communityWithChats.get(0);
-                if (temp != null) {
-                    chatAdapter.setChatsList(temp.chats);
-                }
-            }
-        });
+//        communityViewModel.getChats(communityID).observe(getViewLifecycleOwner(), communityWithChats -> {
+//            if (!communityWithChats.isEmpty()) {
+//                CommunityWithChats temp = communityWithChats.get(0);
+//                if (temp != null) {
+//                    chatAdapter.setChatsList(temp.chats);
+//                }
+//            }
+//        });
 //        Setup RecyclerView to show chats from specific community
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.chatsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

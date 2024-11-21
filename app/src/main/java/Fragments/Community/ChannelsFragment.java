@@ -43,14 +43,14 @@ public class ChannelsFragment extends Fragment {
 
         channelAdapter = new ChannelAdapter(requireActivity());
         communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
-        communityViewModel.getChannels(communityID).observe(getViewLifecycleOwner(), communityWithChannels -> {
-            if (!communityWithChannels.isEmpty()){
-                CommunityWithChannels temp = communityWithChannels.get(0);
-                if (temp != null) {
-                    channelAdapter.setChannelsList(temp.channels);
-                }
-            }
-        });
+//        communityViewModel.getChannels(communityID).observe(getViewLifecycleOwner(), communityWithChannels -> {
+//            if (!communityWithChannels.isEmpty()){
+//                CommunityWithChannels temp = communityWithChannels.get(0);
+//                if (temp != null) {
+//                    channelAdapter.setChannelsList(temp.channels);
+//                }
+//            }
+//        });
 
 //        Setup RecyclerView to show channels from specific community
         RecyclerView recyclerView = view.findViewById(R.id.channelsRecyclerView);

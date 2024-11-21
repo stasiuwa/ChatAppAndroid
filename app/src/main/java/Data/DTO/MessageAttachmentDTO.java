@@ -7,13 +7,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RolesDTO {
+public class MessageAttachmentDTO {
     @JsonProperty("id")
     private String id;
+    @JsonProperty("path")
+    private String path;
+    @JsonProperty("size")
+    private long size;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("communityId")
-    private String communityId;
-    @JsonProperty("permissionOverwrites")
-    private String permissionOverwrites;
+    @JsonProperty("messageId")
+    private String messageId;
 }

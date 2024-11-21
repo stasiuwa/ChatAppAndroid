@@ -26,11 +26,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
-import DataAccess.ViewModels.UserViewModel;
-
 public class LoginFragment extends Fragment {
 
-    UserViewModel userViewModel;
     LoginListener loginListener;
 
 //    Functions required by this fragment to implement
@@ -56,7 +53,6 @@ public class LoginFragment extends Fragment {
         setExitTransition(inflater.inflateTransition(R.transition.slide_left));
         setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

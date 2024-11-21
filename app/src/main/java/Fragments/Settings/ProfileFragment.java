@@ -13,14 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
-import Config.Environment;
+import Config.env;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -39,7 +38,7 @@ public class ProfileFragment extends Fragment {
         setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Environment.api)
+                .baseUrl(env.api)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
     }
@@ -90,8 +89,11 @@ public class ProfileFragment extends Fragment {
         return view;
     }
     private void toggleVisibility(boolean isEditing) {
-        profileUsername.setEnabled(isEditing);
-        profileDescription.setEnabled(isEditing);
+        profileUsername.setFocusable(isEditing);
+        profileUsername.setFocusableInTouchMode(isEditing);
+        profileDescription.setFocusable(isEditing);
+        profileDescription.setFocusableInTouchMode(isEditing);
+
         editProfileButton.setVisibility(isEditing ? View.INVISIBLE : View.VISIBLE);
         acceptEditig.setVisibility(isEditing ? View.VISIBLE : View.INVISIBLE);
         cancelEditing.setVisibility(isEditing ? View.VISIBLE : View.INVISIBLE);

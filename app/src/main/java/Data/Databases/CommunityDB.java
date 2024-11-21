@@ -21,15 +21,9 @@ import Data.Models.UserModel;
 
 @androidx.room.Database(entities = {
         CommunityModel.class,
-        ChannelModel.class,
-        ChatModel.class,
-        UserModel.class,
-        MessageModel.class,
-        RoleModel.class,
 }, version = 1, exportSchema = false)
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();
-
     /**
      * Singelton
      */
@@ -65,13 +59,13 @@ public abstract class CommunityDB extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 CommunityDAO dao = INSTANCE.communityDAO();
 
-                dao.addUser(new UserModel("admin"));
+//                dao.addUser(new UserModel("admin"));
 
 //                społeczność ktora po kliknieciu odpala dialog dołączenia do spolecznosci
-                dao.addCommunity(new CommunityModel("Dołącz"));
-//                testowe spolecznosci do wyswietlenia
-                dao.addCommunity(new CommunityModel("Spolecznosc 1"));
-                dao.addCommunity(new CommunityModel("Spolecznosc 2"));
+////                testowe spolecznosci do wyswietlenia
+//                dao.addCommunity(new CommunityModel(1, "wedkowanie", 69517336201134080L, null, 224));
+//                dao.addCommunity(new CommunityModel(2, "tanie gruzy", 69517336201134080L, null, 224));
+//                dao.addCommunity(new CommunityModel(3, "klub swingers", 69517336201134080L, null, 224));
 //                dao.addCommunity(new CommunityModel("Spolecznosc 3"));
 //                dao.addCommunity(new CommunityModel("Spolecznosc 4"));
 //                dao.addCommunity(new CommunityModel("Spolecznosc 5"));
@@ -100,9 +94,9 @@ public abstract class CommunityDB extends RoomDatabase {
 //                dao.addChannel(new ChannelModel("czat głosowy1 com5", 5));
 //                dao.addChannel(new ChannelModel("czat głosowy1 com6", 6));
 
-                dao.addMessage(new MessageModel(1, "coś tam o górach", "22:31", "user1"));
-                dao.addMessage(new MessageModel(1, "no góry, fajne, wysokie", "22:33", "user1"));
-                dao.addMessage(new MessageModel(1, "generalnie", "22:35", "user1"));
+//                dao.addMessage(new MessageModel(1, "coś tam o górach", "22:31", "user1"));
+//                dao.addMessage(new MessageModel(1, "no góry, fajne, wysokie", "22:33", "user1"));
+//                dao.addMessage(new MessageModel(1, "generalnie", "22:35", "user1"));
             });
         }
 

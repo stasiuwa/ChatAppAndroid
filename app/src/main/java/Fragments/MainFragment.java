@@ -44,7 +44,6 @@ public class MainFragment extends Fragment {
     public interface MainFragmentListener {
         void callCreateCommunityDialog();
         void callAddCommunityDialog();
-        ArrayList<CommunityDTO> getCommunities();
     }
 
     @Override
