@@ -76,6 +76,9 @@ public class MainFragment extends Fragment {
         Button createCommunityButton = view.findViewById(R.id.createCommunityButton);
         createCommunityButton.setOnClickListener(v -> mainFragmentListener.callCreateCommunityDialog());
 
+        Button joinCommunityButton = view.findViewById(R.id.joinCommunityButton);
+        joinCommunityButton.setOnClickListener(v -> mainFragmentListener.callAddCommunityDialog());
+
         return view;
     }
 

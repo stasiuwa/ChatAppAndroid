@@ -144,14 +144,16 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<List<CommunityDTO>> call, Response<List<CommunityDTO>> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    Log.d("POBRANE SPOŁECZNOSCI", "" + response.body().size());
+                    Log.d("MainActivity - communitiesCall", "Ilość społeczności: " + response.body().size());
                     List<CommunityDTO> communityDTOList = response.body();
                     for (CommunityDTO communityDTO : communityDTOList) {
-                        Log.d("COMM", communityDTO.getName());
+                        Log.d("MainActivity - communitiesCall", "Nazwa społeczności: " + communityDTO.getName());
 //                        If communities already exists in Room database update record, else update this record with data from API
                         if (communitiesViewModel.getCommunity(communityDTO.getId()) == null) communitiesViewModel.addCommunity(communityDTO);
                         else communitiesViewModel.updateCommunity(communityDTO);
                     }
+                } else {
+                    Log.d("MainActivity - communitiesCall", "Błąd pobierania danych z serwera" + response.code() + response.message());
                 }
             }
 
@@ -180,8 +182,13 @@ public class MainActivity extends AppCompatActivity implements
         Button joinButton = addCommunityDialog.findViewById(R.id.communityDialogButton);
 //        TODO zmienic na pobranie spolecznosci z serwera i dołączenie do niej
         joinButton.setOnClickListener(v -> {
+            String joinCodeText = joinCode.getText().toString();
+            if (joinCodeText.matches("")){
+                joinCodeLayout.setError("Pole wymagane!");
+            } else {
+                addCommunityDialog.dismiss();
+            }
 //            mCommunitiesViewModel.addCommunity(new CommunityModel(joinCode.getText().toString()));
-            addCommunityDialog.dismiss();
         });
         joinCodeLayout.setHint("Podaj kod dołączenia");
         joinButton.setText("DOŁĄCZ");
@@ -201,16 +208,15 @@ public class MainActivity extends AppCompatActivity implements
         Button createButton = createCommunityDialog.findViewById(R.id.communityDialogButton);
 //        TODO wysłać requesta na stworzenie społecznosci na serwer
 //        TODO dodac wgranie zdjecia na ikonke spolecznosci
-        String name = communityName.getText().toString();
-        if (name.matches("")){
-            communityNameLayout.setError("Pole wymagane!");
-        } else {
-            RequestBody communityJson = RequestBody.create(
-                    MediaType.parse("application/json"),
-                    "{\"name\": \"" + name + "\"}"
-            );
-
-            createButton.setOnClickListener(v -> {
+        createButton.setOnClickListener(v -> {
+            String name = communityName.getText().toString();
+            if (name.matches("")){
+                communityNameLayout.setError("Pole wymagane!");
+            } else {
+                RequestBody communityJson = RequestBody.create(
+                        MediaType.parse("application/json"),
+                        "{\"name\": \"" + name + "\"}"
+                );
                 Call<CommunityDTO> createCommunityCall = communityService.createCommunity(
                         "Bearer "+token.getAccessToken(), communityJson
                 );
@@ -229,8 +235,8 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
                 createCommunityDialog.dismiss();
-            });
-        }
+            }
+        });
         communityNameLayout.setHint("Podaj nazwę społeczności");
         createButton.setText("STWÓRZ");
         createCommunityDialog.show();

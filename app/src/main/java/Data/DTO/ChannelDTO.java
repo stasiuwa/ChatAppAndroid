@@ -24,8 +24,6 @@ public class ChannelDTO {
     private List<ChannelRole> overwrites;
     @JsonProperty("lastMessageId")
     private String lastMessageId;
-    @JsonProperty("messagesState")
-    private ChannelMessagesState messagesState;
 }
 @Getter
 @Setter
@@ -34,9 +32,4 @@ class ChannelRole {
     private String overwrites;
     @JsonProperty("roleId")
     private String roleId;
-}
-enum ChannelMessagesState {
-    @JsonProperty("NotFetched") NotFetched,
-    @JsonProperty("PartlyFetched") PartlyFetched,
-    @JsonProperty("FullyFetched") FullyFetched
 }

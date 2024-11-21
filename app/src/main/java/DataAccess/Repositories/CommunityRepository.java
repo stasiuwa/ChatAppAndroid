@@ -54,7 +54,5 @@ public class CommunityRepository {
     public LiveData<CommunityModel> getCommunity(long id){
         return dao.getCommunityById(id);
     }
-//    public boolean communityExists(long id){
-//        return dao.communityExists(id) >= 1;
-//    }
+
 }

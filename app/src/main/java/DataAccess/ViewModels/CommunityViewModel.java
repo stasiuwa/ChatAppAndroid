@@ -14,7 +14,7 @@ import Data.Models.CommunityModel;
 import lombok.Getter;
 
 /**
- * All communities are maped from CommunityDTO to CommunityModel before any operation
+ * All communities are mapped from CommunityDTO to CommunityModel before any operation
  */
 public class CommunityViewModel extends AndroidViewModel {
     private final CommunityRepository communityRepository;
