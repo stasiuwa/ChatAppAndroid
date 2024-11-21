@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements
 //        Button displaying Settings section (fragment)
         settingsButton = findViewById(R.id.mainSettingsButton);
         SettingsFragment settingsFragment = new SettingsFragment();
+        Bundle settingsArgs = new Bundle();
+        settingsArgs.putBoolean("EXTENDED", false);
+        settingsFragment.setArguments(settingsArgs);
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, settingsFragment)

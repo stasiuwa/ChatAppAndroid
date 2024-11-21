@@ -33,4 +33,6 @@
     <string name="edit">EDYTUJ</string>
     <string name="cancel">ODRZUĆ</string>
     <string name="accept">ZATWIERDŹ</string>
+    <string name="add">DODAJ</string>
+    <string name="create">STWÓRZ</string>
 </resources>

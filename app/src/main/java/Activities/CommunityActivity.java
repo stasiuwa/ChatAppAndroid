@@ -94,6 +94,7 @@ public class CommunityActivity extends AppCompatActivity implements
                             "\nIlość kanałów: " + response.body().getChannels().size() +
                             "\nIlość użytkowników: " + response.body().getMembers().size() +
                             "\nIlość ról: " + response.body().getRoles().size());
+//                    TODO zapisac dane do viewmodeli
                 } else {
                     Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
                 }
@@ -107,9 +108,14 @@ public class CommunityActivity extends AppCompatActivity implements
 
 
 //        Button that changes present fragment to SettingsFragment and hides
+        SettingsFragment settingsFragment = new SettingsFragment();
+//        Pass to SettingsFragment info to display extended options to set (Createing roles, channels etc)
+        Bundle settingsArgs = new Bundle();
+        settingsArgs.putBoolean("EXTENDED", true);
+        settingsFragment.setArguments(settingsArgs);
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, new SettingsFragment())
+                    .replace(R.id.fragmentContainer, settingsFragment)
                     .addToBackStack("uniqueFrag")
                     .commit();
 //            Hide settings button after displaying SettingsFragment

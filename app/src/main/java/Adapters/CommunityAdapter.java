@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
+import java.util.Collections;
 import java.util.List;
 
 import Data.Models.CommunityModel;
@@ -55,6 +56,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         return (communitiesList != null) ? communitiesList.size() : 0;
     }
     public void setCommunitiesList(List<CommunityModel> communitiesList) {
+        Collections.reverse(communitiesList);
         this.communitiesList = communitiesList;
         notifyDataSetChanged();
     }
