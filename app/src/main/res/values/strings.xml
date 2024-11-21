@@ -35,4 +35,6 @@
     <string name="accept">ZATWIERDŹ</string>
     <string name="add">DODAJ</string>
     <string name="create">STWÓRZ</string>
+    <string name="voiceChannels">KANAŁY GŁOSOWE</string>
+    <string name="textChannels">KANAŁY TEKSTOWE</string>
 </resources>

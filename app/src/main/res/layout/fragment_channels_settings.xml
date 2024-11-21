@@ -5,22 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="Fragments.Settings.ChannelsFragment">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/addChannelButton"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/voiceChannelsTitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add"
+        android:layout_marginStart="20dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-    />
-
+        android:text="@string/voiceChannels"
+        style="@style/TextAppearance.Material3.LabelMedium"
+        />
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/addChannelButton"
+        app:layout_constraintTop_toBottomOf="@+id/voiceChannelsTitle"
         />
     <ScrollView
         android:id="@+id/voiceChannelsRecycler"
@@ -28,21 +27,43 @@
         android:layout_height="250dp"
         android:layout_margin="15dp"
         app:layout_constraintTop_toBottomOf="@+id/divider">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/channelsRecyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_list_channel"
+            android:orientation="vertical"
             >
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addVoiceChannelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/add"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/channelsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_list_channel"
+                >
 
-        </androidx.recyclerview.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
     </ScrollView>
+    <TextView
+        android:id="@+id/textChannelsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/voiceChannelsRecycler"
+        style="@style/TextAppearance.Material3.LabelMedium"
+        android:text="@string/textChannels"
+        />
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/voiceChannelsRecycler"
+        app:layout_constraintTop_toBottomOf="@id/textChannelsTitle"
         />
     <ScrollView
         android:id="@+id/textChannelsRecycler"
@@ -51,13 +72,27 @@
         android:layout_margin="15dp"
         app:layout_constraintTop_toBottomOf="@id/divider2"
         >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chatsRecyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_list_chat"
+            android:orientation="vertical"
             >
-        </androidx.recyclerview.widget.RecyclerView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addTextChannelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/add"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chatsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_list_chat"
+                >
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
     </ScrollView>
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider3"

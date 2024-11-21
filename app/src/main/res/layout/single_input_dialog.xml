@@ -7,12 +7,12 @@
     android:background="@android:color/transparent"
     >
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/communityDialogInputLayout"
+        android:id="@+id/dialogInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="">
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/communityDialogInput"
+            android:id="@+id/dialogInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -21,7 +21,7 @@
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.button.MaterialButton
         android:layout_marginTop="10dp"
-        android:id="@+id/communityDialogButton"
+        android:id="@+id/dialogButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         />

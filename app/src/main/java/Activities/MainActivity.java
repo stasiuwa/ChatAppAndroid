@@ -179,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements
     public void callAddCommunityDialog() {
         final Dialog addCommunityDialog = new Dialog(this);
         addCommunityDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
-        addCommunityDialog.setContentView(R.layout.join_community_dialog);
-        TextInputLayout joinCodeLayout = addCommunityDialog.findViewById(R.id.communityDialogInputLayout);
-        TextInputEditText joinCode = addCommunityDialog.findViewById(R.id.communityDialogInput);
-        Button joinButton = addCommunityDialog.findViewById(R.id.communityDialogButton);
+        addCommunityDialog.setContentView(R.layout.single_input_dialog);
+        TextInputLayout joinCodeLayout = addCommunityDialog.findViewById(R.id.dialogInputLayout);
+        TextInputEditText joinCode = addCommunityDialog.findViewById(R.id.dialogInput);
+        Button joinButton = addCommunityDialog.findViewById(R.id.dialogButton);
 //        TODO zmienic na pobranie spolecznosci z serwera i dołączenie do niej
         joinButton.setOnClickListener(v -> {
             String joinCodeText = joinCode.getText().toString();
@@ -204,11 +204,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void callCreateCommunityDialog() {
         final Dialog createCommunityDialog = new Dialog(this);
-        createCommunityDialog.setContentView(R.layout.join_community_dialog);
+        createCommunityDialog.setContentView(R.layout.single_input_dialog);
         createCommunityDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
-        TextInputLayout communityNameLayout = createCommunityDialog.findViewById(R.id.communityDialogInputLayout);
-        TextInputEditText communityName = createCommunityDialog.findViewById(R.id.communityDialogInput);
-        Button createButton = createCommunityDialog.findViewById(R.id.communityDialogButton);
+        TextInputLayout communityNameLayout = createCommunityDialog.findViewById(R.id.dialogInputLayout);
+        TextInputEditText communityName = createCommunityDialog.findViewById(R.id.dialogInput);
+        Button createButton = createCommunityDialog.findViewById(R.id.dialogButton);
 //        TODO wysłać requesta na stworzenie społecznosci na serwer
 //        TODO dodac wgranie zdjecia na ikonke spolecznosci
         createButton.setOnClickListener(v -> {
