@@ -6,24 +6,26 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import Data.Models.Channel;
+import Data.Models.Community;
+import DataAccess.DAO.ChannelDAO;
 import DataAccess.DAO.CommunityDAO;
-import Data.Models.ChannelModel;
-import Data.Models.ChatModel;
-import Data.Models.CommunityModel;
-import Data.Models.MessageModel;
-import Data.Models.RoleModel;
-import Data.Models.UserModel;
 
 @androidx.room.Database(entities = {
-        CommunityModel.class,
+        Community.class,
+        Channel.class
 }, version = 1, exportSchema = false)
+//@TypeConverters({TypeConverters.class})
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();
+    public abstract ChannelDAO channelDAO();
     /**
      * Singelton
      */
@@ -57,46 +59,47 @@ public abstract class CommunityDB extends RoomDatabase {
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             databaseWriteExecutor.execute(() -> {
-                CommunityDAO dao = INSTANCE.communityDAO();
+                CommunityDAO communityDAO = INSTANCE.communityDAO();
+                ChannelDAO channelDAO = INSTANCE.channelDAO();
 
-//                dao.addUser(new UserModel("admin"));
+//                communityDAO.addUser(new UserModel("admin"));
 
 //                społeczność ktora po kliknieciu odpala dialog dołączenia do spolecznosci
 ////                testowe spolecznosci do wyswietlenia
-//                dao.addCommunity(new CommunityModel(1, "wedkowanie", 69517336201134080L, null, 224));
-//                dao.addCommunity(new CommunityModel(2, "tanie gruzy", 69517336201134080L, null, 224));
-//                dao.addCommunity(new CommunityModel(3, "klub swingers", 69517336201134080L, null, 224));
-//                dao.addCommunity(new CommunityModel("Spolecznosc 3"));
-//                dao.addCommunity(new CommunityModel("Spolecznosc 4"));
-//                dao.addCommunity(new CommunityModel("Spolecznosc 5"));
+//                communityDAO.addCommunity(new CommunityModel(1, "wedkowanie", 69517336201134080L, null, 224));
+//                communityDAO.addCommunity(new CommunityModel(2, "tanie gruzy", 69517336201134080L, null, 224));
+//                communityDAO.addCommunity(new CommunityModel(3, "klub swingers", 69517336201134080L, null, 224));
+//                communityDAO.addCommunity(new CommunityModel("Spolecznosc 3"));
+//                communityDAO.addCommunity(new CommunityModel("Spolecznosc 4"));
+//                communityDAO.addCommunity(new CommunityModel("Spolecznosc 5"));
 //
-//                dao.addChat(new ChatModel("czat tekst1 com3", 3));
-//                dao.addChat(new ChatModel("czat tekst2 com3", 3));
-//                dao.addChat(new ChatModel("czat tekst1 com2", 2));
-//                dao.addChat(new ChatModel("czat tekst2 com2", 2));
-//                dao.addChat(new ChatModel("czat tekst3 com3", 3));
-//                dao.addChat(new ChatModel("czat tekst1 com4", 4));
-//                dao.addChat(new ChatModel("czat tekst2 com4", 4));
-//                dao.addChat(new ChatModel("czat tekst3 com4", 4));
-//                dao.addChat(new ChatModel("czat tekst4 com4", 4));
-//                dao.addChat(new ChatModel("czat tekst1 com5", 5));
-//                dao.addChat(new ChatModel("czat tekst1 com6", 6));
+//                communityDAO.addChat(new ChatModel("czat tekst1 com3", 3));
+//                communityDAO.addChat(new ChatModel("czat tekst2 com3", 3));
+//                communityDAO.addChat(new ChatModel("czat tekst1 com2", 2));
+//                communityDAO.addChat(new ChatModel("czat tekst2 com2", 2));
+//                communityDAO.addChat(new ChatModel("czat tekst3 com3", 3));
+//                communityDAO.addChat(new ChatModel("czat tekst1 com4", 4));
+//                communityDAO.addChat(new ChatModel("czat tekst2 com4", 4));
+//                communityDAO.addChat(new ChatModel("czat tekst3 com4", 4));
+//                communityDAO.addChat(new ChatModel("czat tekst4 com4", 4));
+//                communityDAO.addChat(new ChatModel("czat tekst1 com5", 5));
+//                communityDAO.addChat(new ChatModel("czat tekst1 com6", 6));
 //
-//                dao.addChannel(new ChannelModel("czat głosowy1 com3", 3));
-//                dao.addChannel(new ChannelModel("czat głosowy2 com3", 3));
-//                dao.addChannel(new ChannelModel("czat głosowy1 com2", 2));
-//                dao.addChannel(new ChannelModel("czat głosowy2 com2", 2));
-//                dao.addChannel(new ChannelModel("czat głosowy3 com3", 3));
-//                dao.addChannel(new ChannelModel("czat głosowy1 com4", 4));
-//                dao.addChannel(new ChannelModel("czat głosowy2 com4", 4));
-//                dao.addChannel(new ChannelModel("czat głosowy3 com4", 4));
-//                dao.addChannel(new ChannelModel("czat głosowy4 com4", 4));
-//                dao.addChannel(new ChannelModel("czat głosowy1 com5", 5));
-//                dao.addChannel(new ChannelModel("czat głosowy1 com6", 6));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy1 com3", 3));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy2 com3", 3));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy1 com2", 2));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy2 com2", 2));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy3 com3", 3));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy1 com4", 4));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy2 com4", 4));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy3 com4", 4));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy4 com4", 4));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy1 com5", 5));
+//                communityDAO.addChannel(new ChannelModel("czat głosowy1 com6", 6));
 
-//                dao.addMessage(new MessageModel(1, "coś tam o górach", "22:31", "user1"));
-//                dao.addMessage(new MessageModel(1, "no góry, fajne, wysokie", "22:33", "user1"));
-//                dao.addMessage(new MessageModel(1, "generalnie", "22:35", "user1"));
+//                communityDAO.addMessage(new MessageModel(1, "coś tam o górach", "22:31", "user1"));
+//                communityDAO.addMessage(new MessageModel(1, "no góry, fajne, wysokie", "22:33", "user1"));
+//                communityDAO.addMessage(new MessageModel(1, "generalnie", "22:35", "user1"));
             });
         }
 

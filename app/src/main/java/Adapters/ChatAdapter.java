@@ -1,7 +1,6 @@
 package Adapters;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import Data.Models.ChatModel;
+import Data.Models.Chat;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder>  {
 
     Activity activity;
-    List<ChatModel> chatsList;
+    List<Chat> chatsList;
 
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
@@ -37,7 +35,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     }
     public interface OnItemClickListener {
-        void onItemClickListener(ChatModel chat);
+        void onItemClickListener(Chat chat);
     }
     @NonNull
     @Override
@@ -48,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
-        ChatModel chat = chatsList.get(position);
+        Chat chat = chatsList.get(position);
         holder.setChatName(chat.getChatName());
 //        TODO przerobic
         holder.setChatSubname("Ilość nieprzeczytanych wiadomosci");
@@ -60,7 +58,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         return (chatsList != null) ? chatsList.size() : 0;
     }
 
-    public void setChatsList(List<ChatModel> chatsList) {
+    public void setChatsList(List<Chat> chatsList) {
         this.chatsList = chatsList;
         notifyDataSetChanged();
     }
@@ -89,7 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                ChatModel chat = chatsList.get(position);
+                Chat chat = chatsList.get(position);
                 onItemClickListener.onItemClickListener(chat);
             }
         }

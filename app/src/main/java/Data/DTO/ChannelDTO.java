@@ -11,25 +11,17 @@ import lombok.Setter;
 @Setter
 public class ChannelDTO {
     @JsonProperty("id")
-    private String id;
+    private long id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("communityId")
-    private String communityId;
+    private long communityId;
     @JsonProperty("type")
     private ChannelType type;
     @JsonProperty("participants")
     private List<String> participants;
     @JsonProperty("overwrites")
-    private List<ChannelRole> overwrites;
+    private List<ChannelRoleDTO> overwrites;
     @JsonProperty("lastMessageId")
     private String lastMessageId;
-}
-@Getter
-@Setter
-class ChannelRole {
-    @JsonProperty("overwrites")
-    private String overwrites;
-    @JsonProperty("roleId")
-    private String roleId;
 }

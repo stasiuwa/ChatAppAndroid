@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.szampchat.R;
 
-import Data.Models.ChannelModel;
-
 public class VoiceChatFragment extends Fragment {
 
     long channelID;

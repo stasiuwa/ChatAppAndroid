@@ -30,7 +30,7 @@ import Data.DTO.Token;
 import Services.CommunityService;
 import Services.UserService;
 import Config.env;
-import Data.Models.CommunityModel;
+import Data.Models.Community;
 import Data.DTO.UserDTO;
 import DataAccess.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
@@ -83,8 +83,41 @@ public class MainActivity extends AppCompatActivity implements
         userService = retrofit.create(UserService.class);
         communityService = retrofit.create(CommunityService.class);
 
+//        Get user
+        fetchUserInfo(sharedPreferences);
 
-        Call<UserDTO> userInfoCall = userService.getCurrentUser("Bearer "+token.getAccessToken());
+//        Button displaying Settings section (fragment)
+        settingsButton = findViewById(R.id.mainSettingsButton);
+        SettingsFragment settingsFragment = new SettingsFragment();
+        Bundle settingsArgs = new Bundle();
+        settingsArgs.putBoolean("EXTENDED", false);
+        settingsFragment.setArguments(settingsArgs);
+        settingsButton.setOnClickListener(v -> {
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, settingsFragment)
+                    .addToBackStack(null)
+                    .commit();
+//            Hide settings button after displaying SettingsFragment
+            settingsButton.setVisibility(View.INVISIBLE);
+        });
+
+//        Download list of user's communities from API
+        fetchCommunities();
+
+//        Initial setup fragment with communities recyclerview, passed adapter to constructor
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, new MainFragment())
+                .commit();
+    }
+
+    /**
+     * Fetch user info from Server API and save it in SharedPreferences
+     * @param sharedPreferences data store where to save
+     */
+    private void fetchUserInfo(SharedPreferences sharedPreferences){
+        Call<UserDTO> userInfoCall = userService.getCurrentUser(
+                "Bearer "+token.getAccessToken()
+        );
         userInfoCall.enqueue(new Callback<UserDTO>() {
             @Override
             public void onResponse(@NonNull Call<UserDTO> call, @NonNull Response<UserDTO> response) {
@@ -123,26 +156,15 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("MainActivity", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
             }
         });
+    }
 
-
-//        Button displaying Settings section (fragment)
-        settingsButton = findViewById(R.id.mainSettingsButton);
-        SettingsFragment settingsFragment = new SettingsFragment();
-        Bundle settingsArgs = new Bundle();
-        settingsArgs.putBoolean("EXTENDED", false);
-        settingsFragment.setArguments(settingsArgs);
-        settingsButton.setOnClickListener(v -> {
-            this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, settingsFragment)
-                    .addToBackStack(null)
-                    .commit();
-//            Hide settings button after displaying SettingsFragment
-            settingsButton.setVisibility(View.INVISIBLE);
-        });
-
-//        Download list of user's communities from API
-
-        Call<List<CommunityDTO>> communitiesCall = communityService.getCommunities("Bearer "+token.getAccessToken());
+    /**
+     * Fetch all communities for logged user from Server API
+     */
+    private void fetchCommunities(){
+        Call<List<CommunityDTO>> communitiesCall = communityService.getCommunities(
+                "Bearer "+token.getAccessToken()
+        );
         communitiesCall.enqueue(new Callback<List<CommunityDTO>>() {
             @Override
             public void onResponse(Call<List<CommunityDTO>> call, Response<List<CommunityDTO>> response) {
@@ -152,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements
                     for (CommunityDTO communityDTO : communityDTOList) {
                         Log.d("MainActivity - communitiesCall", "Nazwa społeczności: " + communityDTO.getName());
 //                        If communities already exists in Room database update record, else update this record with data from API
-                        if (communitiesViewModel.getCommunity(communityDTO.getId()) == null) communitiesViewModel.addCommunity(communityDTO);
+                        if (communitiesViewModel.communityExists(communityDTO.getId())) communitiesViewModel.addCommunity(communityDTO);
                         else communitiesViewModel.updateCommunity(communityDTO);
                     }
                 } else {
@@ -165,15 +187,9 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("MainActivity - communitiesCall", Arrays.toString(t.getStackTrace()));
             }
         });
-
-//        Initial setup fragment with communities recyclerview, passed adapter to constructor
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, new MainFragment())
-                .commit();
     }
-
     /**
-     * Showing dialog with join community form.
+     * Showing dialog to enter community join code
      */
     @Override
     public void callAddCommunityDialog() {
@@ -199,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Showing dialog with create community form
+     * Showing dialog to create new community
      */
     @Override
     public void callCreateCommunityDialog() {
@@ -209,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements
         TextInputLayout communityNameLayout = createCommunityDialog.findViewById(R.id.dialogInputLayout);
         TextInputEditText communityName = createCommunityDialog.findViewById(R.id.dialogInput);
         Button createButton = createCommunityDialog.findViewById(R.id.dialogButton);
-//        TODO wysłać requesta na stworzenie społecznosci na serwer
 //        TODO dodac wgranie zdjecia na ikonke spolecznosci
         createButton.setOnClickListener(v -> {
             String name = communityName.getText().toString();
@@ -221,7 +236,8 @@ public class MainActivity extends AppCompatActivity implements
                         "{\"name\": \"" + name + "\"}"
                 );
                 Call<CommunityDTO> createCommunityCall = communityService.createCommunity(
-                        "Bearer "+token.getAccessToken(), communityJson
+                        "Bearer "+token.getAccessToken(),
+                        communityJson
                 );
                 createCommunityCall.enqueue(new Callback<CommunityDTO>() {
                     @Override
@@ -245,20 +261,14 @@ public class MainActivity extends AppCompatActivity implements
         createCommunityDialog.show();
     }
     /**
-     * Changing visibility of settings button after resuming main fragment
+     * Move user to Activity with specific community he clicked
      */
     @Override
-    public void onItemClickListener(CommunityModel community) {
-//        Log.d("COMMUNITY-MAIN", "id: " + community.getCommunityID());
-        if (community.getCommunityID() == 1) {
-            callAddCommunityDialog();
-        }
-        else {
-            Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
-            intent.putExtra("communityID", community.getCommunityID());
-            intent.putExtra("communityName", community.getCommunityName());
-            startActivity(intent);
-        }
+    public void onItemClickListener(Community community) {
+        Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
+        intent.putExtra("communityID", community.getCommunityID());
+        intent.putExtra("communityName", community.getCommunityName());
+        startActivity(intent);
     }
 
 }

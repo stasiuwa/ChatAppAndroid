@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "roles")
-public class RoleModel {
+public class Role {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "ID")
     public long roleID;
@@ -22,7 +22,7 @@ public class RoleModel {
 //    Uprawnienia jako jakis wektor flag czy kilka poziomów ??
 
 
-    public RoleModel(String name) {
+    public Role(String name) {
         this.name = name;
     }
 

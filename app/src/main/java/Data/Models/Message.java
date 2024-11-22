@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "messages")
-public class MessageModel {
+public class Message {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "messageID")
     public long messageID;
@@ -22,7 +22,7 @@ public class MessageModel {
     @ColumnInfo(name = "Sent by")
     public String username;
 
-    public MessageModel(long chatID, @NonNull String text, @NonNull String sentTime, @NonNull String username) {
+    public Message(long chatID, @NonNull String text, @NonNull String sentTime, @NonNull String username) {
         this.chatID = chatID;
         this.text = text;
         this.sentTime = sentTime;

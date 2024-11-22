@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey;
 //        )
 //    }
 )
-public class ChatModel {
+public class Chat {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "chatID")
     public long chatID;
@@ -27,7 +27,7 @@ public class ChatModel {
     @ColumnInfo(name = "communityOwnerID")
     public long communityID;
 
-    public ChatModel(@NonNull String chatName, long communityID) {
+    public Chat(@NonNull String chatName, long communityID) {
         this.chatName = chatName;
         this.communityID = communityID;
     }

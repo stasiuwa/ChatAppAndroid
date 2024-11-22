@@ -13,12 +13,12 @@ import com.szampchat.R;
 
 import java.util.List;
 
-import Data.Models.ChannelModel;
+import Data.Models.Channel;
 
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder> {
 
     Activity activity;
-    List<ChannelModel> channelsList;
+    List<Channel> channelsList;
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
 
@@ -34,10 +34,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
     }
 
     public interface OnItemClickListener {
-        void onItemClickListener(ChannelModel channel);
+        void onItemClickListener(Channel channel);
     }
 
-    public void setChannelsList(List<ChannelModel> channelsList){
+    public void setChannelsList(List<Channel> channelsList){
         this.channelsList = channelsList;
         notifyDataSetChanged();
     }
@@ -56,8 +56,8 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
 
     @Override
     public void onBindViewHolder(@NonNull ChannelViewHolder holder, int position) {
-        ChannelModel channel = channelsList.get(position);
-        holder.setChannelName(channel.getChannelName());
+        Channel channel = channelsList.get(position);
+        holder.setChannelName(channel.getName());
         holder.setChannelSubname("ilość użytkowników onlin");
     }
 
@@ -84,7 +84,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position!=RecyclerView.NO_POSITION) {
-                ChannelModel channel = channelsList.get(position);
+                Channel channel = channelsList.get(position);
                 onItemClickListener.onItemClickListener(channel);
             }
         }

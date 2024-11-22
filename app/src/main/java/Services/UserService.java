@@ -11,16 +11,25 @@ import retrofit2.http.POST;
 public interface UserService {
 
     @GET("/api/users/me")
-    Call<UserDTO> getCurrentUser(@Header("Authorization") String token);
+    Call<UserDTO> getCurrentUser(
+            @Header("Authorization") String token
+    );
 
     @FormUrlEncoded
     @GET("/api/users")
-    Call<UserDTO> getUser(@Header("Authorization") String token, @Field("userId") long userId);
+    Call<UserDTO> getUser(
+            @Header("Authorization") String token,
+            @Field("userId") long userId);
 
     @POST("/api/users/description")
-    Call<Void> updateUserDescription(@Field("descriptionDTO") String description);
+    Call<Void> updateUserDescription(
+            @Field("descriptionDTO") String description
+    );
 
     @FormUrlEncoded
     @POST("/api/users")
-    Call<UserDTO> registerUser(@Header("Authorization") String token, @Field("username") String username);
+    Call<UserDTO> registerUser(
+            @Header("Authorization") String token,
+            @Field("username") String username
+    );
 }

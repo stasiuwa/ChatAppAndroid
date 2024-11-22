@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
-public class UserModel {
+public class User {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "userID")
     private long userID;
@@ -17,7 +17,7 @@ public class UserModel {
     @ColumnInfo(name = "communityOwnerID")
     public long communityID;
 
-    public UserModel(@NonNull String username) {
+    public User(@NonNull String username) {
         this.username = username;
     }
 

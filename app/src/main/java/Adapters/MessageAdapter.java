@@ -11,11 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
-import java.util.Date;
 import java.util.List;
 
-import Data.Models.ChatModel;
-import Data.Models.MessageModel;
+import Data.Models.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -24,7 +22,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int VIEW_TYPE_SYSTEM_MESSAGE = 3;
 
     Activity activity;
-    List<MessageModel> messagesList;
+    List<Message> messagesList;
 
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
@@ -40,10 +38,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
     public interface OnItemClickListener {
-        void onItemClickListener(MessageModel message);
+        void onItemClickListener(Message message);
     }
 
-    public void setMessagesList(List<MessageModel> messagesList) {
+    public void setMessagesList(List<Message> messagesList) {
         this.messagesList = messagesList;
         notifyDataSetChanged();
     }
@@ -55,7 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        MessageModel message = (MessageModel) messagesList.get(position);
+        Message message = (Message) messagesList.get(position);
 //        TODO poprawic logige xd sprawdzania czy wiadomosc wyslana przez uzytkownika zalogowanego do aplikacji.
         if (message.getUsername().equals("user2")) {
             return VIEW_TYPE_MESSAGE_SENT;
@@ -87,7 +85,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        MessageModel message = messagesList.get(position);
+        Message message = messagesList.get(position);
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
                 ((SentMessageHolder) holder).bind(message);
@@ -114,7 +112,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageTimestamp = (TextView) itemView.findViewById(R.id.messageTimestamp);
             itemView.setTag(this);
         }
-        public void bind(MessageModel message) {
+        public void bind(Message message) {
             messageText.setText(message.getText());
             messageTimestamp.setText(message.getSentTime());
         }
@@ -132,7 +130,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageTimestamp = itemView.findViewById(R.id.messageTimestamp);
             itemView.setTag(this);
         }
-        public void bind(MessageModel message) {
+        public void bind(Message message) {
             messageText.setText(message.getText());
             messageTimestamp.setText(message.getSentTime());
             messageUser.setText(message.getUsername());
@@ -148,7 +146,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             systemMessage = itemView.findViewById(R.id.systemMessageText);
         }
-        public void bind(MessageModel message){
+        public void bind(Message message){
             systemMessage.setText(message.getText());
         }
     }

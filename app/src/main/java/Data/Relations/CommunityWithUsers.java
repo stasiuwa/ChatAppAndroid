@@ -5,13 +5,13 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-import Data.Models.CommunityModel;
-import Data.Models.UserModel;
+import Data.Models.Community;
+import Data.Models.User;
 
 public class CommunityWithUsers {
     @Embedded
-    public CommunityModel community;
+    public Community community;
 
     @Relation(parentColumn = "communityID", entityColumn = "communityOwnerID")
-    public List<UserModel> users;
+    public List<User> users;
 }

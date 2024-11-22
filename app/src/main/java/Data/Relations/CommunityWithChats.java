@@ -5,14 +5,14 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-import Data.Models.ChatModel;
-import Data.Models.CommunityModel;
+import Data.Models.Chat;
+import Data.Models.Community;
 
 public class CommunityWithChats {
     @Embedded
-    public CommunityModel community;
+    public Community community;
 
     @Relation(parentColumn = "communityID", entityColumn = "communityOwnerID")
-    public List<ChatModel> chats;
+    public List<Chat> chats;
 
 }

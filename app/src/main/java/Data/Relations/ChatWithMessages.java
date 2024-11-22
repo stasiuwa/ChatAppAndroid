@@ -5,12 +5,12 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-import Data.Models.ChatModel;
-import Data.Models.MessageModel;
+import Data.Models.Chat;
+import Data.Models.Message;
 
 public class ChatWithMessages {
     @Embedded
-    public ChatModel chat;
+    public Chat chat;
     @Relation(parentColumn = "chatID", entityColumn = "chatOwnerID")
-    public List<MessageModel> messages;
+    public List<Message> messages;
 }

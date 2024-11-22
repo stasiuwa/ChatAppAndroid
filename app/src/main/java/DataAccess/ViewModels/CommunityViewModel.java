@@ -10,7 +10,7 @@ import java.util.List;
 
 import Data.DTO.CommunityDTO;
 import DataAccess.Repositories.CommunityRepository;
-import Data.Models.CommunityModel;
+import Data.Models.Community;
 import lombok.Getter;
 
 /**
@@ -19,7 +19,7 @@ import lombok.Getter;
 public class CommunityViewModel extends AndroidViewModel {
     private final CommunityRepository communityRepository;
     @Getter
-    private final LiveData<List<CommunityModel>> allCommunities;
+    private final LiveData<List<Community>> allCommunities;
 
     public CommunityViewModel(@NonNull Application application) {
         super(application);
@@ -27,9 +27,9 @@ public class CommunityViewModel extends AndroidViewModel {
         this.allCommunities = communityRepository.getCommunities();
     }
 
-    /*public boolean communityExists(long id){
+    public boolean communityExists(long id){
         return communityRepository.communityExists(id);
-    }*/
+    }
 
     public void addCommunity(CommunityDTO community){
         communityRepository.addCommunity(communityRepository.mapCommunity(community));
@@ -37,10 +37,10 @@ public class CommunityViewModel extends AndroidViewModel {
     public void updateCommunity(CommunityDTO community){
         communityRepository.updateCommunity(communityRepository.mapCommunity(community));
     }
-    public void deleteCommunity(CommunityModel community){
+    public void deleteCommunity(Community community){
         communityRepository.deleteCommunity(community);
     }
-    public LiveData<CommunityModel> getCommunity(long id){
+    public LiveData<Community> getCommunity(long id){
         return communityRepository.getCommunity(id);
     }
 }

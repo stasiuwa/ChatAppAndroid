@@ -14,11 +14,11 @@ import com.szampchat.R;
 import java.util.Collections;
 import java.util.List;
 
-import Data.Models.CommunityModel;
+import Data.Models.Community;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
     Activity activity;
-    List<CommunityModel> communitiesList;
+    List<Community> communitiesList;
 
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
@@ -35,7 +35,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     }
 
     public interface OnItemClickListener {
-        void onItemClickListener(CommunityModel community);
+        void onItemClickListener(Community community);
     }
 
     @NonNull
@@ -47,7 +47,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
 
     @Override
     public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
-        CommunityModel community = communitiesList.get(position);
+        Community community = communitiesList.get(position);
         holder.setCommunityName(community.getCommunityName());
     }
 
@@ -55,7 +55,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     public int getItemCount() {
         return (communitiesList != null) ? communitiesList.size() : 0;
     }
-    public void setCommunitiesList(List<CommunityModel> communitiesList) {
+    public void setCommunitiesList(List<Community> communitiesList) {
         Collections.reverse(communitiesList);
         this.communitiesList = communitiesList;
         notifyDataSetChanged();
@@ -81,7 +81,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
 //                Log.d("TESTOWANIE FUNKCJONALNOSCI", "test pozycji adaptera: " + String.valueOf(position));
-                CommunityModel community = communitiesList.get(position);
+                Community community = communitiesList.get(position);
                 onItemClickListener.onItemClickListener(community);
             }
         }

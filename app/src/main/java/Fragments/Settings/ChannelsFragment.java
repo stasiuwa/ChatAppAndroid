@@ -1,7 +1,10 @@
 package Fragments.Settings;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.transition.TransitionInflater;
@@ -11,21 +14,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
-import Config.env;
 import Data.DTO.ChannelType;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class ChannelsFragment extends Fragment {
 
-    ChannelListener channelListener;
+    ChannelsListener channelsListener;
+    private ChannelType channelType;
 
-    public interface ChannelListener {
-        void addChannel();
+    public interface ChannelsListener {
+        void addChannel(String name, String type);
     }
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            channelsListener = (ChannelsListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.getMessage() + " must implements ChannelsFragment.ChannelListener");
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,14 +53,39 @@ public class ChannelsFragment extends Fragment {
 
         Button addVoiceChannel = view.findViewById(R.id.addVoiceChannelButton);
         Button addTextChannel = view.findViewById(R.id.addTextChannelButton);
+
+        final Dialog createChannelDialog = new Dialog(requireContext());
+        createChannelDialog.setContentView(R.layout.single_input_dialog);
+        createChannelDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+
+        TextInputLayout dialogLayout = createChannelDialog.findViewById(R.id.dialogInputLayout);
+        TextInputEditText dialogEditText = createChannelDialog.findViewById(R.id.dialogInput);
+        Button dialogButton = createChannelDialog.findViewById(R.id.dialogButton);
+        dialogButton.setText(R.string.add);
+
         addVoiceChannel.setOnClickListener(v -> {
-//            TODO formularz, walidacja
             Log.d("ChannelsFragment - addChannel", ChannelType.VOICE_CHANNEL.name());
 //            channelListener.addChannel();
+            dialogLayout.setHint("Nazwa kanału głosowego");
+            dialogEditText.setText("");
+            channelType = ChannelType.VOICE_CHANNEL;
+            createChannelDialog.show();
         });
         addTextChannel.setOnClickListener(v -> {
-//            TODO formularz, walidacja
             Log.d("ChannelsFragment - addChannel", ChannelType.TEXT_CHANNEL.name());
+            dialogLayout.setHint("Nazwa kanału tekstowego");
+            dialogEditText.setText("");
+            channelType = ChannelType.TEXT_CHANNEL;
+            createChannelDialog.show();
+        });
+
+        dialogButton.setOnClickListener(v -> {
+            String channelName = dialogEditText.getText().toString();
+            if (channelName.matches("")) dialogLayout.setError("Podaj nazwę kanału!");
+            else {
+                channelsListener.addChannel(channelName, channelType.name());
+                createChannelDialog.dismiss();
+            }
         });
 
         return view;

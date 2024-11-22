@@ -20,11 +20,12 @@ import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
 import Adapters.MessageAdapter;
 import Config.env;
+import Data.DTO.ChannelDTO;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.Token;
-import Data.Models.ChannelModel;
-import Data.Models.ChatModel;
-import Data.Models.MessageModel;
+import Data.Models.Channel;
+import Data.Models.Chat;
+import Data.Models.Message;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.ChatsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
@@ -32,7 +33,10 @@ import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.SettingsFragment;
+import Services.ChannelService;
 import Services.CommunityService;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,11 +46,20 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
         ChatAdapter.OnItemClickListener,
-        MessageAdapter.OnItemClickListener
+        MessageAdapter.OnItemClickListener,
+
+        Fragments.Settings.ChannelsFragment.ChannelsListener
 {
     long communityID;
-    Button settingsButton;
+
+    NavigationBarView navbar;
+    Button settingsButton, homeButton;
+
     Token token = new Token();
+
+    Retrofit retrofit;
+    CommunityService communityService;
+    ChannelService channelService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +70,10 @@ public class CommunityActivity extends AppCompatActivity implements
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
                 .commit();
-        Button homeButton = findViewById(R.id.communityHomeButton);
+
+        homeButton = findViewById(R.id.communityHomeButton);
         settingsButton = findViewById(R.id.communitySettingsButton);
+        navbar = findViewById(R.id.bottom_navbar);
 
 //        Bundle storing community data
         Bundle communityBundle = new Bundle();
@@ -79,38 +94,21 @@ public class CommunityActivity extends AppCompatActivity implements
         } else Log.d("CommunityActivity", "communityName wasn't passed to activity!");
 
 //        Calling API for full info about Community - channels, roles, members.
-        Retrofit retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(env.api)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
-        CommunityService communityService = retrofit.create(CommunityService.class);
-        Call<FullCommunityDTO> callCommunityInfo = communityService.getFullCommunityInfo("Bearer "+token.getAccessToken(), communityID);
-        callCommunityInfo.enqueue(new Callback<FullCommunityDTO>() {
-            @Override
-            public void onResponse(Call<FullCommunityDTO> call, Response<FullCommunityDTO> response) {
-                if (response.isSuccessful() && response.body()!=null){
-                    Log.d("CommunityActivity - callCommunityInfo",
-                            "Społeczność: " + response.body().getCommunity().getName() +
-                            "\nIlość kanałów: " + response.body().getChannels().size() +
-                            "\nIlość użytkowników: " + response.body().getMembers().size() +
-                            "\nIlość ról: " + response.body().getRoles().size());
-//                    TODO zapisac dane do viewmodeli
-                } else {
-                    Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<FullCommunityDTO> call, Throwable t) {
-                Log.d("CommunityActivity - callCommunityInfo", "Błąd wykonania usługi: " + Arrays.toString(t.getStackTrace()));
-            }
-        });
+        communityService = retrofit.create(CommunityService.class);
+        channelService = retrofit.create(ChannelService.class);
 
+        getCommunityFullInfo();
+        setupNavbar(communityBundle);
 
 //        Button that changes present fragment to SettingsFragment and hides
-        SettingsFragment settingsFragment = new SettingsFragment();
 //        Pass to SettingsFragment info to display extended options to set (Createing roles, channels etc)
         Bundle settingsArgs = new Bundle();
+        SettingsFragment settingsFragment = new SettingsFragment();
         settingsArgs.putBoolean("EXTENDED", true);
         settingsFragment.setArguments(settingsArgs);
         settingsButton.setOnClickListener(v -> {
@@ -132,7 +130,13 @@ public class CommunityActivity extends AppCompatActivity implements
                     .commit();
         });
 //        Handle bottom navbar events
-        NavigationBarView navbar = findViewById(R.id.bottom_navbar);
+    }
+
+    /**
+     * Setup navbar onItemSelectedListener to switch fragments to display and pass them info about community
+     * @param communityBundle bundle containing community id and name
+     */
+    private void setupNavbar(Bundle communityBundle){
         navbar.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.navbar_menu_chats) {
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -167,22 +171,79 @@ public class CommunityActivity extends AppCompatActivity implements
             else return false;
         });
     }
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+
+    /**
+     * Fetching all data about current community from Server API
+     */
+    private void getCommunityFullInfo(){
+        Call<FullCommunityDTO> callCommunityInfo = communityService.getFullCommunityInfo(
+                "Bearer "+token.getAccessToken(),
+                communityID
+        );
+        callCommunityInfo.enqueue(new Callback<FullCommunityDTO>() {
+            @Override
+            public void onResponse(Call<FullCommunityDTO> call, Response<FullCommunityDTO> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    Log.d("CommunityActivity - callCommunityInfo",
+                            "Społeczność: " + response.body().getCommunity().getName() +
+                                    "\nIlość kanałów: " + response.body().getChannels().size() +
+                                    "\nIlość użytkowników: " + response.body().getMembers().size() +
+                                    "\nIlość ról: " + response.body().getRoles().size());
+//                    TODO zapisac dane do viewmodeli
+                } else {
+                    Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FullCommunityDTO> call, Throwable t) {
+                Log.d("CommunityActivity - callCommunityInfo", "Błąd wykonania usługi: " + Arrays.toString(t.getStackTrace()));
+            }
+        });
     }
 
+    /**
+     * Sending to Server API request to create channel
+     * @param name channel name
+     * @param type channel type (possible values: TEXT_CHANNEL, VOICE_CHANNEL)
+     */
+    @Override
+    public void addChannel(String name, String type) {
+        Log.d("TEST1", "test1");
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"),
+                "{\n  \"name\": \"" + name + "\",\n  \"type\": \"" + type + "\"\n}"
+        );
+        Call<ChannelDTO> callAddChannel = channelService.createChannel(
+                "Bearer "+token.getAccessToken(),
+                communityID,
+                body
+        );
+        callAddChannel.enqueue(new Callback<ChannelDTO>() {
+            @Override
+            public void onResponse(Call<ChannelDTO> call, Response<ChannelDTO> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    Log.d("TEST2", response.code() + response.message());
+                }
+                else Log.d("TEST3", response.code() + response.message());
+            }
+
+            @Override
+            public void onFailure(Call<ChannelDTO> call, Throwable t) {
+                Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + Arrays.toString(t.getStackTrace()));
+            }
+        });
+    }
     /**
      * Allows user to join a specific voice channel of available channels in RecyclerView from ChannelsFragment
      * @param channel - specific channel selected from a list
      */
     @Override
-    public void onItemClickListener(ChannelModel channel) {
+    public void onItemClickListener(Channel channel) {
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle channelBundle = new Bundle();
-        channelBundle.putLong("channelID", channel.getChannelID());
-        channelBundle.putString("channelName", channel.getChannelName());
+        channelBundle.putLong("channelID", channel.getId());
+        channelBundle.putString("channelName", channel.getName());
         VoiceChatFragment voiceChatFragment = new VoiceChatFragment();
         voiceChatFragment.setArguments(channelBundle);
         this.getSupportFragmentManager().beginTransaction()
@@ -196,7 +257,7 @@ public class CommunityActivity extends AppCompatActivity implements
      * @param chat - specific chat selected from a list
      */
     @Override
-    public void onItemClickListener(ChatModel chat) {
+    public void onItemClickListener(Chat chat) {
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle chatBundle = new Bundle();
         chatBundle.putLong("chatID", chat.getChatID());
@@ -210,7 +271,17 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemClickListener(MessageModel message) {
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    /**
+     * Handling click on specifc message - TODO add edit and delete feature
+     * @param message specific message selected from a list
+     */
+    @Override
+    public void onItemClickListener(Message message) {
 
     }
 }

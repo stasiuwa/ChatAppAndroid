@@ -3,13 +3,13 @@ package Data.Relations;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import Data.Models.RoleModel;
-import Data.Models.UserModel;
+import Data.Models.Role;
+import Data.Models.User;
 
 public class UserWithRole {
     @Embedded
-    UserModel user;
+    User user;
 
     @Relation(parentColumn = "userID", entityColumn = "roleUserID")
-    public RoleModel role;
+    public Role role;
 }

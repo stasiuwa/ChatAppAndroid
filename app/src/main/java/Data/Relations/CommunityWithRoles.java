@@ -6,13 +6,13 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-import Data.Models.CommunityModel;
-import Data.Models.RoleModel;
+import Data.Models.Community;
+import Data.Models.Role;
 
 public class CommunityWithRoles {
     @Embedded
-    public CommunityModel community;
+    public Community community;
 
     @Relation(parentColumn = "communityID", entityColumn = "roleCommunityID")
-    public LiveData<List<RoleModel>> roles;
+    public LiveData<List<Role>> roles;
 }
