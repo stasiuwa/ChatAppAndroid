@@ -27,10 +27,6 @@ public class CommunityViewModel extends AndroidViewModel {
         this.allCommunities = communityRepository.getCommunities();
     }
 
-    public boolean communityExists(long id){
-        return communityRepository.communityExists(id);
-    }
-
     public void addCommunity(CommunityDTO community){
         communityRepository.addCommunity(communityRepository.mapCommunity(community));
     }

@@ -173,9 +173,8 @@ public class MainActivity extends AppCompatActivity implements
                     List<CommunityDTO> communityDTOList = response.body();
                     for (CommunityDTO communityDTO : communityDTOList) {
                         Log.d("MainActivity - communitiesCall", "Nazwa społeczności: " + communityDTO.getName());
-//                        If communities already exists in Room database update record, else update this record with data from API
-                        if (communitiesViewModel.communityExists(communityDTO.getId())) communitiesViewModel.addCommunity(communityDTO);
-                        else communitiesViewModel.updateCommunity(communityDTO);
+//                        If communities already exists in Room database onConflictStrategy = REPLACE
+                        communitiesViewModel.addCommunity(communityDTO);
                     }
                 } else {
                     Log.d("MainActivity - communitiesCall", "Błąd pobierania danych z serwera" + response.code() + response.message());

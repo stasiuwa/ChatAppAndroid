@@ -23,13 +23,6 @@ public class CommunityRepository {
         dao = mCommunityDB.communityDAO();
         allCommunities = dao.getAllCommunities();
     }
-    public boolean communityExists(long id){
-        CommunityDB.databaseWriteExecutor.execute(() -> {
-            exists = dao.communityExists(id) != 0;
-        });
-        return exists;
-    }
-
     /**
      * Mapping CommunityDTO to Community for Room Database
      * @param communityDTO object to mapping

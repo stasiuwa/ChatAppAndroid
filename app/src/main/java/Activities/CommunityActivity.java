@@ -209,7 +209,6 @@ public class CommunityActivity extends AppCompatActivity implements
      */
     @Override
     public void addChannel(String name, String type) {
-        Log.d("TEST1", "test1");
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"),
                 "{\n  \"name\": \"" + name + "\",\n  \"type\": \"" + type + "\"\n}"
@@ -223,9 +222,8 @@ public class CommunityActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<ChannelDTO> call, Response<ChannelDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    Log.d("TEST2", response.code() + response.message());
                 }
-                else Log.d("TEST3", response.code() + response.message());
+                else Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + response.code() + " " +response.message());
             }
 
             @Override

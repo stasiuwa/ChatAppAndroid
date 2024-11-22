@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
@@ -14,7 +15,7 @@ import Data.Models.Community;
 
 @Dao
 public interface CommunityDAO {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addCommunity(Community community);
 
     @Update
@@ -31,6 +32,6 @@ public interface CommunityDAO {
     @Delete
     void deleteCommunity(Community community);
 
-    @Query("SELECT COUNT(*) FROM communities WHERE communityID = :id")
-    int communityExists(long id);
+    @Query("SELECT EXISTS(SELECT * FROM communities WHERE communityID = :id)")
+    boolean communityExists(long id);
 }

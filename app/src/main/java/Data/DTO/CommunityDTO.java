@@ -17,7 +17,7 @@ public class CommunityDTO {
     @JsonProperty("ownerId")
     private long ownerId;
     @JsonProperty("imageUrl")
-    private UUID imageUrl;
+    private String imageUrl;
     @JsonProperty("basePermissions")
     private int basePermissions;
 }

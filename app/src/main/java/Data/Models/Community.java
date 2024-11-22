@@ -28,7 +28,7 @@ public class Community {
     @ColumnInfo(name = "Owner ID")
     public long ownerID;
     @ColumnInfo(name = "Image URL")
-    public UUID imageUrl;
+    public String imageUrl;
     @ColumnInfo(name = "Base Permissions")
     public int basePermissions;
 }
