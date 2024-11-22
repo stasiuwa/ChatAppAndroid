@@ -9,6 +9,7 @@ import java.util.List;
 
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelRoleDTO;
+import Data.DTO.ChannelType;
 import Data.Databases.CommunityDB;
 import Data.Models.Channel;
 import Data.Models.ChannelRole;
@@ -38,13 +39,26 @@ public class ChannelRepository {
                 channelDTO.getId(),
                 channelDTO.getName(),
                 channelDTO.getCommunityId(),
-                channelDTO.getType(),
+//                ChannelType from server is 0-1
+                (channelDTO.getType()==1) ? ChannelType.VOICE_CHANNEL : ChannelType.TEXT_CHANNEL,
                 channelDTO.getParticipants(),
                 overwrites
         );
     }
-//    TODO dokonczyc
     public void addChannel(Channel channel){
-
+        CommunityDB.databaseWriteExecutor.execute(() -> {
+            dao.addChannel(channel);
+        });
+    }
+    public LiveData<List<Channel>> getChannels() {return allChannels;}
+    public void deleteChannel(Channel channel){
+        CommunityDB.databaseWriteExecutor.execute(() -> {
+            dao.deleteChannel(channel);
+        });
+    }
+    public void updateChannel(Channel channel){
+        CommunityDB.databaseWriteExecutor.execute(() -> {
+            dao.updateChannel(channel);
+        });
     }
 }

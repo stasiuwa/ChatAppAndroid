@@ -25,13 +25,6 @@ public interface CommunityDAO {
     @Query("SELECT * FROM communities")
     LiveData<List<Community>> getAllCommunities();
 
-    @Transaction
-    @Query("SELECT * FROM communities WHERE communityID = :id")
-    LiveData<Community> getCommunityById(long id);
-
     @Delete
     void deleteCommunity(Community community);
-
-    @Query("SELECT EXISTS(SELECT * FROM communities WHERE communityID = :id)")
-    boolean communityExists(long id);
 }

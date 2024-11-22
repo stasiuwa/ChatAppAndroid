@@ -36,7 +36,4 @@ public class CommunityViewModel extends AndroidViewModel {
     public void deleteCommunity(Community community){
         communityRepository.deleteCommunity(community);
     }
-    public LiveData<Community> getCommunity(long id){
-        return communityRepository.getCommunity(id);
-    }
 }

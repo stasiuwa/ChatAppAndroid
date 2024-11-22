@@ -16,7 +16,6 @@ import Data.Databases.CommunityDB;
 public class CommunityRepository {
     private CommunityDAO dao;
     private LiveData<List<Community>> allCommunities;
-    private boolean exists;
 
     public CommunityRepository(Application application){
         CommunityDB mCommunityDB = CommunityDB.getDataBase(application);
@@ -55,9 +54,4 @@ public class CommunityRepository {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> dao.updateCommunity(community));
     }
-
-    public LiveData<Community> getCommunity(long id){
-        return dao.getCommunityById(id);
-    }
-
 }
