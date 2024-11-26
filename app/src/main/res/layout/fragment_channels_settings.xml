@@ -93,7 +93,7 @@
             android:id="@+id/chatsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_list_chat"
+            tools:listitem="@layout/item_list_channel"
             >
 
         </androidx.recyclerview.widget.RecyclerView>

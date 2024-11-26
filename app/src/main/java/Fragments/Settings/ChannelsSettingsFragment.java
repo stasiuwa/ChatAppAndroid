@@ -23,6 +23,7 @@ import com.szampchat.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
@@ -75,8 +76,8 @@ public class ChannelsSettingsFragment extends Fragment {
         Button dialogButton = createChannelDialog.findViewById(R.id.dialogButton);
         dialogButton.setText(R.string.add);
 
-        ChannelAdapter channelAdapter = new ChannelAdapter(requireActivity());
-        ChatAdapter chatAdapter = new ChatAdapter(requireActivity());
+        ChannelAdapter voiceChannelAdapter = new ChannelAdapter(requireActivity());
+        ChannelAdapter textChannelAdapter = new ChannelAdapter(requireActivity());
         ChannelViewModel channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
 
 //        fetch channels for specific community
@@ -84,14 +85,26 @@ public class ChannelsSettingsFragment extends Fragment {
             channelViewModel.getChannelsFromCommunity(received.getLong("communityId"))
                     .observe(getViewLifecycleOwner(), channels -> {
                         if (channels != null) {
-                            channelAdapter.setChannelsList(new ArrayList<>(channels));
+                            List<Channel> voiceChannels = new ArrayList<>();
+                            List<Channel> textChannels = new ArrayList<>();
+                            for (Channel channel : channels) {
+                                if (channel.getType().equals(ChannelType.VOICE_CHANNEL)) voiceChannels.add(channel);
+                                else if (channel.getType().equals(ChannelType.TEXT_CHANNEL)) textChannels.add(channel);
+                                else Log.d("ChannelsSettingsFragment", "Nieznany typ kanału!\n" + channel.getType());
+                            }
+                            voiceChannelAdapter.setChannelsList(voiceChannels);
+                            textChannelAdapter.setChannelsList(textChannels);
                         }
                     });
         }
 
-        RecyclerView channelRecycler = view.findViewById(R.id.channelsRecyclerView);
-        channelRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        channelRecycler.setAdapter(channelAdapter);
+        RecyclerView voiceChannelsRecycler = view.findViewById(R.id.channelsRecyclerView);
+        voiceChannelsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        voiceChannelsRecycler.setAdapter(voiceChannelAdapter);
+
+        RecyclerView textChannelsRecycler = view.findViewById(R.id.chatsRecyclerView);
+        textChannelsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        textChannelsRecycler.setAdapter(textChannelAdapter);
 
         addVoiceChannel.setOnClickListener(v -> {
             Log.d("ChannelsFragment - addChannel", ChannelType.VOICE_CHANNEL.name());
