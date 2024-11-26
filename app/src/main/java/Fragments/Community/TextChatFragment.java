@@ -40,15 +40,18 @@ public class TextChatFragment extends Fragment{
 //        Receive chat data from bundle
         Bundle receivedBundle = getArguments();
         if (receivedBundle != null){
-            if (receivedBundle.containsKey("chatID")){
-                chatID = receivedBundle.getLong("chatID");
+            if (receivedBundle.containsKey("channelID")){
+                chatID = receivedBundle.getLong("channelID");
             }
-            if (receivedBundle.containsKey("chatName")){
-                chatName = receivedBundle.getString("chatName");
+            if (receivedBundle.containsKey("channelName")){
+                chatName = receivedBundle.getString("channelName");
             } else {
                 chatName = "Chat name not found!";
             }
         }
+        TextView chatName = view.findViewById(R.id.textChatName);
+        chatName.setText(getArguments().getString("channelName"));
+
 //        Displaying messages
         messageAdapter = new MessageAdapter(requireActivity());
 
@@ -87,8 +90,7 @@ public class TextChatFragment extends Fragment{
 //        });
 
 //        Chat name in top side of the view
-        TextView chatName = view.findViewById(R.id.textChatName);
-        chatName.setText(getArguments().getString("chatName"));
+
 
         return view;
     }

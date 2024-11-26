@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import Adapters.ChannelAdapter;
+import Adapters.MessageAdapter;
 import Config.env;
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
@@ -27,9 +28,11 @@ import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.Token;
 import Data.Models.Channel;
+import Data.Models.Message;
 import DataAccess.ViewModels.ChannelViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
+import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.ChannelsSettingsFragment;
@@ -46,6 +49,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
+        MessageAdapter.OnItemClickListener,
 
         ChannelsSettingsFragment.ChannelsListener
 {
@@ -243,25 +247,36 @@ public class CommunityActivity extends AppCompatActivity implements
         });
     }
     /**
-     * Allows user to join a specific voice channel of available channels in RecyclerView from ChannelsFragment
+     * Allows user to join a specific channel of available channels in RecyclerView from ChannelsFragment
      * @param channel - specific channel selected from a list
      */
     @Override
     public void onItemClickListener(Channel channel) {
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle channelBundle = new Bundle();
-        channelBundle.putLong("channelID", channel.getId());
+        channelBundle.putLong("channelId", channel.getId());
         channelBundle.putString("channelName", channel.getName());
-        VoiceChatFragment voiceChatFragment = new VoiceChatFragment();
-        voiceChatFragment.setArguments(channelBundle);
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, voiceChatFragment)
-                .addToBackStack("uniqueSubFrag")
-                .commit();
+        if (channel.getType().equals(ChannelType.VOICE_CHANNEL)){
+            VoiceChatFragment voiceChatFragment = new VoiceChatFragment();
+            voiceChatFragment.setArguments(channelBundle);
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, voiceChatFragment)
+                    .addToBackStack("uniqueSubFrag")
+                    .commit();
+        } else if (channel.getType().equals(ChannelType.TEXT_CHANNEL)) {
+            TextChatFragment textChatFragment = new TextChatFragment();
+            textChatFragment.setArguments(channelBundle);
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, textChatFragment)
+                    .addToBackStack("uniqueSubFrag")
+                    .commit();
+        } else {
+            Log.d("CommunityActivity", "ChannelAdapter.onItemClickListener - niepoprawny typ kanału ChannelType: " + channel.getType());
+        }
     }
 
     /**
-     * Handle long click on specific item in RecyclerView to display delete Channel button
+     * Handle long click on specific item in RecyclerView to display delete Channel button, only in ChannelsSettingsFragment view
      * @param channel - specific channel selected from a list
      */
     @Override
@@ -292,5 +307,10 @@ public class CommunityActivity extends AppCompatActivity implements
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onItemClickListener(Message message) {
+
     }
 }

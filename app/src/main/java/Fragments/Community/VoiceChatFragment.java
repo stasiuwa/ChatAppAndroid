@@ -27,8 +27,8 @@ public class VoiceChatFragment extends Fragment {
 
         Bundle receivedBundle = getArguments();
         if (receivedBundle != null){
-            if (receivedBundle.containsKey("channelID")){
-                channelID = receivedBundle.getLong("channelID");
+            if (receivedBundle.containsKey("channelId")){
+                channelID = receivedBundle.getLong("channelId");
             }
             if (receivedBundle.containsKey("channelName")){
                 channelName = receivedBundle.getString("channelName");
