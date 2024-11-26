@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class ChannelRoleDTO {
     @JsonProperty("overwrites")
-    private long channelOverwrites;
+    private long overwrites;
     @JsonProperty("roleId")
     private long roleId;
 }

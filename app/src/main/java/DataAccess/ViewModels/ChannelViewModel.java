@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import Data.DTO.ChannelDTO;
+import Data.DTO.ChannelResponseDTO;
 import Data.Models.Channel;
 import DataAccess.Repositories.ChannelRepository;
 import lombok.Getter;
@@ -23,13 +23,13 @@ public class ChannelViewModel extends AndroidViewModel {
         this.channelRepository = new ChannelRepository(application);
         this.allChannels = channelRepository.getChannels();
     }
-    public void addChannel(ChannelDTO channelDTO){
-        channelRepository.addChannel(channelRepository.mapChannel(channelDTO));
+    public void addChannel(ChannelResponseDTO channelResponseDTO){
+        channelRepository.addChannel(channelRepository.mapChannel(channelResponseDTO));
     }
-    public void updateChannel(ChannelDTO channelDTO){
-        channelRepository.addChannel(channelRepository.mapChannel(channelDTO));
+    public void updateChannel(ChannelResponseDTO channelResponseDTO){
+        channelRepository.addChannel(channelRepository.mapChannel(channelResponseDTO));
     }
-    public void deleteChannel(ChannelDTO channelDTO){
-        channelRepository.deleteChannel(channelRepository.mapChannel(channelDTO));
+    public void deleteChannel(ChannelResponseDTO channelResponseDTO){
+        channelRepository.deleteChannel(channelRepository.mapChannel(channelResponseDTO));
     }
 }

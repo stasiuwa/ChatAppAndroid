@@ -20,7 +20,7 @@ import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
 import Adapters.MessageAdapter;
 import Config.env;
-import Data.DTO.ChannelDTO;
+import Data.DTO.ChannelResponseDTO;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.Token;
 import Data.Models.Channel;
@@ -190,6 +190,7 @@ public class CommunityActivity extends AppCompatActivity implements
                                     "\nIlość użytkowników: " + response.body().getMembers().size() +
                                     "\nIlość ról: " + response.body().getRoles().size());
 //                    TODO zapisac dane do viewmodeli
+                    homeButton.setText("DZIAŁA");
                 } else {
                     Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
                 }
@@ -213,21 +214,21 @@ public class CommunityActivity extends AppCompatActivity implements
                 MediaType.parse("application/json"),
                 "{\n  \"name\": \"" + name + "\",\n  \"type\": \"" + type + "\"\n}"
         );
-        Call<ChannelDTO> callAddChannel = channelService.createChannel(
+        Call<ChannelResponseDTO> callAddChannel = channelService.createChannel(
                 "Bearer "+token.getAccessToken(),
                 communityID,
                 body
         );
-        callAddChannel.enqueue(new Callback<ChannelDTO>() {
+        callAddChannel.enqueue(new Callback<ChannelResponseDTO>() {
             @Override
-            public void onResponse(Call<ChannelDTO> call, Response<ChannelDTO> response) {
+            public void onResponse(Call<ChannelResponseDTO> call, Response<ChannelResponseDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
                 }
                 else Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + response.code() + " " +response.message());
             }
 
             @Override
-            public void onFailure(Call<ChannelDTO> call, Throwable t) {
+            public void onFailure(Call<ChannelResponseDTO> call, Throwable t) {
                 Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + Arrays.toString(t.getStackTrace()));
             }
         });

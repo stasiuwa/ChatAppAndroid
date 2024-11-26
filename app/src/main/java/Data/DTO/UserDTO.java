@@ -12,12 +12,10 @@ import lombok.Setter;
 public class UserDTO {
     @JsonProperty("id")
     private String id;
-    @JsonProperty("description")
-    private String description;
-
     @JsonProperty("username")
     private String username;
-
-    @JsonProperty("image_url")
+    @JsonProperty("imageUrl")
     private String imageUrl;
+    @JsonProperty("description")
+    private String description;
 }

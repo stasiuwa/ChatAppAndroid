@@ -7,9 +7,10 @@ import androidx.lifecycle.LiveData;
 import java.util.ArrayList;
 import java.util.List;
 
-import Data.DTO.ChannelDTO;
+import Data.DTO.ChannelResponseDTO;
 import Data.DTO.ChannelRoleDTO;
 import Data.DTO.ChannelType;
+import Data.DTO.ChannelDTO;
 import Data.Databases.CommunityDB;
 import Data.Models.Channel;
 import Data.Models.ChannelRole;
@@ -27,13 +28,14 @@ public class ChannelRepository {
 
     /**
      * Mapping ChannelDTO to Channel for Room Database
-     * @param channelDTO object to mapping
+     * @param channelResponseDTO object to mapping
      * @return new Channel object
      */
-    public Channel mapChannel(ChannelDTO channelDTO){
+    public Channel mapChannel(ChannelResponseDTO channelResponseDTO){
+        ChannelDTO channelDTO = channelResponseDTO.getChannel();
         List<ChannelRole> overwrites = new ArrayList<>();
-        for(ChannelRoleDTO role : channelDTO.getOverwrites()){
-            overwrites.add(new ChannelRole(role.getChannelOverwrites(), role.getRoleId()));
+        for(ChannelRoleDTO role : channelResponseDTO.getOverwrites()){
+            overwrites.add(new ChannelRole(role.getOverwrites(), role.getRoleId()));
         }
         return new Channel(
                 channelDTO.getId(),
@@ -41,7 +43,7 @@ public class ChannelRepository {
                 channelDTO.getCommunityId(),
 //                ChannelType from server is 0-1
                 (channelDTO.getType()==1) ? ChannelType.VOICE_CHANNEL : ChannelType.TEXT_CHANNEL,
-                channelDTO.getParticipants(),
+                channelResponseDTO.getParticipants(),
                 overwrites
         );
     }

@@ -2,8 +2,6 @@ package Data.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +15,5 @@ public class ChannelDTO {
     @JsonProperty("communityId")
     private long communityId;
     @JsonProperty("type")
-    private ChannelType type;
-    @JsonProperty("participants")
-    private List<String> participants;
-    @JsonProperty("overwrites")
-    private List<ChannelRoleDTO> overwrites;
-    @JsonProperty("lastMessageId")
-    private String lastMessageId;
+    private int type;
 }

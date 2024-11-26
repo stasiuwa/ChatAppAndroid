@@ -243,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements
                     public void onResponse(Call<CommunityDTO> call, Response<CommunityDTO> response) {
                         if (response.isSuccessful() && response.body()!=null){
                             communitiesViewModel.addCommunity(response.body());
-                            Log.d("MainActivity - createCommunityDialog SUCCESS", response.body().getName());
                         }
                     }
 

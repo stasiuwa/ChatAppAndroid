@@ -13,7 +13,7 @@ public class FullCommunityDTO {
     @JsonProperty("community")
     CommunityDTO community;
     @JsonProperty("channels")
-    List<ChannelDTO> channels;
+    List<ChannelResponseDTO> channels;
     @JsonProperty("members")
     List<MemberDTO> members;
     @JsonProperty("roles")

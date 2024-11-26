@@ -1,31 +1,26 @@
 package Services;
 
-import Data.DTO.ChannelDTO;
-import Data.DTO.ChannelType;
+import Data.DTO.ChannelResponseDTO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ChannelService {
 
     @POST("/api/communities/{communityId}/channels")
-    Call<ChannelDTO> createChannel(
+    Call<ChannelResponseDTO> createChannel(
             @Header("Authorization") String token,
             @Path("communityId") long communityId,
             @Body RequestBody requestBody
             );
 
     @PUT("/api/channels/{channelId}")
-    Call<ChannelDTO> editChannel(
+    Call<ChannelResponseDTO> editChannel(
             @Header("Authorization") String token,
             @Path("channelId") long channelId
     );
