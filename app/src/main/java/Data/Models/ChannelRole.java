@@ -2,6 +2,8 @@ package Data.Models;
 
 import androidx.room.ColumnInfo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChannelRole {
-    @ColumnInfo(name = "Role Overwrites")
-    private long channelOverwrites;
-    @ColumnInfo(name = "Role Id")
+    @JsonProperty("id")
     private long roleId;
+    @JsonProperty("overwrites")
+    private long channelOverwrites;
 }

@@ -1,66 +1,47 @@
 package Data.Models;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(tableName = "messages")
 public class Message {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "messageID")
-    public long messageID;
-    @ColumnInfo(name = "chatOwnerID")
-    public long chatID;
-    @NonNull
-    @ColumnInfo(name = "Text")
-    public String text;
-    @NonNull
-    @ColumnInfo(name = "Sent Time", defaultValue = "(datetime('now'))")
-    public String sentTime;
-    @NonNull
-    @ColumnInfo(name = "Sent by")
-    public String username;
-
-    public Message(long chatID, @NonNull String text, @NonNull String sentTime, @NonNull String username) {
-        this.chatID = chatID;
-        this.text = text;
-        this.sentTime = sentTime;
-        this.username = username;
-    }
-
-    public long getMessageID() {
-        return messageID;
-    }
-
-    public long getChatID() {
-        return chatID;
-    }
-
-    @NonNull
-    public String getText() {
-        return text;
-    }
-
-    public void setText(@NonNull String text) {
-        this.text = text;
-    }
-
-    @NonNull
-    public String getSentTime() {
-        return sentTime;
-    }
-
-    public void setSentTime(@NonNull String sentTime) {
-        this.sentTime = sentTime;
-    }
-
-    @NonNull
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(@NonNull String username) {
-        this.username = username;
-    }
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("text")
+    private String text;
+    @JsonProperty("channelId")
+    private String channelId;
+    @JsonProperty("userId")
+    private String userId;
+    @JsonProperty("edited")
+    private boolean edited;
+    @JsonProperty("updatedAt")
+    private Date updatedAt;
+    @JsonProperty("dateFormatted")
+    private String dateFormatted;
+    @JsonProperty("respondsToMessage")
+    private String respondsToMessage;
+    @JsonProperty("respondObject")
+    private Message respondObject;
+    @JsonProperty("reactions")
+    private List<MessageReaction> reactions;
+    @JsonProperty("attachments")
+    private List<MessageAttachment> attachments;
+    @JsonProperty("gifLink")
+    private String gifLink;
 }

@@ -4,33 +4,30 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(tableName = "roles")
 public class Role {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "ID")
-    public long roleID;
-
-    @ColumnInfo(name = "Name")
-    public String name;
-
-    @ColumnInfo(name = "roleCommunityID")
-    public long communityID;
-
-    @ColumnInfo(name = "roleUserID")
-    public long userID;
-//    TODO dodac uprawnienia dla ról
-//    Uprawnienia jako jakis wektor flag czy kilka poziomów ??
-
-
-    public Role(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ColumnInfo(name = "Role ID")
+    @JsonProperty("id")
+    public long roleId;
+    @ColumnInfo(name = "Role Name")
+    @JsonProperty("name")
+    private String name;
+    @ColumnInfo(name = "Community ID")
+    @JsonProperty("communityId")
+    private long communityId;
+    @ColumnInfo(name = "Permission Overwrites")
+    @JsonProperty("permissionOverwrites")
+    private long permissionOverwrites;
 }

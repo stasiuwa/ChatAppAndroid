@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,14 +20,20 @@ import lombok.Setter;
 public class Community {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "communityID")
+    @JsonProperty("id")
     public long communityID;
     @NonNull
     @ColumnInfo(name = "Community Name")
+    @JsonProperty("name")
     public String communityName;
     @ColumnInfo(name = "Owner ID")
+    @JsonProperty("ownerId")
     public long ownerID;
     @ColumnInfo(name = "Image URL")
+    @JsonProperty("imageUrl")
     public String imageUrl;
     @ColumnInfo(name = "Base Permissions")
+    @JsonProperty("basePermissions")
     public int basePermissions;
+
 }

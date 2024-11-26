@@ -26,7 +26,7 @@ import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
 import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
-import Data.DTO.Token;
+import Data.Models.Token;
 import Data.Models.Channel;
 import Data.Models.Message;
 import DataAccess.ViewModels.ChannelViewModel;
@@ -194,7 +194,7 @@ public class CommunityActivity extends AppCompatActivity implements
             public void onResponse(Call<FullCommunityDTO> call, Response<FullCommunityDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
                     Log.d("CommunityActivity - callCommunityInfo",
-                            "Społeczność: " + response.body().getCommunity().getName() +
+                            "Społeczność: " + response.body().getCommunity().getCommunityName() +
                                     "\nIlość kanałów: " + response.body().getChannels().size() +
                                     "\nIlość użytkowników: " + response.body().getMembers().size() +
                                     "\nIlość ról: " + response.body().getRoles().size());

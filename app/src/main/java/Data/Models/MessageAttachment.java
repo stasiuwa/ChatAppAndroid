@@ -1,4 +1,4 @@
-package Data.DTO;
+package Data.Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MessageAttachmentDTO {
+public class MessageAttachment {
     @JsonProperty("id")
     private String id;
     @JsonProperty("path")

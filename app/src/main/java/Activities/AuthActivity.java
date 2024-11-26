@@ -21,11 +21,11 @@ import com.szampchat.R;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import Data.Models.User;
 import Services.KeycloakService;
-import Data.DTO.Token;
+import Data.Models.Token;
 import Services.UserService;
 import Config.env;
-import Data.DTO.UserDTO;
 import Fragments.Auth.LoginFragment;
 import Fragments.Auth.RegisterFragment;
 import okhttp3.OkHttpClient;
@@ -160,14 +160,14 @@ public class AuthActivity extends AppCompatActivity
                     Log.d("AuthActivity - register", "Token: " + token.getAccessToken());
 
                     UserService userService = retrofit.create(UserService.class);
-                    Call<UserDTO> userInfoCall = userService.registerUser("Bearer "+token.getAccessToken(), username);
-                    userInfoCall.enqueue(new Callback<UserDTO>() {
+                    Call<User> userInfoCall = userService.registerUser("Bearer "+token.getAccessToken(), username);
+                    userInfoCall.enqueue(new Callback<User>() {
                         @Override
-                        public void onResponse(@NonNull Call<UserDTO> call, @NonNull Response<UserDTO> response) {
+                        public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                             if (response.isSuccessful() && response.body() != null){
-                                if (response.body().getId() != null && response.body().getUsername() != null)
+                                if (response.body().getUsername() != null)
                                 {
-                                    Log.d("UserInfo - id", response.body().getId());
+                                    Log.d("UserInfo - id", ""+response.body().getUserId());
                                     Log.d("UserInfo - username", response.body().getUsername());
 
                                     Intent intent = new Intent(AuthActivity.this, MainActivity.class);
@@ -179,7 +179,7 @@ public class AuthActivity extends AppCompatActivity
                             }
                         }
                         @Override
-                        public void onFailure(@NonNull Call<UserDTO> call, @NonNull Throwable t) {
+                        public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                             Log.d("AuthActivity - register", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
                         }
                     });

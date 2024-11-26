@@ -17,11 +17,9 @@ import android.widget.Button;
 
 import com.szampchat.R;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import Adapters.CommunityAdapter;
-import Data.DTO.CommunityDTO;
 import DataAccess.ViewModels.CommunityViewModel;
 
 public class MainFragment extends Fragment {

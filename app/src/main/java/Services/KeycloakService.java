@@ -1,6 +1,6 @@
 package Services;
 
-import Data.DTO.Token;
+import Data.Models.Token;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

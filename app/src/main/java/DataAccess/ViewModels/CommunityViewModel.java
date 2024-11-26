@@ -8,9 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import Data.DTO.CommunityDTO;
-import DataAccess.Repositories.CommunityRepository;
 import Data.Models.Community;
+import DataAccess.Repositories.CommunityRepository;
 import lombok.Getter;
 
 /**
@@ -27,10 +26,10 @@ public class CommunityViewModel extends AndroidViewModel {
         this.allCommunities = communityRepository.getCommunities();
     }
 
-    public void addCommunity(CommunityDTO community){
+    public void addCommunity(Community community){
         communityRepository.addCommunity(communityRepository.mapCommunity(community));
     }
-    public void updateCommunity(CommunityDTO community){
+    public void updateCommunity(Community community){
         communityRepository.updateCommunity(communityRepository.mapCommunity(community));
     }
     public void deleteCommunity(Community community){

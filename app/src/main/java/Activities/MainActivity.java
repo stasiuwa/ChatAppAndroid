@@ -25,13 +25,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import Adapters.CommunityAdapter;
-import Data.DTO.CommunityDTO;
-import Data.DTO.Token;
+import Data.Models.Token;
+import Data.Models.Community;
+import Data.Models.User;
 import Services.CommunityService;
 import Services.UserService;
 import Config.env;
-import Data.Models.Community;
-import Data.DTO.UserDTO;
 import DataAccess.ViewModels.CommunityViewModel;
 import Fragments.MainFragment;
 import Fragments.Settings.SettingsFragment;
@@ -115,23 +114,23 @@ public class MainActivity extends AppCompatActivity implements
      * @param sharedPreferences data store where to save
      */
     private void fetchUserInfo(SharedPreferences sharedPreferences){
-        Call<UserDTO> userInfoCall = userService.getCurrentUser(
+        Call<User> userInfoCall = userService.getCurrentUser(
                 "Bearer "+token.getAccessToken()
         );
-        userInfoCall.enqueue(new Callback<UserDTO>() {
+        userInfoCall.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(@NonNull Call<UserDTO> call, @NonNull Response<UserDTO> response) {
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    if (response.body().getId() != null && response.body().getUsername() != null)
+                    if (response.body().getUsername() != null)
                     {
-                        Log.d("MainActivity UserInfo - id", response.body().getId());
+                        Log.d("MainActivity UserInfo - id", ""+response.body().getUserId());
                         Log.d("MainActivity UserInfo - username", response.body().getUsername());
 
-                        String id = response.body().getId();
+                        long id = response.body().getUserId();
                         String username = response.body().getUsername();
 //                    TODO przerobic na proto DataStore np.
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userId", id);
+                        editor.putLong("userId", id);
                         editor.putString("username", username);
                         getSupportActionBar().setTitle("YO! "+username);
                         if (response.body().getDescription() != null) {
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<UserDTO> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 Log.d("MainActivity", "Nieudane połączenie do serwera" + Arrays.toString(t.getStackTrace()));
             }
         });
@@ -162,19 +161,19 @@ public class MainActivity extends AppCompatActivity implements
      * Fetch all communities for logged user from Server API
      */
     private void fetchCommunities(){
-        Call<List<CommunityDTO>> communitiesCall = communityService.getCommunities(
+        Call<List<Community>> communitiesCall = communityService.getCommunities(
                 "Bearer "+token.getAccessToken()
         );
-        communitiesCall.enqueue(new Callback<List<CommunityDTO>>() {
+        communitiesCall.enqueue(new Callback<List<Community>>() {
             @Override
-            public void onResponse(Call<List<CommunityDTO>> call, Response<List<CommunityDTO>> response) {
+            public void onResponse(Call<List<Community>> call, Response<List<Community>> response) {
                 if (response.isSuccessful() && response.body()!=null){
                     Log.d("MainActivity - communitiesCall", "Ilość społeczności: " + response.body().size());
-                    List<CommunityDTO> communityDTOList = response.body();
-                    for (CommunityDTO communityDTO : communityDTOList) {
-                        Log.d("MainActivity - communitiesCall", "Nazwa społeczności: " + communityDTO.getName());
+                    List<Community> communityList = response.body();
+                    for (Community community : communityList) {
+                        Log.d("MainActivity - communitiesCall", "Nazwa społeczności: " + community.getCommunityName());
 //                        If communities already exists in Room database onConflictStrategy = REPLACE
-                        communitiesViewModel.addCommunity(communityDTO);
+                        communitiesViewModel.addCommunity(community);
                     }
                 } else {
                     Log.d("MainActivity - communitiesCall", "Błąd pobierania danych z serwera" + response.code() + response.message());
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onFailure(Call<List<CommunityDTO>> call, Throwable t) {
+            public void onFailure(Call<List<Community>> call, Throwable t) {
                 Log.d("MainActivity - communitiesCall", Arrays.toString(t.getStackTrace()));
             }
         });
@@ -234,20 +233,20 @@ public class MainActivity extends AppCompatActivity implements
                         MediaType.parse("application/json"),
                         "{\"name\": \"" + name + "\"}"
                 );
-                Call<CommunityDTO> createCommunityCall = communityService.createCommunity(
+                Call<Community> createCommunityCall = communityService.createCommunity(
                         "Bearer "+token.getAccessToken(),
                         communityJson
                 );
-                createCommunityCall.enqueue(new Callback<CommunityDTO>() {
+                createCommunityCall.enqueue(new Callback<Community>() {
                     @Override
-                    public void onResponse(Call<CommunityDTO> call, Response<CommunityDTO> response) {
+                    public void onResponse(Call<Community> call, Response<Community> response) {
                         if (response.isSuccessful() && response.body()!=null){
                             communitiesViewModel.addCommunity(response.body());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<CommunityDTO> call, Throwable t) {
+                    public void onFailure(Call<Community> call, Throwable t) {
                         Log.d("MainActivity - createCommunityDialog ERROR", Arrays.toString(t.getStackTrace()));
                     }
                 });

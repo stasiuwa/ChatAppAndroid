@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Data.DTO.ChannelResponseDTO;
-import Data.DTO.ChannelRoleDTO;
 import Data.DTO.ChannelType;
 import Data.DTO.ChannelDTO;
 import Data.Databases.CommunityDB;
@@ -19,7 +18,6 @@ import DataAccess.DAO.ChannelDAO;
 public class ChannelRepository {
     private ChannelDAO dao;
     private LiveData<List<Channel>> allChannels;
-    private LiveData<List<Channel>> channels;
 
     public ChannelRepository(Application application) {
         CommunityDB communityDB = CommunityDB.getDataBase(application);
@@ -35,8 +33,8 @@ public class ChannelRepository {
     public Channel mapChannel(ChannelResponseDTO channelResponseDTO){
         ChannelDTO channelDTO = channelResponseDTO.getChannel();
         List<ChannelRole> overwrites = new ArrayList<>();
-        for(ChannelRoleDTO role : channelResponseDTO.getOverwrites()){
-            overwrites.add(new ChannelRole(role.getOverwrites(), role.getRoleId()));
+        for(ChannelRole role : channelResponseDTO.getOverwrites()){
+            overwrites.add(new ChannelRole(role.getChannelOverwrites(), role.getRoleId()));
         }
         return new Channel(
                 channelDTO.getId(),

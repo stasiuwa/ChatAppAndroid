@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+import Data.Models.ChannelRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,5 +23,5 @@ public class ChannelResponseDTO {
     @JsonProperty("participants")
     private List<String> participants;
     @JsonProperty("overwrites")
-    private List<ChannelRoleDTO> overwrites;
+    private List<ChannelRole> overwrites;
 }

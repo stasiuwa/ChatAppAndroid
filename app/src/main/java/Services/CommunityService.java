@@ -2,14 +2,12 @@ package Services;
 
 import java.util.List;
 
-import Data.DTO.CommunityDTO;
 import Data.DTO.FullCommunityDTO;
-import okhttp3.MultipartBody;
+import Data.Models.Community;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -21,7 +19,7 @@ import retrofit2.http.Path;
 public interface CommunityService {
 
     @GET("/api/communities")
-    Call<List<CommunityDTO>> getCommunities(
+    Call<List<Community>> getCommunities(
             @Header("Authorization") String token
     );
 
@@ -33,7 +31,7 @@ public interface CommunityService {
 
     @Multipart
     @POST("/api/communities")
-    Call<CommunityDTO> createCommunity(
+    Call<Community> createCommunity(
             @Header("Authorization") String token,
 //            @Part("file") MultipartBody.Part file, // narazie nie dziala, jebac te pliki
             @Part("community") RequestBody community // JSON
@@ -48,7 +46,7 @@ public interface CommunityService {
 
     @Multipart
     @PATCH("/api/communities/{communityId}")
-    Call<CommunityDTO> editCommunity(
+    Call<Community> editCommunity(
             @Header("Authorization") String token,
             @Path("communityId") long communityId,
 //            @Part("file") MultipartBody.Part file,

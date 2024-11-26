@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import Data.DTO.CommunityDTO;
 import Data.Models.Community;
 import DataAccess.DAO.CommunityDAO;
 import Data.Databases.CommunityDB;
@@ -24,16 +23,16 @@ public class CommunityRepository {
     }
     /**
      * Mapping CommunityDTO to Community for Room Database
-     * @param communityDTO object to mapping
+     * @param community object to mapping
      * @return new Community object
      */
-    public Community mapCommunity(CommunityDTO communityDTO){
+    public Community mapCommunity(Community community){
         return new Community(
-                communityDTO.getId(),
-                communityDTO.getName(),
-                communityDTO.getOwnerId(),
-                communityDTO.getImageUrl(),
-                communityDTO.getBasePermissions()
+                community.getCommunityID(),
+                community.getCommunityName(),
+                community.getOwnerID(),
+                community.getImageUrl(),
+                community.getBasePermissions()
         );
     }
 //    Communities
