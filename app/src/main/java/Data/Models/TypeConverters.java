@@ -6,12 +6,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public class TypeConverters {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Konwerter z listy ChannelRole na String (JSON)
     @TypeConverter
     public static String fromChannelRoleList(List<ChannelRole> roles) {
         try {
@@ -23,7 +23,6 @@ public class TypeConverters {
         }
     }
 
-    // Konwerter ze Stringa (JSON) na listę ChannelRole
     @TypeConverter
     public static List<ChannelRole> toChannelRoleList(String data) {
         try {
@@ -35,7 +34,6 @@ public class TypeConverters {
         }
     }
 
-    // Konwerter z listy String na String (JSON)
     @TypeConverter
     public static String fromStringList(List<String> strings) {
         try {
@@ -47,7 +45,6 @@ public class TypeConverters {
         }
     }
 
-    // Konwerter ze Stringa (JSON) na listę Stringów
     @TypeConverter
     public static List<String> toStringList(String data) {
         try {
@@ -57,5 +54,75 @@ public class TypeConverters {
             e.printStackTrace();
             throw new RuntimeException("Deserialization error: cannot convert JSON to String list", e);
         }
+    }
+
+    @TypeConverter
+    public static String fromMessage(Message message) {
+        try {
+            return message == null ? null : objectMapper.writeValueAsString(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Serialization error: cannot convert Message to JSON", e);
+        }
+    }
+
+    @TypeConverter
+    public static Message toMessage(String data) {
+        try {
+            return data == null ? null : objectMapper.readValue(data, Message.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Deserialization error: cannot convert JSON to Message", e);
+        }
+    }
+
+    @TypeConverter
+    public static String fromMessageReactionList(List<MessageReaction> reactions) {
+        try {
+            return reactions == null ? null : objectMapper.writeValueAsString(reactions);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Serialization error: cannot convert MessageReaction list to JSON", e);
+        }
+    }
+
+    @TypeConverter
+    public static List<MessageReaction> toMessageReactionList(String data) {
+        try {
+            return data == null ? null : objectMapper.readValue(data, new TypeReference<List<MessageReaction>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Deserialization error: cannot convert JSON to MessageReaction list", e);
+        }
+    }
+
+    @TypeConverter
+    public static String fromMessageAttachmentList(List<MessageAttachment> attachments) {
+        try {
+            return attachments == null ? null : objectMapper.writeValueAsString(attachments);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Serialization error: cannot convert MessageAttachment list to JSON", e);
+        }
+    }
+
+    @TypeConverter
+    public static List<MessageAttachment> toMessageAttachmentList(String data) {
+        try {
+            return data == null ? null : objectMapper.readValue(data, new TypeReference<List<MessageAttachment>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Deserialization error: cannot convert JSON to MessageAttachment list", e);
+        }
+    }
+
+    @TypeConverter
+    public static Long fromDate(Date date) {
+        return date == null ? null : date.getTime();
+    }
+
+    @TypeConverter
+    public static Date toDate(Long timestamp) {
+        return timestamp == null ? null : new Date(timestamp);
     }
 }

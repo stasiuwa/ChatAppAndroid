@@ -202,7 +202,6 @@ public class CommunityActivity extends AppCompatActivity implements
                         channelViewModel.addChannel(channelResponseDTO);
                     }
 //                    TODO zapisac dane do viewmodeli
-                    homeButton.setText("DZIAŁA");
                 } else {
                     Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
                 }

@@ -2,6 +2,8 @@ package Data.Models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -31,6 +33,7 @@ public class Message {
     @JsonProperty("edited")
     private boolean edited;
     @JsonProperty("updatedAt")
+    @TypeConverters(Data.Models.TypeConverters.class)
     private Date updatedAt;
     @JsonProperty("dateFormatted")
     private String dateFormatted;
@@ -39,8 +42,10 @@ public class Message {
     @JsonProperty("respondObject")
     private Message respondObject;
     @JsonProperty("reactions")
+    @TypeConverters(Data.Models.TypeConverters.class)
     private List<MessageReaction> reactions;
     @JsonProperty("attachments")
+    @TypeConverters(Data.Models.TypeConverters.class)
     private List<MessageAttachment> attachments;
     @JsonProperty("gifLink")
     private String gifLink;

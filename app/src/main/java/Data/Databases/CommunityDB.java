@@ -19,7 +19,7 @@ import DataAccess.DAO.CommunityDAO;
 @androidx.room.Database(entities = {
         Community.class,
         Channel.class
-}, version = 1, exportSchema = false)
+}, version = 2, exportSchema = false)
 //@TypeConverters({TypeConverters.class})
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();

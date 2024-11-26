@@ -1,5 +1,6 @@
 package Data.Models;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -30,6 +31,7 @@ public class Channel {
     public ChannelType type;
     @ColumnInfo(name = "Voice Channel Participants")
     @TypeConverters(Data.Models.TypeConverters.class)
+    @Nullable
     public List<String> participants;
     @ColumnInfo(name = "Channel Role Overwrites")
     @TypeConverters(Data.Models.TypeConverters.class)

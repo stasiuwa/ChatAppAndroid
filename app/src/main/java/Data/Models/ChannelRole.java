@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChannelRole {
-    @JsonProperty("id")
+    @JsonProperty("roleId")
     private long roleId;
     @JsonProperty("overwrites")
     private long channelOverwrites;
