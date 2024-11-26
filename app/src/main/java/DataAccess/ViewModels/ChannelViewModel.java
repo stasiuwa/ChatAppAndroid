@@ -23,6 +23,10 @@ public class ChannelViewModel extends AndroidViewModel {
         this.channelRepository = new ChannelRepository(application);
         this.allChannels = channelRepository.getChannels();
     }
+    public LiveData<List<Channel>> getChannelsFromCommunity(long id){
+        return channelRepository.getChannelsForCommunity(id);
+    }
+
     public void addChannel(ChannelResponseDTO channelResponseDTO){
         channelRepository.addChannel(channelRepository.mapChannel(channelResponseDTO));
     }
@@ -32,7 +36,15 @@ public class ChannelViewModel extends AndroidViewModel {
     public void deleteChannel(ChannelResponseDTO channelResponseDTO){
         channelRepository.deleteChannel(channelRepository.mapChannel(channelResponseDTO));
     }
-    public LiveData<List<Channel>> getChannelsFromCommunity(long id){
-        return channelRepository.getChannelsForCommunity(id);
+
+
+    public void addChannel(Channel channel){
+        channelRepository.addChannel(channel);
+    }
+    public void updateChannel(Channel channel){
+        channelRepository.addChannel(channel);
+    }
+    public void deleteChannel(Channel channel){
+        channelRepository.deleteChannel(channel);
     }
 }

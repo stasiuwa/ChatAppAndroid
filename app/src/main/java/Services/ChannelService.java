@@ -29,6 +29,6 @@ public interface ChannelService {
     @DELETE("/api/channels/{channelId}")
     Call<Void> deleteChannel(
             @Header("Authorization") String token,
-            @Path("channelsId") long channelId
+            @Path("channelId") long channelId
     );
 }

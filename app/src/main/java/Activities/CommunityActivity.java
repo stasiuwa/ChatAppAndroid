@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import Adapters.ChannelAdapter;
-import Adapters.ChatAdapter;
 import Config.env;
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
@@ -27,11 +27,9 @@ import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.Token;
 import Data.Models.Channel;
-import Data.Models.Chat;
 import DataAccess.ViewModels.ChannelViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
-import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.ChannelsSettingsFragment;
@@ -48,7 +46,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
-        ChatAdapter.OnItemClickListener,
 
         ChannelsSettingsFragment.ChannelsListener
 {
@@ -269,25 +266,26 @@ public class CommunityActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemLongClickListener(Channel channel) {
-        Log.d("TEST", "SPRAWDZAMY DZIALANIE BUTTON PO OnItemLongClick");
-    }
+        Call<Void> callDeleteChannel = channelService.deleteChannel(
+                "Bearer " + token.getAccessToken(),
+                channel.getId()
+        );
+        callDeleteChannel.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "Usunięto kanał " + channel.getName(), Toast.LENGTH_SHORT).show();
+                    channelViewModel.deleteChannel(channel);
+                } else {
+                    Log.d("DeleteChannel", "Błąd usuwania kanału: " + response.code() + "\t" + response.message());
+                }
+            }
 
-    /**
-     * Allows user to join a specific text chat of available chats in RecyclerView from ChatsFragment
-     * @param chat - specific chat selected from a list
-     */
-    @Override
-    public void onItemClickListener(Chat chat) {
-        this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle chatBundle = new Bundle();
-        chatBundle.putLong("chatID", chat.getChatID());
-        chatBundle.putString("chatName", chat.getChatName());
-        TextChatFragment textChatFragment = new TextChatFragment();
-        textChatFragment.setArguments(chatBundle);
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, textChatFragment)
-                .addToBackStack("uniqueSubFrag")
-                .commit();
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("DeleteChannel", "Błąd wykonywania usługi: " + Arrays.toString(t.getStackTrace()));
+            }
+        });
     }
 
     @Override

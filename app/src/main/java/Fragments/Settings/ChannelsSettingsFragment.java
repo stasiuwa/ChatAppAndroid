@@ -23,10 +23,8 @@ import com.szampchat.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import Adapters.ChannelAdapter;
-import Adapters.ChatAdapter;
 import Data.DTO.ChannelType;
 import Data.Models.Channel;
 import DataAccess.ViewModels.ChannelViewModel;
@@ -76,8 +74,8 @@ public class ChannelsSettingsFragment extends Fragment {
         Button dialogButton = createChannelDialog.findViewById(R.id.dialogButton);
         dialogButton.setText(R.string.add);
 
-        ChannelAdapter voiceChannelAdapter = new ChannelAdapter(requireActivity());
-        ChannelAdapter textChannelAdapter = new ChannelAdapter(requireActivity());
+        ChannelAdapter voiceChannelAdapter = new ChannelAdapter(requireActivity(), true);
+        ChannelAdapter textChannelAdapter = new ChannelAdapter(requireActivity(), true);
         ChannelViewModel channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
 
 //        fetch channels for specific community

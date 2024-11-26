@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +15,10 @@ import android.view.ViewGroup;
 
 import com.szampchat.R;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import Adapters.ChannelAdapter;
-import Data.DTO.ChannelType;
-import Data.Models.Channel;
-import Data.Relations.CommunityWithChannels;
 import DataAccess.ViewModels.ChannelViewModel;
-import DataAccess.ViewModels.CommunityViewModel;
 
 public class ChannelsFragment extends Fragment {
 
@@ -35,9 +30,6 @@ public class ChannelsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        TransitionInflater inflater = TransitionInflater.from(requireContext());
-//        setExitTransition(inflater.inflateTransition(R.transition.slide_up));
-//        setEnterTransition(inflater.inflateTransition(R.transition.slide_down));
     }
 
     @Override
@@ -50,10 +42,9 @@ public class ChannelsFragment extends Fragment {
             throw new NullPointerException("communityID from fragment's arguments is null");
         }
         channelType = getArguments().getString("type");
-        channelType = getArguments().getString("type");
         if (channelType.matches("")) Log.d("ChannelsFragment", "Brak typu kanałów przekazanego w Arguments");
 
-        channelAdapter = new ChannelAdapter(requireActivity());
+        channelAdapter = new ChannelAdapter(requireActivity(), false);
         channelViewModel = new ViewModelProvider(requireActivity()).get(ChannelViewModel.class);
 
 

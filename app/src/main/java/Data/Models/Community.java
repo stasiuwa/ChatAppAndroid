@@ -24,7 +24,6 @@ public class Community {
     @NonNull
     @ColumnInfo(name = "Community Name")
     public String communityName;
-
     @ColumnInfo(name = "Owner ID")
     public long ownerID;
     @ColumnInfo(name = "Image URL")

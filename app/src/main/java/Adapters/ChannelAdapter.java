@@ -19,25 +19,33 @@ import java.util.List;
 import Data.DTO.ChannelType;
 import Data.Models.Channel;
 
+
+// TODO zmienić usuwanie z LongClick na Swipe, dodać edycje na LongClick
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder> {
 
     public static final int VIEW_TYPE_VOICE_CHANNEL = 1;
     public static final int VIEW_TYPE_TEXT_CHANNEL = 0;
 
     Activity activity;
+    private boolean isEditingEnabled = false;
     List<Channel> channelsList;
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
 
-    public ChannelAdapter(Activity activity) {
+    public ChannelAdapter(Activity activity, boolean editingEnabled) {
         this.activity = activity;
         this.layoutInflater = LayoutInflater.from(activity);
+        this.isEditingEnabled = editingEnabled;
         channelsList = null;
         try {
             onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(e.getMessage() + " must implements ChannelAdapter.OnItemClickListener interface");
         }
+    }
+
+    public void setEditingEnabled(boolean editingEnabled) {
+        isEditingEnabled = editingEnabled;
     }
 
     public interface OnItemClickListener {
@@ -88,6 +96,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         TextView channelNameTextView, channelSubnameTextView;
         Button deleteButton;
         ImageView iconImageView;
+        boolean isVisible = false;
 
         public ChannelViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -132,7 +141,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
 
         @Override
         public boolean onLongClick(View view) {
-            deleteButton.setVisibility(View.VISIBLE);
+            if (!isEditingEnabled) return false;
+            if (isVisible) deleteButton.setVisibility(View.GONE);
+            else deleteButton.setVisibility(View.VISIBLE);
+            isVisible = !isVisible;
             return true;
         }
     }
