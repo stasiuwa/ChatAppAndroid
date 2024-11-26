@@ -27,6 +27,8 @@ public class SettingsFragment extends Fragment {
 
         Bundle received = getArguments();
         boolean isExtended = received.getBoolean("EXTENDED");
+        long communityId = received.getLong("communityId");
+        Log.d("SettingsFragment", "communityId = " + communityId);
         if (isExtended) Log.d("EXTENDED SETTINGS", "YES");
 
         LinearLayout profileSettings = view.findViewById(R.id.settingsUserProfile);
@@ -40,17 +42,24 @@ public class SettingsFragment extends Fragment {
         if (isExtended){
             rolesSettings.setVisibility(View.VISIBLE);
             channelsSettings.setVisibility(View.VISIBLE);
+            Bundle fragmentArgs = new Bundle();
+            fragmentArgs.putLong("communityId", communityId);
+            RolesFragment rolesFragment = new RolesFragment();
+            ChannelsSettingsFragment channelsSettingsFragment = new ChannelsSettingsFragment();
+            rolesFragment.setArguments(fragmentArgs);
+            channelsSettingsFragment.setArguments(fragmentArgs);
+
 //            Setup onClickListener to replace current fragment with RolesFragment
             rolesSettings.setOnClickListener(v -> {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, new RolesFragment())
+                        .replace(R.id.fragmentContainer, rolesFragment)
                         .addToBackStack(null)
                         .commit();
             });
 //            Setup onClickListener to replace current fragment with ChannelsFragment
             channelsSettings.setOnClickListener(v -> {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, new ChannelsFragment())
+                        .replace(R.id.fragmentContainer, channelsSettingsFragment)
                         .addToBackStack(null)
                         .commit();
             });

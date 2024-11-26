@@ -19,6 +19,7 @@ import DataAccess.DAO.ChannelDAO;
 public class ChannelRepository {
     private ChannelDAO dao;
     private LiveData<List<Channel>> allChannels;
+    private LiveData<List<Channel>> channels;
 
     public ChannelRepository(Application application) {
         CommunityDB communityDB = CommunityDB.getDataBase(application);
@@ -53,6 +54,10 @@ public class ChannelRepository {
         });
     }
     public LiveData<List<Channel>> getChannels() {return allChannels;}
+    public LiveData<List<Channel>> getChannelsForCommunity(long communityId){
+        return dao.getChannelsForCommunity(communityId);
+    }
+
     public void deleteChannel(Channel channel){
         CommunityDB.databaseWriteExecutor.execute(() -> {
             dao.deleteChannel(channel);

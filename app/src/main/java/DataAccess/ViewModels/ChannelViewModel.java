@@ -32,4 +32,7 @@ public class ChannelViewModel extends AndroidViewModel {
     public void deleteChannel(ChannelResponseDTO channelResponseDTO){
         channelRepository.deleteChannel(channelRepository.mapChannel(channelResponseDTO));
     }
+    public LiveData<List<Channel>> getChannelsFromCommunity(long id){
+        return channelRepository.getChannelsForCommunity(id);
+    }
 }

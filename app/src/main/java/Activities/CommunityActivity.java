@@ -10,28 +10,36 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.szampchat.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
 import Adapters.MessageAdapter;
 import Config.env;
+import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
+import Data.DTO.ChannelRoleDTO;
+import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.Token;
 import Data.Models.Channel;
 import Data.Models.Chat;
 import Data.Models.Message;
+import DataAccess.ViewModels.ChannelViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.ChatsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
 import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Community.VoiceChatFragment;
+import Fragments.Settings.ChannelsSettingsFragment;
 import Fragments.Settings.SettingsFragment;
 import Services.ChannelService;
 import Services.CommunityService;
@@ -48,9 +56,10 @@ public class CommunityActivity extends AppCompatActivity implements
         ChatAdapter.OnItemClickListener,
         MessageAdapter.OnItemClickListener,
 
-        Fragments.Settings.ChannelsFragment.ChannelsListener
+        ChannelsSettingsFragment.ChannelsListener
 {
     long communityID;
+    ChannelViewModel channelViewModel;
 
     NavigationBarView navbar;
     Button settingsButton, homeButton;
@@ -74,6 +83,7 @@ public class CommunityActivity extends AppCompatActivity implements
         homeButton = findViewById(R.id.communityHomeButton);
         settingsButton = findViewById(R.id.communitySettingsButton);
         navbar = findViewById(R.id.bottom_navbar);
+        channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
 
 //        Bundle storing community data
         Bundle communityBundle = new Bundle();
@@ -110,6 +120,7 @@ public class CommunityActivity extends AppCompatActivity implements
         Bundle settingsArgs = new Bundle();
         SettingsFragment settingsFragment = new SettingsFragment();
         settingsArgs.putBoolean("EXTENDED", true);
+        settingsArgs.putLong("communityId", communityID);
         settingsFragment.setArguments(settingsArgs);
         settingsButton.setOnClickListener(v -> {
             this.getSupportFragmentManager().beginTransaction()
@@ -189,6 +200,9 @@ public class CommunityActivity extends AppCompatActivity implements
                                     "\nIlość kanałów: " + response.body().getChannels().size() +
                                     "\nIlość użytkowników: " + response.body().getMembers().size() +
                                     "\nIlość ról: " + response.body().getRoles().size());
+                    for (ChannelResponseDTO channelResponseDTO : response.body().getChannels()){
+                        channelViewModel.addChannel(channelResponseDTO);
+                    }
 //                    TODO zapisac dane do viewmodeli
                     homeButton.setText("DZIAŁA");
                 } else {
@@ -214,21 +228,22 @@ public class CommunityActivity extends AppCompatActivity implements
                 MediaType.parse("application/json"),
                 "{\n  \"name\": \"" + name + "\",\n  \"type\": \"" + type + "\"\n}"
         );
-        Call<ChannelResponseDTO> callAddChannel = channelService.createChannel(
+        Call<ChannelDTO> callAddChannel = channelService.createChannel(
                 "Bearer "+token.getAccessToken(),
                 communityID,
                 body
         );
-        callAddChannel.enqueue(new Callback<ChannelResponseDTO>() {
+        callAddChannel.enqueue(new Callback<ChannelDTO>() {
             @Override
-            public void onResponse(Call<ChannelResponseDTO> call, Response<ChannelResponseDTO> response) {
+            public void onResponse(Call<ChannelDTO> call, Response<ChannelDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
+                    channelViewModel.addChannel(new ChannelResponseDTO(response.body(), (type.equals(ChannelType.VOICE_CHANNEL.name())) ? new ArrayList<>() : null, new ArrayList<>()));
                 }
                 else Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + response.code() + " " +response.message());
             }
 
             @Override
-            public void onFailure(Call<ChannelResponseDTO> call, Throwable t) {
+            public void onFailure(Call<ChannelDTO> call, Throwable t) {
                 Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + Arrays.toString(t.getStackTrace()));
             }
         });

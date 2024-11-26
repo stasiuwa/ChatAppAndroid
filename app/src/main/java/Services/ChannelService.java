@@ -1,5 +1,6 @@
 package Services;
 
+import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -13,14 +14,14 @@ import retrofit2.http.Path;
 public interface ChannelService {
 
     @POST("/api/communities/{communityId}/channels")
-    Call<ChannelResponseDTO> createChannel(
+    Call<ChannelDTO> createChannel(
             @Header("Authorization") String token,
             @Path("communityId") long communityId,
             @Body RequestBody requestBody
             );
 
     @PUT("/api/channels/{channelId}")
-    Call<ChannelResponseDTO> editChannel(
+    Call<ChannelDTO> editChannel(
             @Header("Authorization") String token,
             @Path("channelId") long channelId
     );

@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -18,9 +21,16 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
-import Data.DTO.ChannelType;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ChannelsFragment extends Fragment {
+import Adapters.ChannelAdapter;
+import Adapters.ChatAdapter;
+import Data.DTO.ChannelType;
+import Data.Models.Channel;
+import DataAccess.ViewModels.ChannelViewModel;
+
+public class ChannelsSettingsFragment extends Fragment {
 
     ChannelsListener channelsListener;
     private ChannelType channelType;
@@ -51,6 +61,8 @@ public class ChannelsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_channels_settings, container, false);
 
+        Bundle received = getArguments();
+
         Button addVoiceChannel = view.findViewById(R.id.addVoiceChannelButton);
         Button addTextChannel = view.findViewById(R.id.addTextChannelButton);
 
@@ -62,6 +74,24 @@ public class ChannelsFragment extends Fragment {
         TextInputEditText dialogEditText = createChannelDialog.findViewById(R.id.dialogInput);
         Button dialogButton = createChannelDialog.findViewById(R.id.dialogButton);
         dialogButton.setText(R.string.add);
+
+        ChannelAdapter channelAdapter = new ChannelAdapter(requireActivity());
+        ChatAdapter chatAdapter = new ChatAdapter(requireActivity());
+        ChannelViewModel channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
+
+//        fetch channels for specific community
+        if (received != null && received.containsKey("communityId")){
+            channelViewModel.getChannelsFromCommunity(received.getLong("communityId"))
+                    .observe(getViewLifecycleOwner(), channels -> {
+                        if (channels != null) {
+                            channelAdapter.setChannelsList(new ArrayList<>(channels));
+                        }
+                    });
+        }
+
+        RecyclerView channelRecycler = view.findViewById(R.id.channelsRecyclerView);
+        channelRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        channelRecycler.setAdapter(channelAdapter);
 
         addVoiceChannel.setOnClickListener(v -> {
             Log.d("ChannelsFragment - addChannel", ChannelType.VOICE_CHANNEL.name());
