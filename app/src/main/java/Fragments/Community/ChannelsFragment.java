@@ -7,21 +7,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.szampchat.R;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import Adapters.ChannelAdapter;
+import Data.DTO.ChannelType;
+import Data.Models.Channel;
 import Data.Relations.CommunityWithChannels;
+import DataAccess.ViewModels.ChannelViewModel;
 import DataAccess.ViewModels.CommunityViewModel;
 
 public class ChannelsFragment extends Fragment {
 
-    CommunityViewModel communityViewModel;
+    ChannelViewModel channelViewModel;
     ChannelAdapter channelAdapter;
     long communityID;
+    String channelType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,17 +49,20 @@ public class ChannelsFragment extends Fragment {
         } catch (NullPointerException e) {
             throw new NullPointerException("communityID from fragment's arguments is null");
         }
+        channelType = getArguments().getString("type");
+        channelType = getArguments().getString("type");
+        if (channelType.matches("")) Log.d("ChannelsFragment", "Brak typu kanałów przekazanego w Arguments");
 
         channelAdapter = new ChannelAdapter(requireActivity());
-        communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
-//        communityViewModel.getChannels(communityID).observe(getViewLifecycleOwner(), communityWithChannels -> {
-//            if (!communityWithChannels.isEmpty()){
-//                CommunityWithChannels temp = communityWithChannels.get(0);
-//                if (temp != null) {
-//                    channelAdapter.setChannelsList(temp.channels);
-//                }
-//            }
-//        });
+        channelViewModel = new ViewModelProvider(requireActivity()).get(ChannelViewModel.class);
+
+
+        channelViewModel.getChannelsFromCommunity(communityID)
+                .observe(getViewLifecycleOwner(), channels -> {
+                    if (channels != null) {
+                        channelAdapter.setChannelsList(channels.stream().filter(x->x.getType().name().equals(channelType)).collect(Collectors.toList()));
+                    }
+                });
 
 //        Setup RecyclerView to show channels from specific community
         RecyclerView recyclerView = view.findViewById(R.id.channelsRecyclerView);

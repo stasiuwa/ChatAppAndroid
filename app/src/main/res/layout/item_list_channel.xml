@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/channelIcon"
-        android:text="NAZWA KANAŁU GŁOSOWEGO"
+        android:text="NAZWA KANAŁU"
         android:textSize="17sp"
         />
     <TextView
@@ -28,6 +28,17 @@
         app:layout_constraintTop_toBottomOf="@id/channelName"
         android:text="Ilość użytkowników online czy cos?"
         android:textStyle="italic"
+        />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/deleteChannelButton"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/baseline_delete_outline_24"
+        android:text="@string/delete"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

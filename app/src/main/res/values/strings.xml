@@ -37,4 +37,5 @@
     <string name="create">STWÓRZ</string>
     <string name="voiceChannels">KANAŁY GŁOSOWE</string>
     <string name="textChannels">KANAŁY TEKSTOWE</string>
+    <string name="delete">USUŃ</string>
 </resources>

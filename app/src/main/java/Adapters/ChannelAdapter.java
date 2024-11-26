@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
 
     public interface OnItemClickListener {
         void onItemClickListener(Channel channel);
+        void onItemLongClickListener(Channel channel);
     }
 
     public void setChannelsList(List<Channel> channelsList){
@@ -77,20 +79,34 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
 
         if (channel.getType().equals(ChannelType.VOICE_CHANNEL)) holder.setIcon(R.drawable.outline_mic_24);
         else holder.setIcon(R.drawable.baseline_chat_bubble_outline_24);
+
+        holder.deleteButton.setVisibility(View.GONE);
     }
 
-    public class ChannelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ChannelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView channelNameTextView, channelSubnameTextView;
+        Button deleteButton;
         ImageView iconImageView;
 
         public ChannelViewHolder(@NonNull View itemView) {
             super(itemView);
             iconImageView = itemView.findViewById(R.id.channelIcon);
+            deleteButton = itemView.findViewById(R.id.deleteChannelButton);
             channelNameTextView = itemView.findViewById(R.id.channelName);
             channelSubnameTextView = itemView.findViewById(R.id.channelSubname);
+
             itemView.setTag(this);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
+            deleteButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION){
+                    onItemClickListener.onItemLongClickListener(channelsList.get(position));
+                }
+            });
+
         }
 
         public void setChannelName(String channelName){
@@ -112,6 +128,12 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
                 Channel channel = channelsList.get(position);
                 onItemClickListener.onItemClickListener(channel);
             }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            deleteButton.setVisibility(View.VISIBLE);
+            return true;
         }
     }
 }

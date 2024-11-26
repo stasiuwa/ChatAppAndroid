@@ -17,24 +17,19 @@ import com.szampchat.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import Adapters.ChannelAdapter;
 import Adapters.ChatAdapter;
-import Adapters.MessageAdapter;
 import Config.env;
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
-import Data.DTO.ChannelRoleDTO;
 import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.Token;
 import Data.Models.Channel;
 import Data.Models.Chat;
-import Data.Models.Message;
 import DataAccess.ViewModels.ChannelViewModel;
 import Fragments.Community.ChannelsFragment;
-import Fragments.Community.ChatsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
 import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
@@ -54,7 +49,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
         ChatAdapter.OnItemClickListener,
-        MessageAdapter.OnItemClickListener,
 
         ChannelsSettingsFragment.ChannelsListener
 {
@@ -151,16 +145,18 @@ public class CommunityActivity extends AppCompatActivity implements
         navbar.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.navbar_menu_chats) {
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                ChatsFragment chatsFragment = new ChatsFragment();
-                chatsFragment.setArguments(communityBundle);
+                communityBundle.putString("type", ChannelType.TEXT_CHANNEL.name());
+                ChannelsFragment channelsFragment = new ChannelsFragment();
+                channelsFragment.setArguments(communityBundle);
                 this.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, chatsFragment)
+                        .replace(R.id.fragmentContainer, channelsFragment)
                         .addToBackStack("uniqueFrag")
                         .commit();
                 return true;
             }
             else if (item.getItemId() == R.id.navbar_menu_channels) {
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                communityBundle.putString("type", ChannelType.VOICE_CHANNEL.name());
                 ChannelsFragment channelsFragment = new ChannelsFragment();
                 channelsFragment.setArguments(communityBundle);
                 this.getSupportFragmentManager().beginTransaction()
@@ -171,6 +167,7 @@ public class CommunityActivity extends AppCompatActivity implements
             }
             else if (item.getItemId() == R.id.navbar_menu_users) {
                 this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                communityBundle.putString("type", ChannelType.TEXT_CHANNEL.name());
                 UsersFragment usersFragment = new UsersFragment();
                 usersFragment.setArguments(communityBundle);
                 this.getSupportFragmentManager().beginTransaction()
@@ -267,6 +264,15 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
     /**
+     * Handle long click on specific item in RecyclerView to display delete Channel button
+     * @param channel - specific channel selected from a list
+     */
+    @Override
+    public void onItemLongClickListener(Channel channel) {
+        Log.d("TEST", "SPRAWDZAMY DZIALANIE BUTTON PO OnItemLongClick");
+    }
+
+    /**
      * Allows user to join a specific text chat of available chats in RecyclerView from ChatsFragment
      * @param chat - specific chat selected from a list
      */
@@ -288,14 +294,5 @@ public class CommunityActivity extends AppCompatActivity implements
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    /**
-     * Handling click on specifc message - TODO add edit and delete feature
-     * @param message specific message selected from a list
-     */
-    @Override
-    public void onItemClickListener(Message message) {
-
     }
 }
