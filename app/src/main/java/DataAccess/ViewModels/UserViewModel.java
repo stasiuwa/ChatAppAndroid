@@ -10,6 +10,7 @@ import Data.DTO.MemberDTO;
 import Data.Models.User;
 import DataAccess.Repositories.UserRepository;
 import lombok.Getter;
+import lombok.Setter;
 
 public class UserViewModel extends AndroidViewModel {
     private final UserRepository userRepository;

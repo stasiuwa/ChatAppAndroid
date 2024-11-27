@@ -12,6 +12,7 @@ import Data.Databases.CommunityDB;
 import Data.Models.Role;
 import DataAccess.Repositories.RoleRepository;
 import lombok.Getter;
+import lombok.Setter;
 
 public class RoleViewModel extends AndroidViewModel {
     private final RoleRepository roleRepository;

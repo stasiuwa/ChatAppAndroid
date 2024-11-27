@@ -12,6 +12,7 @@ import Data.DTO.ChannelResponseDTO;
 import Data.Models.Channel;
 import DataAccess.Repositories.ChannelRepository;
 import lombok.Getter;
+import lombok.Setter;
 
 public class ChannelViewModel extends AndroidViewModel {
     private final ChannelRepository channelRepository;

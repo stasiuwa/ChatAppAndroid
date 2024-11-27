@@ -64,6 +64,8 @@ public class CommunityActivity extends AppCompatActivity implements
     RoleViewModel roleViewModel;
     UserViewModel userViewModel;
 
+    Bundle communityBundle;
+
     NavigationBarView navbar;
     Button settingsButton, homeButton;
 
@@ -78,11 +80,6 @@ public class CommunityActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_community);
-//        Setup startup fragment in container
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, new CommunityWelcomeFragment())
-                .commit();
-
         homeButton = findViewById(R.id.communityHomeButton);
         settingsButton = findViewById(R.id.communitySettingsButton);
         navbar = findViewById(R.id.bottom_navbar);
@@ -91,7 +88,7 @@ public class CommunityActivity extends AppCompatActivity implements
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
 //        Bundle storing community data
-        Bundle communityBundle = new Bundle();
+        communityBundle = new Bundle();
 //        Load token from SharedPreferences
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
         token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
@@ -137,17 +134,17 @@ public class CommunityActivity extends AppCompatActivity implements
         });
 
 //        Button that returns to main page of Community, changes fragment to CommunityWelcomeFragment
-        homeButton.setOnClickListener(v -> {
-            CommunityWelcomeFragment communityWelcomeFragment = new CommunityWelcomeFragment();
-            communityWelcomeFragment.setArguments(communityBundle);
-            this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, communityWelcomeFragment)
-                    .commit();
-        });
-//        Handle bottom navbar events
+        homeButton.setOnClickListener(v -> setupWelcomeFragment());
     }
 
+    private void setupWelcomeFragment(){
+        CommunityWelcomeFragment communityWelcomeFragment = new CommunityWelcomeFragment();
+        communityWelcomeFragment.setArguments(communityBundle);
+        this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, communityWelcomeFragment)
+                .commit();
+    }
     /**
      * Setup navbar onItemSelectedListener to switch fragments to display and pass them info about community
      * @param communityBundle bundle containing community id and name
@@ -219,15 +216,12 @@ public class CommunityActivity extends AppCompatActivity implements
                     for (MemberDTO memberDTO : response.body().getMembers()){
                         userViewModel.addUser(memberDTO);
                     }
+                    communityBundle.putInt("usersCount", response.body().getMembers().size());
+                    communityBundle.putInt("rolesCount", response.body().getRoles().size());
+                    communityBundle.putInt("voiceChannelsCount", voiceChannels);
+                    communityBundle.putInt("textChannelsCount", response.body().getChannels().size() - voiceChannels);
 
-                    TextView voiceChannelNumber = findViewById(R.id.voiceChannelNumber);
-                    TextView textChannelNumber = findViewById(R.id.textChannelNumber);
-                    TextView usersNumber = findViewById(R.id.usersNumber);
-                    TextView rolesNumber = findViewById(R.id.rolesNumber);
-                    usersNumber.setText(String.valueOf(response.body().getMembers().size()));
-                    rolesNumber.setText(String.valueOf(response.body().getRoles().size()));
-                    voiceChannelNumber.setText(String.valueOf(voiceChannels));
-                    textChannelNumber.setText(String.valueOf(response.body().getChannels().size() - voiceChannels));
+                    setupWelcomeFragment();
 
                 } else {
                     Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
