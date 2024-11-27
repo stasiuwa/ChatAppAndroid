@@ -14,9 +14,11 @@ import Data.Databases.CommunityDB;
 import Data.Models.Channel;
 import Data.Models.ChannelRole;
 import DataAccess.DAO.ChannelDAO;
+import lombok.Getter;
 
 public class ChannelRepository {
     private ChannelDAO dao;
+    @Getter
     private LiveData<List<Channel>> allChannels;
 
     public ChannelRepository(Application application) {
@@ -51,7 +53,6 @@ public class ChannelRepository {
             dao.addChannel(channel);
         });
     }
-    public LiveData<List<Channel>> getChannels() {return allChannels;}
     public LiveData<List<Channel>> getChannelsForCommunity(long communityId){
         return dao.getChannelsForCommunity(communityId);
     }

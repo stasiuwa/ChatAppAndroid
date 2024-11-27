@@ -21,7 +21,7 @@ public class ChannelViewModel extends AndroidViewModel {
     public ChannelViewModel(@NonNull Application application) {
         super(application);
         this.channelRepository = new ChannelRepository(application);
-        this.allChannels = channelRepository.getChannels();
+        this.allChannels = channelRepository.getAllChannels();
     }
     public LiveData<List<Channel>> getChannelsFromCommunity(long id){
         return channelRepository.getChannelsForCommunity(id);

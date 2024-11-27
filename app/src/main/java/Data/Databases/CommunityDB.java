@@ -13,17 +13,29 @@ import java.util.concurrent.Executors;
 
 import Data.Models.Channel;
 import Data.Models.Community;
+import Data.Models.Message;
+import Data.Models.Role;
+import Data.Models.User;
 import DataAccess.DAO.ChannelDAO;
 import DataAccess.DAO.CommunityDAO;
+import DataAccess.DAO.MessageDAO;
+import DataAccess.DAO.RoleDAO;
+import DataAccess.DAO.UserDAO;
 
 @androidx.room.Database(entities = {
         Community.class,
-        Channel.class
-}, version = 2, exportSchema = false)
+        Channel.class,
+        Role.class,
+        User.class,
+        Message.class
+}, version = 1, exportSchema = false)
 //@TypeConverters({TypeConverters.class})
 public abstract class CommunityDB extends RoomDatabase {
     public abstract CommunityDAO communityDAO();
     public abstract ChannelDAO channelDAO();
+    public abstract RoleDAO roleDAO();
+    public abstract MessageDAO messageDAO();
+    public abstract UserDAO userDAO();
     /**
      * Singelton
      */
@@ -59,6 +71,9 @@ public abstract class CommunityDB extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 CommunityDAO communityDAO = INSTANCE.communityDAO();
                 ChannelDAO channelDAO = INSTANCE.channelDAO();
+                RoleDAO roleDAO = INSTANCE.roleDAO();
+                UserDAO userDAO = INSTANCE.userDAO();
+                MessageDAO messageDAO = INSTANCE.messageDAO();
 
 //                communityDAO.addUser(new UserModel("admin"));
 
