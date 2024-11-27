@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import Data.DTO.MemberDTO;
 import Data.Databases.CommunityDB;
 import Data.Models.User;
 import DataAccess.DAO.UserDAO;
@@ -21,6 +22,16 @@ public class UserRepository {
         dao = communityDB.userDAO();
         allUsers = dao.getAllUsers();
     }
+    public User mapUser(MemberDTO memberDTO){
+        return new User(
+                memberDTO.getUser().getUserId(),
+                memberDTO.getUser().getUsername(),
+                memberDTO.getUser().getImageUrl(),
+                memberDTO.getUser().getDescription(),
+                memberDTO.getRoles()
+        );
+    }
+
     public void addUser(User user){
         CommunityDB.databaseWriteExecutor.execute(()->{
             dao.addUser(user);

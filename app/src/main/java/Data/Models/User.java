@@ -1,33 +1,42 @@
 package Data.Models;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity(tableName = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "users")
 public class User {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "userID")
     @JsonProperty("id")
-    private long userId;
+    public long userId;
     @ColumnInfo(name = "Username")
     @JsonProperty("username")
-    private String username;
+    public String username;
     @ColumnInfo(name = "Image URL")
     @JsonProperty("imageUrl")
-    private String imageUrl;
+    public String imageUrl;
     @ColumnInfo(name = "Description")
     @JsonProperty("description")
-    private String description;
+    public String description;
+    @TypeConverters(Data.Models.TypeConverters.class)
+    @Nullable
+    @ColumnInfo(name = "Roles")
+    @JsonProperty("roles")
+    public List<Long> roles;
 }

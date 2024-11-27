@@ -26,10 +26,15 @@ import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
 import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
+import Data.DTO.MemberDTO;
+import Data.Models.Role;
 import Data.Models.Token;
 import Data.Models.Channel;
 import Data.Models.Message;
+import Data.Models.User;
 import DataAccess.ViewModels.ChannelViewModel;
+import DataAccess.ViewModels.RoleViewModel;
+import DataAccess.ViewModels.UserViewModel;
 import Fragments.Community.ChannelsFragment;
 import Fragments.Community.CommunityWelcomeFragment;
 import Fragments.Community.TextChatFragment;
@@ -55,6 +60,8 @@ public class CommunityActivity extends AppCompatActivity implements
 {
     long communityID;
     ChannelViewModel channelViewModel;
+    RoleViewModel roleViewModel;
+    UserViewModel userViewModel;
 
     NavigationBarView navbar;
     Button settingsButton, homeButton;
@@ -79,6 +86,8 @@ public class CommunityActivity extends AppCompatActivity implements
         settingsButton = findViewById(R.id.communitySettingsButton);
         navbar = findViewById(R.id.bottom_navbar);
         channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
+        roleViewModel = new ViewModelProvider(this).get(RoleViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
 //        Bundle storing community data
         Bundle communityBundle = new Bundle();
@@ -200,6 +209,12 @@ public class CommunityActivity extends AppCompatActivity implements
                                     "\nIlość ról: " + response.body().getRoles().size());
                     for (ChannelResponseDTO channelResponseDTO : response.body().getChannels()){
                         channelViewModel.addChannel(channelResponseDTO);
+                    }
+                    for (Role role : response.body().getRoles()){
+                        roleViewModel.addRole(role);
+                    }
+                    for (MemberDTO memberDTO : response.body().getMembers()){
+                        userViewModel.addUser(memberDTO);
                     }
 //                    TODO zapisac dane do viewmodeli
                 } else {

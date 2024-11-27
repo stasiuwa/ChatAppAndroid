@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class MemberDTO {
     @JsonProperty("roles")
-    private List<String> roles;
+    private List<Long> roles;
     @JsonProperty("user")
     private User user;
 }

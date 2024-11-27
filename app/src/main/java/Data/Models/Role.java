@@ -11,11 +11,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity(tableName = "roles")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "roles")
 public class Role {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "Role ID")
@@ -23,11 +23,11 @@ public class Role {
     public long roleId;
     @ColumnInfo(name = "Role Name")
     @JsonProperty("name")
-    private String name;
+    public String name;
     @ColumnInfo(name = "Community ID")
     @JsonProperty("communityId")
-    private long communityId;
+    public long communityId;
     @ColumnInfo(name = "Permission Overwrites")
     @JsonProperty("permissionOverwrites")
-    private long permissionOverwrites;
+    public long permissionOverwrites;
 }

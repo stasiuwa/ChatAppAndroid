@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import Data.DTO.MemberDTO;
 import Data.Models.User;
 import DataAccess.Repositories.UserRepository;
 import lombok.Getter;
@@ -22,6 +23,9 @@ public class UserViewModel extends AndroidViewModel {
     }
     public void addUser(User user) {
         userRepository.addUser(user);
+    }
+    public void addUser(MemberDTO memberDTO) {
+        userRepository.addUser(userRepository.mapUser(memberDTO));
     }
     public LiveData<User> getUserById(long userId){
         return userRepository.getUserById(userId);

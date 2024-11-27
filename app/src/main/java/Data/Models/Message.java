@@ -2,7 +2,6 @@ package Data.Models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,38 +14,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity(tableName = "messages")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "messages")
 public class Message {
     @PrimaryKey(autoGenerate = true)
     @JsonProperty("id")
-    private String id;
+    public long id;
     @JsonProperty("text")
-    private String text;
+    public String text;
     @JsonProperty("channelId")
-    private String channelId;
+    public String channelId;
     @JsonProperty("userId")
-    private String userId;
+    public String userId;
     @JsonProperty("edited")
-    private boolean edited;
+    public boolean edited;
     @JsonProperty("updatedAt")
     @TypeConverters(Data.Models.TypeConverters.class)
-    private Date updatedAt;
+    public Date updatedAt;
     @JsonProperty("dateFormatted")
-    private String dateFormatted;
+    public String dateFormatted;
     @JsonProperty("respondsToMessage")
-    private String respondsToMessage;
+    public String respondsToMessage;
     @JsonProperty("respondObject")
-    private Message respondObject;
+    @TypeConverters(Data.Models.TypeConverters.class)
+    public Message respondObject;
     @JsonProperty("reactions")
     @TypeConverters(Data.Models.TypeConverters.class)
-    private List<MessageReaction> reactions;
+    public List<MessageReaction> reactions;
     @JsonProperty("attachments")
     @TypeConverters(Data.Models.TypeConverters.class)
-    private List<MessageAttachment> attachments;
+    public List<MessageAttachment> attachments;
     @JsonProperty("gifLink")
-    private String gifLink;
+    public String gifLink;
 }

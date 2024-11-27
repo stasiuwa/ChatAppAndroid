@@ -125,4 +125,23 @@ public class TypeConverters {
     public static Date toDate(Long timestamp) {
         return timestamp == null ? null : new Date(timestamp);
     }
+    @TypeConverter
+    public static String fromLongList(List<Long> roles) {
+        try {
+            return objectMapper.writeValueAsString(roles);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Serialization error: cannot convert Long list to JSON", e);
+        }
+    }
+
+    @TypeConverter
+    public static List<Long> toLongList(String data) {
+        try {
+            return objectMapper.readValue(data, new TypeReference<List<Long>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Deserialization error: cannot convert JSON to Long list", e);
+        }
+    }
 }
