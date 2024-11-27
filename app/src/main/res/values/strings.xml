@@ -43,4 +43,6 @@
     <string name="roles">ROLE</string>
     <string name="text">TEKSTOWE:</string>
     <string name="voice">GŁOSOWE:</string>
+    <string name="roleNameInput">Podaj nazwę roli</string>
+    <string name="createRole">TWORZENIE ROLI</string>
 </resources>

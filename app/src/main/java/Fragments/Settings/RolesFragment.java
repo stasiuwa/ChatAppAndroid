@@ -1,7 +1,10 @@
 package Fragments.Settings;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -12,10 +15,19 @@ import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.szampchat.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import Adapters.RoleAdapter;
+import Data.Models.Role;
 import DataAccess.ViewModels.RoleViewModel;
 
 public class RolesFragment extends Fragment {
@@ -57,6 +69,21 @@ public class RolesFragment extends Fragment {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(roleAdapter.getItemTouchHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        Button createRoleButton = view.findViewById(R.id.createRoleButton);
+        createRoleButton.setOnClickListener(v -> {
+            TechFragment techFragment = new TechFragment();
+
+            Bundle args = new Bundle();
+            args.putLong("communityID", communityId);
+            techFragment.setArguments(args);
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, techFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         return view;
     }

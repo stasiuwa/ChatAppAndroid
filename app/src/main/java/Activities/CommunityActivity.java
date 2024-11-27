@@ -23,6 +23,7 @@ import com.szampchat.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import Adapters.ChannelAdapter;
 import Adapters.MessageAdapter;
@@ -48,7 +49,9 @@ import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.ChannelsSettingsFragment;
+import Fragments.Settings.RolesFragment;
 import Fragments.Settings.SettingsFragment;
+import Fragments.Settings.TechFragment;
 import Services.ChannelService;
 import Services.CommunityService;
 import okhttp3.MediaType;
@@ -65,7 +68,8 @@ public class CommunityActivity extends AppCompatActivity implements
         UserAdapter.OnItemClickListener,
         RoleAdapter.OnItemClickListener,
 
-        ChannelsSettingsFragment.ChannelsListener
+        ChannelsSettingsFragment.ChannelsListener,
+        TechFragment.RolesListener
 {
     long communityID;
     ChannelViewModel channelViewModel;
@@ -331,17 +335,29 @@ public class CommunityActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * I dont remeber :)
+     * @return
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    /**
+     * TODO
+     * @param message
+     */
     @Override
     public void onItemClickListener(Message message) {
 
     }
 
+    /**
+     * Display dialog with details about specific user
+     * @param user - clicked user from RecyclerView
+     */
     @Override
     public void onItemClickListener(User user) {
         final Dialog userProfileDialog = new Dialog(this);
@@ -360,6 +376,10 @@ public class CommunityActivity extends AppCompatActivity implements
         userProfileDialog.show();
     }
 
+    /**
+     * Handle to show dialog with details about specific role
+     * @param role - clicked role from RecyclerView
+     */
     @Override
     public void onItemClickListener(Role role) {
         final Dialog userProfileDialog = new Dialog(this);
@@ -375,11 +395,30 @@ public class CommunityActivity extends AppCompatActivity implements
         userProfileDialog.show();
     }
 
+    /**
+     * Handle LongClick on specific role from RecyclerView - display edit form
+     * @param role
+     */
     @Override
     public void onItemLongClickListener(Role role) {
 //        TODO tutaj dialog z edycja roli
     }
 
+    /**
+     * Send POST request to server API to create new role
+     * @param name - role name
+     * @param permission - role set of permissions
+     * @param members - users with this role
+     */
+    @Override
+    public void addRole(String name, long permission, List<Long> members) {
+
+    }
+
+    /**
+     * Send DELETE request to server to remove role from server, on success also from RoleViewModel
+     * @param role - specific role to delete
+     */
     @Override
     public void onSwipeDeleteRole(Role role) {
         Call<Void> callDeleteRole = communityService.deleteRole(
@@ -401,4 +440,6 @@ public class CommunityActivity extends AppCompatActivity implements
             }
         });
     }
+
+
 }
