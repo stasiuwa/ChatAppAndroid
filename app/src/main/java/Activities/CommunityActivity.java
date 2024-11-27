@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -202,6 +203,7 @@ public class CommunityActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<FullCommunityDTO> call, Response<FullCommunityDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
+                    int voiceChannels = 0;
                     Log.d("CommunityActivity - callCommunityInfo",
                             "Społeczność: " + response.body().getCommunity().getCommunityName() +
                                     "\nIlość kanałów: " + response.body().getChannels().size() +
@@ -209,6 +211,7 @@ public class CommunityActivity extends AppCompatActivity implements
                                     "\nIlość ról: " + response.body().getRoles().size());
                     for (ChannelResponseDTO channelResponseDTO : response.body().getChannels()){
                         channelViewModel.addChannel(channelResponseDTO);
+                        if (channelResponseDTO.getChannel().getType() == 1) voiceChannels++;
                     }
                     for (Role role : response.body().getRoles()){
                         roleViewModel.addRole(role);
@@ -216,7 +219,16 @@ public class CommunityActivity extends AppCompatActivity implements
                     for (MemberDTO memberDTO : response.body().getMembers()){
                         userViewModel.addUser(memberDTO);
                     }
-//                    TODO zapisac dane do viewmodeli
+
+                    TextView voiceChannelNumber = findViewById(R.id.voiceChannelNumber);
+                    TextView textChannelNumber = findViewById(R.id.textChannelNumber);
+                    TextView usersNumber = findViewById(R.id.usersNumber);
+                    TextView rolesNumber = findViewById(R.id.rolesNumber);
+                    usersNumber.setText(String.valueOf(response.body().getMembers().size()));
+                    rolesNumber.setText(String.valueOf(response.body().getRoles().size()));
+                    voiceChannelNumber.setText(String.valueOf(voiceChannels));
+                    textChannelNumber.setText(String.valueOf(response.body().getChannels().size() - voiceChannels));
+
                 } else {
                     Log.d("CommunityActivity - callCommunityInfo", "Błąd pobierania pełnych danych o społeczności" + response.code() + response.message());
                 }

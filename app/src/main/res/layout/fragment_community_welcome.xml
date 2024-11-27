@@ -9,26 +9,146 @@
     >
 
     <TextView
-        android:id="@+id/test"
+        android:id="@+id/welcomePageTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="WELCOME PAGE"
+        android:text="WITAM ;D"
+        style="@style/TextAppearance.Material3.LabelSmall"
         android:textSize="30sp"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
         />
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/test"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/welcomePageTitle"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
         >
-        <TextView
-            android:paddingBottom="300dp"
-            android:clipToPadding="false"
-            android:id="@+id/desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dawno dawno tymu, za siedmioma chujami, za siedmioma zekami, w okolicach Gubałówki mieszkał Tomisław Apoloniusz Curuś Bachleda Farrell, jak ten piecyk z dmuchawą. Pewnego dnia Tomisław wysedł na halę i pomyśloł: Krucafuks dość! Ile mozna wpierdalać łoscypek! Ani to dobre, ani śwarne a jakie drogie jebane! No i sracka murowana, toć to gołymi łapami ługniotane. Zeby to jeszcze z krowiego mleka było; a weź tu łodróznij barana od łowiecki. Stąd ten słonawy posmak. Tfu, łohydne. Co te turysty w tym widzą. Podczas, gdy Bachleda zajadał się łoscypkiem, smród baraniego nabiału niósł się po łokolicy. Nawet pod wiater jebało napletkiem hej! Bekasy nie wytsymały. Fetor przepłoszył je z terenów lęgowych. Ryby, w Morskim Łoku zdechły, a w Carnym Stawie, zdechły. Niedźwiedź Gąsienica łobudził się ze snu zimowego i łod razu poszedł pod prysznic. Lecz to nie tylko łod niego tak popierdalało. Niby po kąpieli smród bełta i gówna ustąpił, ale przez to woń łoctówy stała się jeszcze bardziej nieznośna. Lecz specyficzny zapach łobudził nie tyko misia, łobudził też ządze, łobrzydliwe homoseksualne żądze. Śniezny Kockodan, przez niektórych nazywany też Yeti, dostaje smergla, gdy pocuje woń fiuta hej. Tak się składo, że łoscypek pachnie tożsamo, koniec.Bestia normalnie żywi się owocami, ale łocet budzi w niej zboczenie. Tamtej nocy zeszła z wierchu na hale wiedziona zapachem rozporka. Nieświadomy nicego Bachleda Farrell zajadoł właśnie syr. Pierwsze razy posły w dupe hej! Little Boy małpy rozdupcył Hirosimę Bachledy. Potem Kockodan założył strapona Big Ben i dzwonił jajami o brodę Curusia. Koszmar małpy trwał kilka dni. Bachleda nie chciał puścić. Donosił tylko sprzęty, od których małpie robiły się wielkie łoczy. Yeti nie wytsymał, gdy Bachleda przyniósł słoik. A gdy słój pękł, a Bachleda zabronił wzywać karetkę, tylko kazał nagrywać dalej, małpa zwariowała. I grasuje po łokolicy po dziś dzień. A film ze słoikiem dostępny jest w sieci."
-            />
-    </ScrollView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/channelsCardView"
+            android:layout_marginTop="30dp"
+            android:layout_width="200dp"
+            android:layout_height="150dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/channels"
+                    android:textStyle="bold"
+                    style="@style/TextAppearance.Material3.LabelLarge"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="10dp"
+                    />
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    >
+                    <TextView
+                        android:text="@string/voice"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/voiceChannelNumber"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="15dp"
+                    />
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    >
+                    <TextView
+                        android:text="@string/text"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/textChannelNumber"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/usersCardView"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="175dp"
+            android:layout_height="150dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/users"
+                    android:textStyle="bold"
+                    style="@style/TextAppearance.Material3.LabelLarge"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    />
+                <TextView
+                    android:id="@+id/usersNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="40sp"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/roles"
+                    android:textStyle="bold"
+                    style="@style/TextAppearance.Material3.LabelMedium"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+                <TextView
+                    android:id="@+id/rolesNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

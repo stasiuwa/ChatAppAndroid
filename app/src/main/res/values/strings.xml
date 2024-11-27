@@ -38,4 +38,9 @@
     <string name="voiceChannels">KANAŁY GŁOSOWE</string>
     <string name="textChannels">KANAŁY TEKSTOWE</string>
     <string name="delete">USUŃ</string>
+    <string name="channels">KANAŁY</string>
+    <string name="users">UŻYTKOWNICY</string>
+    <string name="roles">ROLE</string>
+    <string name="text">TEKSTOWE:</string>
+    <string name="voice">GŁOSOWE:</string>
 </resources>

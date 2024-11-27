@@ -37,7 +37,6 @@ public class ChannelViewModel extends AndroidViewModel {
         channelRepository.deleteChannel(channelRepository.mapChannel(channelResponseDTO));
     }
 
-
     public void addChannel(Channel channel){
         channelRepository.addChannel(channel);
     }
