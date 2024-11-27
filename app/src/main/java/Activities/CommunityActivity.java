@@ -1,11 +1,13 @@
 package Activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
 import java.util.ArrayList;
@@ -22,6 +26,8 @@ import java.util.Arrays;
 
 import Adapters.ChannelAdapter;
 import Adapters.MessageAdapter;
+import Adapters.RoleAdapter;
+import Adapters.UserAdapter;
 import Config.env;
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
@@ -56,6 +62,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
         MessageAdapter.OnItemClickListener,
+        UserAdapter.OnItemClickListener,
+        RoleAdapter.OnItemClickListener,
 
         ChannelsSettingsFragment.ChannelsListener
 {
@@ -332,5 +340,65 @@ public class CommunityActivity extends AppCompatActivity implements
     @Override
     public void onItemClickListener(Message message) {
 
+    }
+
+    @Override
+    public void onItemClickListener(User user) {
+        final Dialog userProfileDialog = new Dialog(this);
+        userProfileDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        userProfileDialog.setContentView(R.layout.user_profile_dialog);
+
+        TextView username = userProfileDialog.findViewById(R.id.userDialogUsername);
+        TextView description = userProfileDialog.findViewById(R.id.userDialogDescription);
+        TextView roles = userProfileDialog.findViewById(R.id.userDialogRoles);
+        ImageView picture = userProfileDialog.findViewById(R.id.userDialogPicture);
+
+        username.setText(user.getUsername());
+        description.setText(user.getDescription());
+        roles.setText("NIKT");
+
+        userProfileDialog.show();
+    }
+
+    @Override
+    public void onItemClickListener(Role role) {
+        final Dialog userProfileDialog = new Dialog(this);
+        userProfileDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        userProfileDialog.setContentView(R.layout.details_dialog);
+
+        TextView title = userProfileDialog.findViewById(R.id.dialogTitle);
+        TextView text = userProfileDialog.findViewById(R.id.dialogText);
+
+        title.setText(role.getName());
+        text.setText(String.valueOf(role.getPermissionOverwrites()));
+
+        userProfileDialog.show();
+    }
+
+    @Override
+    public void onItemLongClickListener(Role role) {
+//        TODO tutaj dialog z edycja roli
+    }
+
+    @Override
+    public void onSwipeDeleteRole(Role role) {
+        Call<Void> callDeleteRole = communityService.deleteRole(
+                "Bearer "+token.getAccessToken(),
+                role.getRoleId()
+        );
+        callDeleteRole.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()){
+                    roleViewModel.deleteRole(role);
+                }
+                else Log.d("CommunityActivity", "onSwipeDeleteRole - błąd usuwania roli: " + response.code() + response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("CommunityActivity", "Błąd wykonywania usługi " + Arrays.toString(t.getStackTrace()));
+            }
+        });
     }
 }

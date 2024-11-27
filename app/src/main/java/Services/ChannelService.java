@@ -2,6 +2,7 @@ package Services;
 
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
+import Data.DTO.RoleResponseDTO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

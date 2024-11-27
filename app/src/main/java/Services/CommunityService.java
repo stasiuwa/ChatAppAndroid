@@ -3,6 +3,7 @@ package Services;
 import java.util.List;
 
 import Data.DTO.FullCommunityDTO;
+import Data.DTO.RoleResponseDTO;
 import Data.Models.Community;
 import Data.Models.Role;
 import okhttp3.RequestBody;
@@ -58,5 +59,18 @@ public interface CommunityService {
     Call<Void> deleteCommunity(
             @Header("Authorization") String token,
             @Path("communityId") long communityId
+    );
+
+    @POST("/api/communities/{communityId}/roles")
+    Call<RoleResponseDTO> createRole(
+            @Header("Authorization") String token,
+            @Path("communityId") long communityId,
+            @Body RequestBody requestBody
+            );
+
+    @DELETE("/api/roles/{roleId}")
+    Call<Void> deleteRole(
+            @Header("Authorization") String token,
+            @Path("roleId") long roleId
     );
 }
