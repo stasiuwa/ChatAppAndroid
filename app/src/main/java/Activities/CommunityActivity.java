@@ -226,6 +226,8 @@ public class CommunityActivity extends AppCompatActivity implements
                         if (channelResponseDTO.getChannel().getType() == 1) voiceChannels++;
                     }
                     for (Role role : response.body().getRoles()){
+                        role.setCommunityId(communityID);
+                        Log.d("ROLE", role.getName() + role.communityId + "-" + role.getRoleId() );
                         roleViewModel.addRole(role);
                     }
                     for (MemberDTO memberDTO : response.body().getMembers()){
@@ -290,6 +292,7 @@ public class CommunityActivity extends AppCompatActivity implements
         this.getSupportFragmentManager().popBackStack("uniqueSubFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle channelBundle = new Bundle();
         channelBundle.putLong("channelId", channel.getId());
+        channelBundle.putLong("userId", channel.getId());
         channelBundle.putString("channelName", channel.getName());
         if (channel.getType().equals(ChannelType.VOICE_CHANNEL)){
             VoiceChatFragment voiceChatFragment = new VoiceChatFragment();

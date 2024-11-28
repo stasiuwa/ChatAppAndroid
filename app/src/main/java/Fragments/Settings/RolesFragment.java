@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +32,8 @@ import Adapters.RoleAdapter;
 import Data.Models.Role;
 import DataAccess.ViewModels.RoleViewModel;
 
+//TODO pokazuje za kazdym razem wszystkie Role z Room'a, nie wiem kurwa czemu jest napiasne 1:1 jak Channel a tamto dziala
+
 public class RolesFragment extends Fragment {
     long communityId;
     RoleAdapter roleAdapter;
@@ -50,7 +53,8 @@ public class RolesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_roles, container, false);
 
         try {
-            communityId = getArguments().getLong("communityID");
+            communityId = getArguments().getLong("communityId");
+            Log.d("CommunityId", String.valueOf(communityId));
         } catch (NullPointerException e) {
             throw new NullPointerException("communityID from fragment's arguments is null");
         }
@@ -78,11 +82,10 @@ public class RolesFragment extends Fragment {
             Bundle args = new Bundle();
             args.putLong("communityID", communityId);
             techFragment.setArguments(args);
-
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, techFragment)
-                    .addToBackStack(null)
+                    .addToBackStack("uniqueSettingsFrag")
                     .commit();
         });
 

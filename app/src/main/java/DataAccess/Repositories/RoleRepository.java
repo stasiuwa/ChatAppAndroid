@@ -9,9 +9,11 @@ import java.util.List;
 import Data.Databases.CommunityDB;
 import Data.Models.Role;
 import DataAccess.DAO.RoleDAO;
+import lombok.Getter;
 
 public class RoleRepository {
     private RoleDAO dao;
+    @Getter
     private LiveData<List<Role>> allRoles;
 
     public RoleRepository(Application application){
@@ -25,7 +27,7 @@ public class RoleRepository {
             dao.addRole(role);
         });
     }
-    public LiveData<List<Role>> getRoles() {return allRoles;}
+
     public LiveData<List<Role>> getRolesForCommunity(long communityId){
         return dao.getRolesForCommunity(communityId);
     }

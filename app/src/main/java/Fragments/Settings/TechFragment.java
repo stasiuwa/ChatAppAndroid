@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -117,6 +118,7 @@ public class TechFragment extends Fragment {
                 RolesFragment rolesFragment = new RolesFragment();
                 rolesFragment.setArguments(fragmentArgs);
 
+                requireActivity().getSupportFragmentManager().popBackStack("uniqueSettingsFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragmentContainer, rolesFragment)

@@ -32,7 +32,7 @@ public class ChannelViewModel extends AndroidViewModel {
         channelRepository.addChannel(channelRepository.mapChannel(channelResponseDTO));
     }
     public void updateChannel(ChannelResponseDTO channelResponseDTO){
-        channelRepository.addChannel(channelRepository.mapChannel(channelResponseDTO));
+        channelRepository.updateChannel(channelRepository.mapChannel(channelResponseDTO));
     }
     public void deleteChannel(ChannelResponseDTO channelResponseDTO){
         channelRepository.deleteChannel(channelRepository.mapChannel(channelResponseDTO));
@@ -42,7 +42,7 @@ public class ChannelViewModel extends AndroidViewModel {
         channelRepository.addChannel(channel);
     }
     public void updateChannel(Channel channel){
-        channelRepository.addChannel(channel);
+        channelRepository.updateChannel(channel);
     }
     public void deleteChannel(Channel channel){
         channelRepository.deleteChannel(channel);

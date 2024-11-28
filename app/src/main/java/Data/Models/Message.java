@@ -26,9 +26,9 @@ public class Message {
     @JsonProperty("text")
     public String text;
     @JsonProperty("channelId")
-    public String channelId;
+    public long channelId;
     @JsonProperty("userId")
-    public String userId;
+    public long userId;
     @JsonProperty("edited")
     public boolean edited;
     @JsonProperty("updatedAt")

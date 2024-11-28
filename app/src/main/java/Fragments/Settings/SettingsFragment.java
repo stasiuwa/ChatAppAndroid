@@ -2,6 +2,8 @@ package Fragments.Settings;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +52,7 @@ public class SettingsFragment extends Fragment {
 
 //            Setup onClickListener to replace current fragment with RolesFragment
             rolesSettings.setOnClickListener(v -> {
+//                requireActivity().getSupportFragmentManager().popBackStack("uniqueSettingsFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, rolesFragment)
                         .addToBackStack(null)
@@ -57,6 +60,7 @@ public class SettingsFragment extends Fragment {
             });
 //            Setup onClickListener to replace current fragment with ChannelsFragment
             channelsSettings.setOnClickListener(v -> {
+//                requireActivity().getSupportFragmentManager().popBackStack("uniqueSettingsFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, channelsSettingsFragment)
                         .addToBackStack(null)
@@ -65,6 +69,7 @@ public class SettingsFragment extends Fragment {
         }
 //        Setup onClickListener to replace current fragment with ProfileFragment
         profileSettings.setOnClickListener(v -> {
+//            requireActivity().getSupportFragmentManager().popBackStack("uniqueSettingsFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new ProfileFragment())
                     .addToBackStack(null)

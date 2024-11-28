@@ -21,8 +21,8 @@ public class RoleViewModel extends AndroidViewModel {
 
     public RoleViewModel(@NonNull Application application) {
         super(application);
-        roleRepository = new RoleRepository(application);
-        allRoles = roleRepository.getRoles();
+        this.roleRepository = new RoleRepository(application);
+        this.allRoles = roleRepository.getAllRoles();
     }
     public void addRole(Role role){
         roleRepository.addRole(role);

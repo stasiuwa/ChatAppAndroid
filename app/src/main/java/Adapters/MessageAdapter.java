@@ -1,6 +1,8 @@
 package Adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-    private static final int VIEW_TYPE_SYSTEM_MESSAGE = 3;
 
     Activity activity;
     List<Message> messagesList;
+    long userId;
 
     private LayoutInflater layoutInflater;
     private OnItemClickListener onItemClickListener;
@@ -31,6 +33,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.activity = activity;
         this.layoutInflater = LayoutInflater.from(activity);
         this.messagesList = null;
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        this.userId = sharedPreferences.getLong("userId", 0);
         try {
             onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
@@ -55,11 +59,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = (Message) messagesList.get(position);
 //        TODO poprawic logige xd sprawdzania czy wiadomosc wyslana przez uzytkownika zalogowanego do aplikacji.
-        if (message.getUserId().equals("1")) {
+        if (message.getUserId() == userId) {
             return VIEW_TYPE_MESSAGE_SENT;
-        } else if (message.getUserId().equals("SYSTEM")){
-            return VIEW_TYPE_SYSTEM_MESSAGE;
-        } else {
+        }
+//        else if (message.getUserId() == 0){
+//            return VIEW_TYPE_SYSTEM_MESSAGE;
+//        }
+        else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
         }
     }
@@ -72,12 +78,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (viewType == VIEW_TYPE_MESSAGE_SENT){
             view = layoutInflater.inflate(R.layout.item_list_message_sent, parent, false);
             return new SentMessageHolder(view);
-        } else if (viewType == VIEW_TYPE_SYSTEM_MESSAGE) {
-            view = layoutInflater.inflate(R.layout.item_list_message_system, parent, false);
-            return new ReceivedMessageHolder(view);
-        } else
-//            if (viewType == VIEW_TYPE_MESSAGE_RECEIVED)
-            {
+        }
+//        else if (viewType == VIEW_TYPE_SYSTEM_MESSAGE) {
+//            view = layoutInflater.inflate(R.layout.item_list_message_system, parent, false);
+//            return new ReceivedMessageHolder(view);
+//        }
+        else {
             view = layoutInflater.inflate(R.layout.item_list_message_received, parent, false);
             return new ReceivedMessageHolder(view);
         }
@@ -93,12 +99,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 ((ReceivedMessageHolder) holder).bind(message);
                 break;
-            case VIEW_TYPE_SYSTEM_MESSAGE:
-                ((SystemMessageHolder) holder).bind(message);
-                break;
         }
     }
-
 
 
 //    ViewHolder for messages sent by user in app
@@ -133,21 +135,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void bind(Message message) {
             messageText.setText(message.getText());
             messageTimestamp.setText(message.getUpdatedAt().toString());
-            messageUser.setText(message.getUserId());
+            messageUser.setText(String.valueOf(message.getUserId()));
         }
     }
 
 //    ViewHolder for messages sent by SYSTEM (new user joined etc.)
-    public class SystemMessageHolder extends RecyclerView.ViewHolder {
-
-        TextView systemMessage;
-
-        public SystemMessageHolder(@NonNull View itemView) {
-            super(itemView);
-            systemMessage = itemView.findViewById(R.id.systemMessageText);
-        }
-        public void bind(Message message){
-            systemMessage.setText(message.getText());
-        }
-    }
+//    public class SystemMessageHolder extends RecyclerView.ViewHolder {
+//
+//        TextView systemMessage;
+//
+//        public SystemMessageHolder(@NonNull View itemView) {
+//            super(itemView);
+//            systemMessage = itemView.findViewById(R.id.systemMessageText);
+//        }
+//        public void bind(Message message){
+//            systemMessage.setText(message.getText());
+//        }
+//    }
 }

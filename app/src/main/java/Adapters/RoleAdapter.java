@@ -37,8 +37,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
     public RoleAdapter(Activity activity) {
         this.activity = activity;
         this.layoutInflater = LayoutInflater.from(activity);
-        this.roleList = null;
-
+        roleList = null;
         try {
             onItemClickListener = (RoleAdapter.OnItemClickListener) activity;
         } catch (ClassCastException e) {
