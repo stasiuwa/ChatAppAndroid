@@ -15,12 +15,18 @@ import android.widget.TextView;
 
 import com.szampchat.R;
 
+import Data.DTO.ChannelType;
 import Data.Models.Channel;
 import DataAccess.ViewModels.ChannelViewModel;
 import DataAccess.ViewModels.RoleViewModel;
 import DataAccess.ViewModels.UserViewModel;
 
 public class CommunityWelcomeFragment extends Fragment {
+
+    private UserViewModel userViewModel;
+    private RoleViewModel roleViewModel;
+    private ChannelViewModel channelViewModel;
+    long communityId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,31 +40,38 @@ public class CommunityWelcomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community_welcome, container, false);
 
+        try {
+            communityId = getArguments().getLong("communityID");
+        } catch (NullPointerException e) {
+            throw new NullPointerException("communityID from fragment's arguments is null");
+        }
+
         TextView voiceChannelNumber = view.findViewById(R.id.voiceChannelNumber);
         TextView textChannelNumber = view.findViewById(R.id.textChannelNumber);
         TextView usersNumber = view.findViewById(R.id.usersNumber);
         TextView rolesNumber = view.findViewById(R.id.rolesNumber);
 
-        Bundle communityBundle = getArguments();
-        if (communityBundle!=null){
-            int usersCount = communityBundle.getInt("usersCount", 0);
-            int rolesCount = communityBundle.getInt("rolesCount", 0);
-            int voiceChannelsCount = communityBundle.getInt("voiceChannelsCount", 0);
-            int textChannelsCount = communityBundle.getInt("textChannelsCount", 0);
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("CommunityData", Context.MODE_PRIVATE);
 
-            if (usersNumber != null) {
-                usersNumber.setText(String.valueOf(usersCount));
-            }
-            if (rolesNumber != null) {
-                rolesNumber.setText(String.valueOf(rolesCount));
-            }
-            if (voiceChannelNumber != null) {
-                voiceChannelNumber.setText(String.valueOf(voiceChannelsCount));
-            }
-            if (textChannelNumber != null) {
-                textChannelNumber.setText(String.valueOf(textChannelsCount));
-            }
-        }
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        roleViewModel = new ViewModelProvider(requireActivity()).get(RoleViewModel.class);
+        channelViewModel = new ViewModelProvider(requireActivity()).get(ChannelViewModel.class);
+
+        // Obserwowanie LiveData w ViewModelach
+        userViewModel.getAllUsers().observe(getViewLifecycleOwner(), users -> {
+            usersNumber.setText(String.valueOf(users.size()));
+        });
+
+        roleViewModel.getAllRoles().observe(getViewLifecycleOwner(), roles -> {
+            rolesNumber.setText(String.valueOf(roles.size()));
+        });
+
+        channelViewModel.getChannelsFromCommunity(communityId).observe(getViewLifecycleOwner(), channels -> {
+            long voiceChannels = channels.stream().filter(x->x.getType().equals(ChannelType.VOICE_CHANNEL)).count();
+            long textChannels = channels.size() - voiceChannels;
+            voiceChannelNumber.setText(String.valueOf(voiceChannels));
+            textChannelNumber.setText(String.valueOf(textChannels));
+        });
 
         return view;
     }

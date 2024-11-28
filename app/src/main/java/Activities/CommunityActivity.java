@@ -63,8 +63,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-// TODO po dodaniu roli nie pokazuje jej dopóki nie bedzie getFullCommunityInfo
-// TODO po dodaniu kanału nie zwieksza ich ilosci na WelcomeFragment
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
         MessageAdapter.OnItemClickListener,
@@ -72,7 +70,8 @@ public class CommunityActivity extends AppCompatActivity implements
         RoleAdapter.OnItemClickListener,
 
         ChannelsSettingsFragment.ChannelsListener,
-        TechFragment.RolesListener
+        TechFragment.RolesListener,
+        TextChatFragment.MessageListener
 {
     long communityID;
     ChannelViewModel channelViewModel;
@@ -215,7 +214,6 @@ public class CommunityActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<FullCommunityDTO> call, Response<FullCommunityDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    int voiceChannels = 0;
                     Log.d("CommunityActivity - callCommunityInfo",
                             "Społeczność: " + response.body().getCommunity().getCommunityName() +
                                     "\nIlość kanałów: " + response.body().getChannels().size() +
@@ -223,7 +221,6 @@ public class CommunityActivity extends AppCompatActivity implements
                                     "\nIlość ról: " + response.body().getRoles().size());
                     for (ChannelResponseDTO channelResponseDTO : response.body().getChannels()){
                         channelViewModel.addChannel(channelResponseDTO);
-                        if (channelResponseDTO.getChannel().getType() == 1) voiceChannels++;
                     }
                     for (Role role : response.body().getRoles()){
                         role.setCommunityId(communityID);
@@ -233,10 +230,6 @@ public class CommunityActivity extends AppCompatActivity implements
                     for (MemberDTO memberDTO : response.body().getMembers()){
                         userViewModel.addUser(memberDTO);
                     }
-                    communityBundle.putInt("usersCount", response.body().getMembers().size());
-                    communityBundle.putInt("rolesCount", response.body().getRoles().size());
-                    communityBundle.putInt("voiceChannelsCount", voiceChannels);
-                    communityBundle.putInt("textChannelsCount", response.body().getChannels().size() - voiceChannels);
 
                     setupWelcomeFragment();
 
@@ -484,4 +477,18 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    public void loadMessagesFromServer() {
+
+    }
+
+    @Override
+    public void loadOlderMessages() {
+
+    }
+
+    @Override
+    public void sendMessage(Message message) {
+
+    }
 }

@@ -1,16 +1,22 @@
 package Services;
 
+import java.util.List;
+
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
 import Data.DTO.RoleResponseDTO;
+import Data.Models.Message;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ChannelService {
 
@@ -31,5 +37,30 @@ public interface ChannelService {
     Call<Void> deleteChannel(
             @Header("Authorization") String token,
             @Path("channelId") long channelId
+    );
+    @GET("/api/channels/{channelId}/messages")
+    Call<List<Message>> getMessagesForChannel(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId,
+            @Query("limit") int limit,
+            @Query("before") long lastMessageId
+    );
+    @POST("/api/channels/{channelId}/messages")
+    Call<Message> createMessage(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId
+    );
+    @DELETE("/api/channels/{channelId}/messages/{messageId}")
+    Call<Void> deleteMessage(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId,
+            @Path("messageId") long messageId
+    );
+
+    @PATCH("/api/channels/{channelId}/messages/{messageId}")
+    Call<Message> editMessage(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId,
+            @Path("messageId") long messageId
     );
 }

@@ -25,28 +25,21 @@ public class Message {
     public long id;
     @JsonProperty("text")
     public String text;
+    @JsonProperty("updated_at")
+    @TypeConverters(Data.Models.TypeConverters.class)
+    public Date updatedAt;
+    @JsonProperty("respondsToMessage")
+    public long respondsToMessage;
+    @JsonProperty("gifLink")
+    public String gifLink;
+    @JsonProperty("attachments")
+    @TypeConverters(Data.Models.TypeConverters.class)
+    public List<MessageAttachment> attachments;
+    @JsonProperty("reactions")
+    @TypeConverters(Data.Models.TypeConverters.class)
+    public List<MessageReaction> reactions;
     @JsonProperty("channelId")
     public long channelId;
     @JsonProperty("userId")
     public long userId;
-    @JsonProperty("edited")
-    public boolean edited;
-    @JsonProperty("updatedAt")
-    @TypeConverters(Data.Models.TypeConverters.class)
-    public Date updatedAt;
-    @JsonProperty("dateFormatted")
-    public String dateFormatted;
-    @JsonProperty("respondsToMessage")
-    public String respondsToMessage;
-    @JsonProperty("respondObject")
-    @TypeConverters(Data.Models.TypeConverters.class)
-    public Message respondObject;
-    @JsonProperty("reactions")
-    @TypeConverters(Data.Models.TypeConverters.class)
-    public List<MessageReaction> reactions;
-    @JsonProperty("attachments")
-    @TypeConverters(Data.Models.TypeConverters.class)
-    public List<MessageAttachment> attachments;
-    @JsonProperty("gifLink")
-    public String gifLink;
 }
