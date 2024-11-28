@@ -22,6 +22,10 @@ public class UserViewModel extends AndroidViewModel {
         this.userRepository = new UserRepository(application);
         this.allUsers = userRepository.getAllUsers();
     }
+    public void getUsersForCommunity(long communityId){
+
+    }
+
     public void addUser(User user) {
         userRepository.addUser(user);
     }

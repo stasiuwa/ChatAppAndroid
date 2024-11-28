@@ -24,6 +24,11 @@ import java.util.List;
 
 public class TechFragment extends Fragment {
     long communityId;
+
+    Long roleId;
+    Long permissions;
+    String roleName;
+
     RolesListener rolesListener;
 
     public interface RolesListener{
@@ -50,14 +55,10 @@ public class TechFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tech, container, false);
 
-        try {
-            communityId = getArguments().getLong("communityID");
-        } catch (NullPointerException e) {
-            throw new NullPointerException("communityID from fragment's arguments is null");
-        }
-
+        TextView createRoleTitle = view.findViewById(R.id.createRoleTitle);
         TextInputEditText roleNameInput = view.findViewById(R.id.createRoleNameInput);
         TextInputLayout roleNameLayout = view.findViewById(R.id.createRoleNameLayout);
+
         SwitchMaterial setting1Switch = view.findViewById(R.id.roleSetting1Switch);
         SwitchMaterial setting2Switch = view.findViewById(R.id.techSetting2Switch);
         SwitchMaterial setting3Switch = view.findViewById(R.id.techSetting3Switch);
@@ -66,6 +67,32 @@ public class TechFragment extends Fragment {
         SwitchMaterial setting6Switch = view.findViewById(R.id.techSetting6Switch);
         SwitchMaterial setting7Switch = view.findViewById(R.id.techSetting7Switch);
         SwitchMaterial setting8Switch = view.findViewById(R.id.techSetting8Switch);
+
+        try {
+            communityId = getArguments().getLong("communityID");
+        } catch (NullPointerException e) {
+            throw new NullPointerException("communityID from fragment's arguments is null");
+        }
+        Bundle received = getArguments();
+        if (received.containsKey("roleId")){
+            permissions = getArguments().getLong("permissions", 0);
+            roleId = getArguments().getLong("roleId", 0);
+            roleName = getArguments().getString("roleName", "UNKNOWN");
+
+            roleNameInput.setText(roleName);
+
+            createRoleTitle.setText("EDYCJA ROLI");
+
+            setting1Switch.setChecked((permissions & (1L << 0)) != 0);
+            setting2Switch.setChecked((permissions & (1L << 1)) != 0);
+            setting3Switch.setChecked((permissions & (1L << 2)) != 0);
+            setting4Switch.setChecked((permissions & (1L << 3)) != 0);
+            setting5Switch.setChecked((permissions & (1L << 4)) != 0);
+            setting6Switch.setChecked((permissions & (1L << 5)) != 0);
+            setting7Switch.setChecked((permissions & (1L << 6)) != 0);
+            setting8Switch.setChecked((permissions & (1L << 7)) != 0);
+        }
+
 
         TextView techSetting1Input = view.findViewById(R.id.techSetting1Input);
         techSetting1Input.setText("Administrator:");
@@ -94,7 +121,7 @@ public class TechFragment extends Fragment {
         Button saveButton = view.findViewById(R.id.saveButton);
 
         saveButton.setOnClickListener(v -> {
-            String roleName = roleNameInput.getText().toString();
+            roleName = roleNameInput.getText().toString();
             if (roleName.matches("")){
                 roleNameLayout.setError("Podaj nazwe roli!");
             } else {

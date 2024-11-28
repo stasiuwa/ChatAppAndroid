@@ -44,9 +44,8 @@ public class TextChatFragment extends Fragment{
     ConstraintLayout.LayoutParams layoutParams;
 
     public interface MessageListener {
-        void loadMessagesFromServer();
-        void loadOlderMessages();
-        void sendMessage(Message message);
+        void loadMessagesFromServer(long channelId, Long lastMessageId);
+        void sendMessage(String text, long channelId);
     }
 
     @Override
@@ -96,20 +95,19 @@ public class TextChatFragment extends Fragment{
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (layoutManager != null && layoutManager.findFirstVisibleItemPosition() == 0) {
-                    messageListener.loadOlderMessages();
+                    long lastMessageId = 1;
+                    messageListener.loadMessagesFromServer(chatID, lastMessageId);
                 }
             }
         });
 
-        messageListener.loadMessagesFromServer();
+        messageListener.loadMessagesFromServer(chatID, null);
 
 //        Sending messagess
         EditText messageText = view.findViewById(R.id.inputText);
         Button sendMessageButton = view.findViewById(R.id.messageSendButton);
         sendMessageButton.setOnClickListener(v -> {
-            messageListener.sendMessage(new Message(
-
-            ));
+            messageListener.sendMessage("TEST", chatID);
 //            Clear messageText value and focus
             messageText.getText().clear();
             messageText.clearFocus();

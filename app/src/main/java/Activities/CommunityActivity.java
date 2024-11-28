@@ -21,8 +21,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import Adapters.ChannelAdapter;
@@ -36,12 +38,15 @@ import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.MemberDTO;
 import Data.DTO.RoleResponseDTO;
+import Data.Models.MessageAttachment;
+import Data.Models.MessageReaction;
 import Data.Models.Role;
 import Data.Models.Token;
 import Data.Models.Channel;
 import Data.Models.Message;
 import Data.Models.User;
 import DataAccess.ViewModels.ChannelViewModel;
+import DataAccess.ViewModels.MessageViewModel;
 import DataAccess.ViewModels.RoleViewModel;
 import DataAccess.ViewModels.UserViewModel;
 import Fragments.Community.ChannelsFragment;
@@ -73,10 +78,23 @@ public class CommunityActivity extends AppCompatActivity implements
         TechFragment.RolesListener,
         TextChatFragment.MessageListener
 {
+    private static final String[] PERMISSIONS = {
+            "ADMINISTRATOR",   // Bit 0
+            "ROLE_MODIFY",     // Bit 1
+            "INVITE_CREATE",   // Bit 2
+            "CHANNEL_CREATE",  // Bit 3
+            "CHANNEL_MODIFY",  // Bit 4
+            "MESSAGE_CREATE",  // Bit 5
+            "MESSAGE_DELETE",  // Bit 6
+            "REACTION_CREATE"  // Bit 7
+    };
+
     long communityID;
+    long userId;
     ChannelViewModel channelViewModel;
     RoleViewModel roleViewModel;
     UserViewModel userViewModel;
+    MessageViewModel messageViewModel;
 
     Bundle communityBundle;
 
@@ -100,12 +118,14 @@ public class CommunityActivity extends AppCompatActivity implements
         channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
         roleViewModel = new ViewModelProvider(this).get(RoleViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
 
 //        Bundle storing community data
         communityBundle = new Bundle();
 //        Load token from SharedPreferences
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
         token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
+        userId = sharedPreferences.getLong("userId", 0);
 
 //        Load Community id and name from intent
         Intent intent = getIntent();
@@ -382,6 +402,19 @@ public class CommunityActivity extends AppCompatActivity implements
     @Override
     public void onItemClickListener(Role role) {
         final Dialog userProfileDialog = new Dialog(this);
+
+        StringBuilder permissions = new StringBuilder();
+
+        // Iterujemy przez bity liczby permissionsValue
+        for (int i = 0; i < PERMISSIONS.length; i++) {
+            if ((role.getPermissionOverwrites() & (1L << i)) != 0) {  // Sprawdzamy, czy bit jest ustawiony
+                if (permissions.length() > 0) {
+                    permissions.append("\n");
+                }
+                permissions.append(PERMISSIONS[i]);
+            }
+        }
+        if (String.valueOf(permissions).isEmpty()) permissions.append("BRAK");
         userProfileDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         userProfileDialog.setContentView(R.layout.details_dialog);
 
@@ -389,7 +422,7 @@ public class CommunityActivity extends AppCompatActivity implements
         TextView text = userProfileDialog.findViewById(R.id.dialogText);
 
         title.setText(role.getName());
-        text.setText(String.valueOf(role.getPermissionOverwrites()));
+        text.setText(permissions);
 
         userProfileDialog.show();
     }
@@ -400,7 +433,18 @@ public class CommunityActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemLongClickListener(Role role) {
-//        TODO tutaj dialog z edycja roli
+        TechFragment techFragment = new TechFragment();
+        Bundle args = new Bundle();
+        args.putLong("communityID", communityID);
+        args.putLong("permissions", role.getPermissionOverwrites());
+        args.putLong("roleId", role.getRoleId());
+        args.putString("roleName", role.getName());
+        techFragment.setArguments(args);
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, techFragment)
+                .addToBackStack("uniqueSettingsFrag")
+                .commit();
     }
 
     /**
@@ -478,17 +522,61 @@ public class CommunityActivity extends AppCompatActivity implements
 
 
     @Override
-    public void loadMessagesFromServer() {
+    public void loadMessagesFromServer(long channelId, Long lastMessageId) {
+        Call<List<Message>> callFetchMessages = channelService.getMessagesForChannel(
+                "Bearer "+token.getAccessToken(),
+                channelId,
+                10,
+                lastMessageId
+        );
+        callFetchMessages.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    Log.d("getMessages", "W CHUJ" + response.body().size());
+                }
+                else {
+                    Log.d("CommunityActivity", "loadMessagesFromServer() - Błąd pobierania wiadomości " + response.code() + " " + response.message());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+                Log.d("CommunityActivity", "loadMessagesFromServer() - Błąd wykonywania usługi " + Arrays.toString(t.getStackTrace()));
+            }
+        });
     }
 
     @Override
-    public void loadOlderMessages() {
+    public void sendMessage(String text, long channelId) {
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"),
+                        "\"message\": {\n" +
+                        "  \"text\": \" "+ text +" \",\n" +
+                        "  \"communityId\": " + communityID + "\n" +
+                        "}"
+        );
+        Call<Message> callSendMessage = channelService.createMessage(
+                "Bearer " + token.getAccessToken(),
+                channelId,
+                body
+        );
+        callSendMessage.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    Log.d("sendMessage", "DZIAŁA");
+                    messageViewModel.addMessage(response.body());
+                }
+                else {
+                    Log.d("CommunityActivity", "sendMessage() - Błąd wysyłania wiadomości " + response.code() + " " + response.message());
+                }
+            }
 
-    }
-
-    @Override
-    public void sendMessage(Message message) {
-
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Log.d("CommunityActivity", "sendMessage() - Błąd wykonywania usługi " + Arrays.toString(t.getStackTrace()));
+            }
+        });
     }
 }

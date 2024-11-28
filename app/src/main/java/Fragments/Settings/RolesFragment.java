@@ -78,7 +78,6 @@ public class RolesFragment extends Fragment {
         Button createRoleButton = view.findViewById(R.id.createRoleButton);
         createRoleButton.setOnClickListener(v -> {
             TechFragment techFragment = new TechFragment();
-
             Bundle args = new Bundle();
             args.putLong("communityID", communityId);
             techFragment.setArguments(args);

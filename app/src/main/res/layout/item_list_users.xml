@@ -29,18 +29,6 @@
                 android:text="NAZWA UŻYTKOWNIKA"
                 android:textSize="17sp"
                 />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/deleteIndicator"
-                android:gravity="end"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                app:icon="@drawable/outline_arrow_forward_24"
-                android:text="@string/delete"
-                android:textColor="@color/red"
-                android:background="@color/transparent"
-                android:enabled="false"
-                />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

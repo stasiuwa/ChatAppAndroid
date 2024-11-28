@@ -85,9 +85,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
             super(itemView);
             roleNameTextView = itemView.findViewById(R.id.username);
             icon = itemView.findViewById(R.id.channelIcon);
-            delete = itemView.findViewById(R.id.deleteIndicator);
             icon.setVisibility(View.GONE);
-            delete.setVisibility(View.VISIBLE);
+
 
             itemView.setTag(this);
             itemView.setOnClickListener(this);

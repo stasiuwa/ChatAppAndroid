@@ -43,12 +43,13 @@ public interface ChannelService {
             @Header("Authorization") String token,
             @Path("channelId") long channelId,
             @Query("limit") int limit,
-            @Query("before") long lastMessageId
+            @Query("before") Long lastMessageId
     );
     @POST("/api/channels/{channelId}/messages")
     Call<Message> createMessage(
             @Header("Authorization") String token,
-            @Path("channelId") long channelId
+            @Path("channelId") long channelId,
+            @Body RequestBody requestBody
     );
     @DELETE("/api/channels/{channelId}/messages/{messageId}")
     Call<Void> deleteMessage(
