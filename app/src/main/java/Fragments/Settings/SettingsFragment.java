@@ -32,7 +32,6 @@ public class SettingsFragment extends Fragment {
         if (isExtended) Log.d("EXTENDED SETTINGS", "YES");
 
         LinearLayout profileSettings = view.findViewById(R.id.settingsUserProfile);
-        LinearLayout appSettings = view.findViewById(R.id.settingsApplication);
         LinearLayout rolesSettings = view.findViewById(R.id.settingsRoles);
         LinearLayout channelsSettings = view.findViewById(R.id.settingsChannels);
 
@@ -68,14 +67,6 @@ public class SettingsFragment extends Fragment {
         profileSettings.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new ProfileFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-//        Setup onClickListener to replace current fragment with TechFragment
-        appSettings.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, new TechFragment())
                     .addToBackStack(null)
                     .commit();
         });

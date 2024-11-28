@@ -35,6 +35,7 @@ import Data.DTO.ChannelResponseDTO;
 import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.MemberDTO;
+import Data.DTO.RoleResponseDTO;
 import Data.Models.Role;
 import Data.Models.Token;
 import Data.Models.Channel;
@@ -62,6 +63,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+// TODO po dodaniu roli nie pokazuje jej dopóki nie bedzie getFullCommunityInfo
+// TODO po dodaniu kanału nie zwieksza ich ilosci na WelcomeFragment
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
         MessageAdapter.OnItemClickListener,
@@ -408,11 +411,47 @@ public class CommunityActivity extends AppCompatActivity implements
      * Send POST request to server API to create new role
      * @param name - role name
      * @param permission - role set of permissions
-     * @param members - users with this role
+     * @param members - users with this role(for now is always empty)
      */
     @Override
     public void addRole(String name, long permission, List<Long> members) {
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"),
+                "{\n" +
+                        "  \"name\": \"" + name + "\",\n" +
+                        "  \"permissionOverwrites\": " + permission + ",\n" +
+                        "  \"members\": []\n" +
+                        "}"
+        );
 
+        Call<RoleResponseDTO> callRoleCreate = communityService.createRole(
+                "Bearer "+token.getAccessToken(),
+                communityID,
+                body
+        );
+        callRoleCreate.enqueue(new Callback<RoleResponseDTO>() {
+            @Override
+            public void onResponse(Call<RoleResponseDTO> call, Response<RoleResponseDTO> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    Role role = new Role(
+                            response.body().getRole().getRoleId(),
+                            response.body().getRole().getName(),
+                            communityID,
+                            response.body().getRole().getPermissionOverwrites());
+                    roleViewModel.addRole(role);
+//                    Jakies obejscie, nie aktualizuje adaptera nie wiem czemu
+//                    getCommunityFullInfo();
+                }
+                else {
+                    Log.d("CommunityActivity", "addRole() - Błąd dodawania roli " + response.code() + " " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RoleResponseDTO> call, Throwable t) {
+                Log.d("CommunityActivity", "addRole() - Błąd wykownywania usługi " + Arrays.toString(t.getStackTrace()));
+            }
+        });
     }
 
     /**

@@ -13,7 +13,7 @@ public class env {
      * Serwis Keycloak
      * 1. http://localhost:8082/admin/master/console/#/szampchat/realm-settings - pole Frontend URL
      */
-    private final static String IP = "192.168.1.15";
+    private final static String IP = "192.168.1.21";
     public static String api = "http://" + IP + ":8081";
     public static String keycloakUrl = "http://" + IP + ":8082";
     public static String keycloakClientId = "mobile2";

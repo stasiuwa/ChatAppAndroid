@@ -25,7 +25,7 @@ public class Role {
     @JsonProperty("name")
     public String name;
     @ColumnInfo(name = "Community ID")
-    @JsonProperty("communityId")
+    @JsonProperty("community")
     public long communityId;
     @ColumnInfo(name = "Permission Overwrites")
     @JsonProperty("permissionOverwrites")
