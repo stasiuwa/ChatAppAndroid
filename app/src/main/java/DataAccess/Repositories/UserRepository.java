@@ -23,7 +23,6 @@ public class UserRepository {
         dao = communityDB.userDAO();
         allUsers = dao.getAllUsers();
     }
-
     public LiveData<List<User>> getUsersForCommunity(long communityId){
         return dao.getUsersForCommunity(communityId);
     }

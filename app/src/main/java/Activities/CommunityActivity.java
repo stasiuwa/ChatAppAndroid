@@ -15,6 +15,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.szampchat.R;
@@ -22,6 +24,7 @@ import com.szampchat.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Adapters.ChannelAdapter;
 import Adapters.MessageAdapter;
@@ -117,6 +120,10 @@ public class CommunityActivity extends AppCompatActivity implements
         communityBundle = new Bundle();
 //        Load token from SharedPreferences
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("communityId", communityID);
+        editor.apply();
+
         token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
         userId = sharedPreferences.getLong("userId", 0);
 
@@ -243,6 +250,8 @@ public class CommunityActivity extends AppCompatActivity implements
                     for (MemberDTO memberDTO : response.body().getMembers()){
                         User user = userViewModel.mapUser(memberDTO);
                         user.addCommunity(communityID);
+                        user.setRoles(new ArrayList<>(memberDTO.getRoles()));
+
                         userViewModel.addUser(user);
                     }
 
@@ -370,23 +379,51 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
     /**
-     * Display dialog with details about specific user
+     * Add user to Role's assignment in create Role form
      * @param user - clicked user from RecyclerView
      */
     @Override
     public void onItemClickListener(User user) {
+
+    }
+    /**
+     * Display dialog with details about specific user
+     * @param user - long clicked user from RecyclerView
+     */
+    @Override
+    public void onItemLongClickListener(User user) {
         final Dialog userProfileDialog = new Dialog(this);
         userProfileDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         userProfileDialog.setContentView(R.layout.user_profile_dialog);
 
         TextView username = userProfileDialog.findViewById(R.id.userDialogUsername);
         TextView description = userProfileDialog.findViewById(R.id.userDialogDescription);
-        TextView roles = userProfileDialog.findViewById(R.id.userDialogRoles);
+        TextView userRoles = userProfileDialog.findViewById(R.id.userDialogRoles);
         ImageView picture = userProfileDialog.findViewById(R.id.userDialogPicture);
 
+        roleViewModel.getRolesForCommunity(communityID).observe(this, rolesList -> {
+            if (!rolesList.isEmpty()){
+                List<Role> roles = rolesList.stream()
+                        .filter(role -> user.getRoles().contains(role.getRoleId()))
+                        .collect(Collectors.toList());
+
+                StringBuilder roleNames = new StringBuilder();
+
+                for (Role r : roles) {
+                    if (roleNames.length() > 0) {
+                        roleNames.append(", ");
+                    }
+                    roleNames.append(r.getName());
+                }
+
+                String rolesText = roleNames.length() > 0 ? roleNames.toString() : "NIKT";
+
+                userRoles.setText(rolesText);
+            }
+        });
         username.setText(user.getUsername());
         description.setText(user.getDescription());
-        roles.setText("NIKT");
+
 
         userProfileDialog.show();
     }
@@ -397,7 +434,7 @@ public class CommunityActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemClickListener(Role role) {
-        final Dialog userProfileDialog = new Dialog(this);
+        final Dialog roleDetailsDialog = new Dialog(this);
 
         StringBuilder permissions = new StringBuilder();
 
@@ -411,16 +448,28 @@ public class CommunityActivity extends AppCompatActivity implements
             }
         }
         if (String.valueOf(permissions).isEmpty()) permissions.append("BRAK");
-        userProfileDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
-        userProfileDialog.setContentView(R.layout.details_dialog);
+        roleDetailsDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        roleDetailsDialog.setContentView(R.layout.details_dialog);
 
-        TextView title = userProfileDialog.findViewById(R.id.dialogTitle);
-        TextView text = userProfileDialog.findViewById(R.id.dialogText);
+        TextView title = roleDetailsDialog.findViewById(R.id.dialogTitle);
+        TextView text = roleDetailsDialog.findViewById(R.id.dialogText);
+
+        UserAdapter userAdapter = new UserAdapter(this, false);
+
+        userViewModel.getAllUsers().observe(this, users -> {
+            if (users != null){
+                userAdapter.setUserList(users.stream().filter(x->x.roles.contains(role.getRoleId())).collect(Collectors.toList()));
+            }
+        });
+
+        RecyclerView recyclerView = roleDetailsDialog.findViewById(R.id.roleUsersRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(userAdapter);
 
         title.setText(role.getName());
         text.setText(permissions);
 
-        userProfileDialog.show();
+        roleDetailsDialog.show();
     }
 
     /**
@@ -456,7 +505,7 @@ public class CommunityActivity extends AppCompatActivity implements
                 "{\n" +
                         "  \"name\": \"" + name + "\",\n" +
                         "  \"permissionOverwrites\": " + permission + ",\n" +
-                        "  \"members\": []\n" +
+                        "  \"members\": " + members.toString() + "\n" +
                         "}"
         );
 

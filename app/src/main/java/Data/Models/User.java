@@ -32,6 +32,8 @@ public class User {
     @TypeConverters(Data.Models.TypeConverters.class)
     public List<Long> communitiesList;
 
+
+
     @ColumnInfo(name = "Username")
     @JsonProperty("username")
     public String username;
@@ -44,14 +46,19 @@ public class User {
     @JsonProperty("description")
     public String description;
 
-    @TypeConverters(Data.Models.TypeConverters.class)
+    @Setter
     @Nullable
-    @ColumnInfo(name = "Roles")
-    @JsonProperty("roles")
+    @ColumnInfo(name = "Roles List")
+    @TypeConverters(Data.Models.TypeConverters.class)
     public List<Long> roles;
 
     public void addCommunity(long communityId){
         if (getCommunitiesList()==null) setCommunitiesList(new ArrayList<>());
         getCommunitiesList().add(communityId);
+    }
+
+    public void addRole(long roleId){
+        if (getRoles()==null) setRoles(new ArrayList<>());
+        getRoles().add(roleId);
     }
 }

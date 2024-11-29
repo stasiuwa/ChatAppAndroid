@@ -43,7 +43,7 @@ public class UsersFragment extends Fragment {
             throw new NullPointerException("communityID from fragment's arguments is null");
         }
 
-        userAdapter = new UserAdapter(requireActivity());
+        userAdapter = new UserAdapter(requireActivity(), false);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         userViewModel.getAllUsers().observe(getViewLifecycleOwner(), users -> {

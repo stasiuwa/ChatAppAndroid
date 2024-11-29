@@ -36,9 +36,9 @@ public class UserViewModel extends AndroidViewModel {
         );
     }
 
-    public LiveData<List<User>> getUsersForCommunity(long communityId){
-        return userRepository.getUsersForCommunity(communityId);
-    }
+//    public LiveData<List<User>> getUsersForCommunity(long communityId){
+//        return userRepository.getUsersForCommunity(communityId);
+//    }
 
     public void addUser(User user) {
         userRepository.addUser(user);

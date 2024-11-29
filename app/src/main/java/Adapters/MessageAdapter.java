@@ -1,21 +1,31 @@
 package Adapters;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import Data.Models.Message;
+import Data.Models.User;
+import DataAccess.ViewModels.UserViewModel;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -24,6 +34,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     Activity activity;
     List<Message> messagesList;
+
     long userId;
 
     private LayoutInflater layoutInflater;
@@ -33,8 +44,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.activity = activity;
         this.layoutInflater = LayoutInflater.from(activity);
         this.messagesList = null;
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("app_prefs", MODE_PRIVATE);
         this.userId = sharedPreferences.getLong("userId", 0);
+
         try {
             onItemClickListener = (OnItemClickListener) activity;
         } catch (ClassCastException e) {
@@ -135,6 +148,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void bind(Message message) {
             messageText.setText(message.getText());
 //            messageTimestamp.setText(message.getUpdatedAt().toString());
+            // Domyślna wartość, jeśli użytkownik nie istnieje
             messageUser.setText(String.valueOf(message.getUserId()));
         }
     }

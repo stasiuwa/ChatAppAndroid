@@ -1,6 +1,9 @@
 package Fragments.Community;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,10 +24,15 @@ import android.widget.TextView;
 
 import com.szampchat.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Adapters.MessageAdapter;
 import Config.env;
 import Data.Models.Message;
+import Data.Models.User;
 import DataAccess.ViewModels.MessageViewModel;
+import DataAccess.ViewModels.UserViewModel;
 import Services.ChannelService;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -34,6 +42,7 @@ public class TextChatFragment extends Fragment{
 
     MessageAdapter messageAdapter;
     MessageViewModel messageViewModel;
+    UserViewModel userViewModel;
 
     private long lastMessageId;
 
@@ -67,6 +76,7 @@ public class TextChatFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_text_chat, container, false);
 
+
 //        Receive chat data from bundle
         Bundle receivedBundle = getArguments();
         if (receivedBundle != null){
@@ -84,6 +94,7 @@ public class TextChatFragment extends Fragment{
 
 //        Displaying messages
         messageViewModel = new ViewModelProvider(requireActivity()).get(MessageViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         messageAdapter = new MessageAdapter(requireActivity());
         RecyclerView recyclerView = view.findViewById(R.id.messagesRecyclerView);

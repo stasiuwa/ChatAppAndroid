@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_margin="10dp"
-    android:background="@color/colorBackgroundNight"
-    >
+    android:background="@color/colorBackgroundNight">
     <TextView
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
@@ -25,4 +25,21 @@
         android:textSize="15sp"
         android:layout_marginBottom="10dp"
         />
+    <com.google.android.material.button.MaterialButton
+        android:visibility="gone"
+        android:id="@+id/setRoleUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setRoleUsers"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/roleUsersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_list_users"
+            />
+    </ScrollView>
 </LinearLayout>

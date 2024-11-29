@@ -12,6 +12,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import Data.Models.User;
+import lombok.Setter;
 
 @Dao
 public interface UserDAO {
@@ -24,6 +25,10 @@ public interface UserDAO {
     @Transaction
     @Query("SELECT * FROM users")
     LiveData<List<User>> getAllUsers();
+
+    @Transaction
+    @Query("SELECT Username FROM users WHERE userID = :userId")
+    String getUserName(long userId);
 
     @Transaction
     @Query("SELECT * FROM users WHERE `Communities List` LIKE :communityId")

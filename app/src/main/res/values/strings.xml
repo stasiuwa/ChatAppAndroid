@@ -45,4 +45,5 @@
     <string name="voice">GŁOSOWE:</string>
     <string name="roleNameInput">Podaj nazwę roli</string>
     <string name="createRole">TWORZENIE ROLI</string>
+    <string name="setRoleUsers">Przydziel użytkowników</string>
 </resources>

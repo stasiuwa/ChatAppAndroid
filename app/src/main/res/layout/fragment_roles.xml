@@ -13,12 +13,16 @@
         android:text="@string/create"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_margin="20dp"
-        android:id="@+id/roleRecyclerView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/item_list_users"
-        />
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="20dp"
+            android:id="@+id/roleRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_list_users"
+            />
+    </ScrollView>
 
 </LinearLayout>
