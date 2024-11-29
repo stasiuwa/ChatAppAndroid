@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Data.DTO.MemberDTO;
@@ -16,21 +17,34 @@ public class UserViewModel extends AndroidViewModel {
     private final UserRepository userRepository;
     @Getter
     private final LiveData<List<User>> allUsers;
+    @Getter
+    private LiveData<List<User>> communityUsers;
 
     public UserViewModel(Application application) {
         super(application);
         this.userRepository = new UserRepository(application);
         this.allUsers = userRepository.getAllUsers();
     }
-    public void getUsersForCommunity(long communityId){
+    public User mapUser(MemberDTO memberDTO){
+        return new User(
+                memberDTO.getUser().getUserId(),
+                new ArrayList<>(),
+                memberDTO.getUser().getUsername(),
+                memberDTO.getUser().getImageUrl(),
+                memberDTO.getUser().getDescription(),
+                memberDTO.getRoles()
+        );
+    }
 
+    public LiveData<List<User>> getUsersForCommunity(long communityId){
+        return userRepository.getUsersForCommunity(communityId);
     }
 
     public void addUser(User user) {
         userRepository.addUser(user);
     }
     public void addUser(MemberDTO memberDTO) {
-        userRepository.addUser(userRepository.mapUser(memberDTO));
+        userRepository.addUser(mapUser(memberDTO));
     }
     public LiveData<User> getUserById(long userId){
         return userRepository.getUserById(userId);

@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 
 import com.szampchat.R;
 
+import java.util.stream.Collectors;
+
 import Adapters.UserAdapter;
 import DataAccess.ViewModels.UserViewModel;
 
@@ -46,7 +48,7 @@ public class UsersFragment extends Fragment {
 
         userViewModel.getAllUsers().observe(getViewLifecycleOwner(), users -> {
             if (users != null){
-                userAdapter.setUserList(users);
+                userAdapter.setUserList(users.stream().filter(x->x.communitiesList.contains(communityId)).collect(Collectors.toList()));
             }
         });
 

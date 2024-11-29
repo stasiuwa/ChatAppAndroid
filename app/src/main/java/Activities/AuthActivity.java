@@ -132,7 +132,6 @@ public class AuthActivity extends AppCompatActivity
 
     @Override
     public void registerUser(String username, String email, String password, String passwordCheck) {
-//        dodac POST na /api/users z username
         token = new Token();
 
         Call<Token> tokenCall = keycloakService.getAccessToken(
@@ -195,7 +194,6 @@ public class AuthActivity extends AppCompatActivity
         });
     }
 
-//    TODO przerobic aby nie przechowywac klucz wartosć tylko obiekt typu Token
     /**
      * Saving token to SharedPreferences
      * @param context - interface where to save token

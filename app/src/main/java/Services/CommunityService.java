@@ -5,7 +5,6 @@ import java.util.List;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.RoleResponseDTO;
 import Data.Models.Community;
-import Data.Models.Role;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

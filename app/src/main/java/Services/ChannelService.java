@@ -6,15 +6,18 @@ import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
 import Data.DTO.RoleResponseDTO;
 import Data.Models.Message;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -39,17 +42,25 @@ public interface ChannelService {
             @Path("channelId") long channelId
     );
     @GET("/api/channels/{channelId}/messages")
+    Call<List<Message>> getFirstMessagesForChannel(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId,
+            @Query("limit") int limit
+    );
+    @GET("/api/channels/{channelId}/messages")
     Call<List<Message>> getMessagesForChannel(
             @Header("Authorization") String token,
             @Path("channelId") long channelId,
             @Query("limit") int limit,
             @Query("before") Long lastMessageId
     );
+    @Multipart
     @POST("/api/channels/{channelId}/messages")
     Call<Message> createMessage(
             @Header("Authorization") String token,
             @Path("channelId") long channelId,
-            @Body RequestBody requestBody
+            @Part("message") RequestBody requestBody
+//            @Part("file") MultipartBody.Part file
     );
     @DELETE("/api/channels/{channelId}/messages/{messageId}")
     Call<Void> deleteMessage(

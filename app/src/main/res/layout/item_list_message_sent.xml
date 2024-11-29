@@ -8,14 +8,13 @@
 
     <TextView
         android:id="@+id/messageText"
-        android:layout_width="230dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/messageUserIcon"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
+        android:padding="10dp"
         android:gravity="end"
-        android:text="Jeden chłopiec urodził się z fiutkiem średnim, a drugi z zajebistym. Ogromnym! Spytacie: który jest szczęśliwy? Żaden - jeden jeździ na wózku, a drugi ma padaczkę. Pytasz Sergio czy jest super... No pewnie, że super. Zdrowie!"
+        android:background="@color/colorBackgroundNight"
         />
     <TextView
         android:id="@+id/messageUserIcon"
@@ -34,7 +33,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="11sp"
         android:textStyle="italic"
-        android:text="21:37 20.04.2005"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

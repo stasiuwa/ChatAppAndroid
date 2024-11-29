@@ -111,12 +111,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public SentMessageHolder(@NonNull View itemView) {
             super(itemView);
             messageText = (TextView) itemView.findViewById(R.id.messageText);
-            messageTimestamp = (TextView) itemView.findViewById(R.id.messageTimestamp);
+//            messageTimestamp = (TextView) itemView.findViewById(R.id.messageTimestamp);
             itemView.setTag(this);
         }
         public void bind(Message message) {
             messageText.setText(message.getText());
-            messageTimestamp.setText(message.getUpdatedAt().toString());
+//            messageTimestamp.setText(message.getUpdatedAt().toString());
         }
     }
 
@@ -134,7 +134,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         public void bind(Message message) {
             messageText.setText(message.getText());
-            messageTimestamp.setText(message.getUpdatedAt().toString());
+//            messageTimestamp.setText(message.getUpdatedAt().toString());
             messageUser.setText(String.valueOf(message.getUserId()));
         }
     }

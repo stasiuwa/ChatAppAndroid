@@ -10,7 +10,10 @@ public interface KeycloakService {
 
     String realm = "szampchat";
 //    TODO ogarnac rejestracje
-//    @POST("/realms/" + realm + "/login-actions/registration")
+    @POST("/realms/" + realm + "/clients-registrations/openid-connect")
+    Call<Token> registerUser(
+
+    );
 
     @POST("/realms/" + realm + "/protocol/openid-connect/token")
     @FormUrlEncoded

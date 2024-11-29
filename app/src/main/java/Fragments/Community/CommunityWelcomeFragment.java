@@ -59,10 +59,11 @@ public class CommunityWelcomeFragment extends Fragment {
 
         // Obserwowanie LiveData w ViewModelach
         userViewModel.getAllUsers().observe(getViewLifecycleOwner(), users -> {
-            usersNumber.setText(String.valueOf(users.size()));
+            Long usersCount = users.stream().filter(x->x.communitiesList.contains(communityId)).count();
+            usersNumber.setText(String.valueOf(usersCount));
         });
 
-        roleViewModel.getAllRoles().observe(getViewLifecycleOwner(), roles -> {
+        roleViewModel.getRolesForCommunity(communityId).observe(getViewLifecycleOwner(), roles -> {
             rolesNumber.setText(String.valueOf(roles.size()));
         });
 

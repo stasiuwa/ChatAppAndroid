@@ -26,7 +26,7 @@ public interface UserDAO {
     LiveData<List<User>> getAllUsers();
 
     @Transaction
-    @Query("SELECT * FROM users WHERE")
+    @Query("SELECT * FROM users WHERE `Communities List` LIKE :communityId")
     LiveData<List<User>> getUsersForCommunity(long communityId);
 
     @Transaction

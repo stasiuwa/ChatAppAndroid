@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Data.DTO.MemberDTO;
@@ -22,14 +23,9 @@ public class UserRepository {
         dao = communityDB.userDAO();
         allUsers = dao.getAllUsers();
     }
-    public User mapUser(MemberDTO memberDTO){
-        return new User(
-                memberDTO.getUser().getUserId(),
-                memberDTO.getUser().getUsername(),
-                memberDTO.getUser().getImageUrl(),
-                memberDTO.getUser().getDescription(),
-                memberDTO.getRoles()
-        );
+
+    public LiveData<List<User>> getUsersForCommunity(long communityId){
+        return dao.getUsersForCommunity(communityId);
     }
 
     public void addUser(User user){

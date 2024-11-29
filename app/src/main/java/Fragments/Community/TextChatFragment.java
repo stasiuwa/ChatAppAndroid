@@ -70,8 +70,8 @@ public class TextChatFragment extends Fragment{
 //        Receive chat data from bundle
         Bundle receivedBundle = getArguments();
         if (receivedBundle != null){
-            if (receivedBundle.containsKey("channelID")){
-                chatID = receivedBundle.getLong("channelID");
+            if (receivedBundle.containsKey("channelId")){
+                chatID = receivedBundle.getLong("channelId");
             }
             if (receivedBundle.containsKey("channelName")){
                 chatName = receivedBundle.getString("channelName");
@@ -103,11 +103,17 @@ public class TextChatFragment extends Fragment{
 
         messageListener.loadMessagesFromServer(chatID, null);
 
+        messageViewModel.getAllMessagesFromChannel(chatID).observe(getViewLifecycleOwner(), messages -> {
+            if (messages != null){
+                messageAdapter.setMessagesList(messages);
+            }
+        });
+
 //        Sending messagess
         EditText messageText = view.findViewById(R.id.inputText);
         Button sendMessageButton = view.findViewById(R.id.messageSendButton);
         sendMessageButton.setOnClickListener(v -> {
-            messageListener.sendMessage("TEST", chatID);
+            messageListener.sendMessage(messageText.getText().toString(), chatID);
 //            Clear messageText value and focus
             messageText.getText().clear();
             messageText.clearFocus();

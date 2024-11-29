@@ -14,13 +14,12 @@
         />
     <TextView
         android:id="@+id/messageText"
-        android:layout_width="230dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/messageUserIcon"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="5dp"
-        android:text="Jeden chłopiec urodził się z fiutkiem średnim, a drugi z zajebistym. Ogromnym! Spytacie: który jest szczęśliwy? Żaden - jeden jeździ na wózku, a drugi ma padaczkę. Pytasz Sergio czy jest super... No pewnie, że super. Zdrowie!"
+        android:padding="10dp"
+        android:background="@color/colorBackgroundNight"
         />
     <TextView
         android:id="@+id/messageUser"
@@ -31,7 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="12sp"
         android:textStyle="bold"
-        android:text="Caster Gandolfo"
         />
     <TextView
         android:id="@+id/messageTimestamp"
@@ -42,7 +40,6 @@
         app:layout_constraintStart_toEndOf="@id/messageUser"
         android:textSize="11sp"
         android:textStyle="italic"
-        android:text="21:37 20.04.2005"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,14 +17,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.szampchat.R;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import Adapters.ChannelAdapter;
@@ -38,8 +34,6 @@ import Data.DTO.ChannelType;
 import Data.DTO.FullCommunityDTO;
 import Data.DTO.MemberDTO;
 import Data.DTO.RoleResponseDTO;
-import Data.Models.MessageAttachment;
-import Data.Models.MessageReaction;
 import Data.Models.Role;
 import Data.Models.Token;
 import Data.Models.Channel;
@@ -55,7 +49,6 @@ import Fragments.Community.TextChatFragment;
 import Fragments.Community.UsersFragment;
 import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.ChannelsSettingsFragment;
-import Fragments.Settings.RolesFragment;
 import Fragments.Settings.SettingsFragment;
 import Fragments.Settings.TechFragment;
 import Services.ChannelService;
@@ -248,7 +241,9 @@ public class CommunityActivity extends AppCompatActivity implements
                         roleViewModel.addRole(role);
                     }
                     for (MemberDTO memberDTO : response.body().getMembers()){
-                        userViewModel.addUser(memberDTO);
+                        User user = userViewModel.mapUser(memberDTO);
+                        user.addCommunity(communityID);
+                        userViewModel.addUser(user);
                     }
 
                     setupWelcomeFragment();
@@ -286,6 +281,7 @@ public class CommunityActivity extends AppCompatActivity implements
             public void onResponse(Call<ChannelDTO> call, Response<ChannelDTO> response) {
                 if (response.isSuccessful() && response.body()!=null){
                     channelViewModel.addChannel(new ChannelResponseDTO(response.body(), (type.equals(ChannelType.VOICE_CHANNEL.name())) ? new ArrayList<>() : null, new ArrayList<>()));
+                    Toast.makeText(getApplicationContext(), "Dodano kanał " + name, Toast.LENGTH_SHORT).show();
                 }
                 else Log.d("CommunityActivity - addChannel", "Błąd wykonywania usługi: " + response.code() + " " +response.message());
             }
@@ -523,17 +519,16 @@ public class CommunityActivity extends AppCompatActivity implements
 
     @Override
     public void loadMessagesFromServer(long channelId, Long lastMessageId) {
-        Call<List<Message>> callFetchMessages = channelService.getMessagesForChannel(
+        Call<List<Message>> callFetchMessages = channelService.getFirstMessagesForChannel(
                 "Bearer "+token.getAccessToken(),
                 channelId,
-                10,
-                lastMessageId
+                10
         );
         callFetchMessages.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    Log.d("getMessages", "W CHUJ" + response.body().size());
+                    response.body().forEach(message -> messageViewModel.addMessage(message));
                 }
                 else {
                     Log.d("CommunityActivity", "loadMessagesFromServer() - Błąd pobierania wiadomości " + response.code() + " " + response.message());
@@ -551,7 +546,7 @@ public class CommunityActivity extends AppCompatActivity implements
     public void sendMessage(String text, long channelId) {
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"),
-                        "\"message\": {\n" +
+                        "{\n" +
                         "  \"text\": \" "+ text +" \",\n" +
                         "  \"communityId\": " + communityID + "\n" +
                         "}"
@@ -565,7 +560,6 @@ public class CommunityActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    Log.d("sendMessage", "DZIAŁA");
                     messageViewModel.addMessage(response.body());
                 }
                 else {
