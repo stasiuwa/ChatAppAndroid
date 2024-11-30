@@ -1,5 +1,6 @@
 package Activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,7 +67,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class CommunityActivity extends AppCompatActivity implements
         ChannelAdapter.OnItemClickListener,
-        MessageAdapter.OnItemClickListener,
+        MessageAdapter.MessageAdapterListener,
         UserAdapter.OnItemClickListener,
         RoleAdapter.OnItemClickListener,
 
@@ -378,8 +379,65 @@ public class CommunityActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    public void onItemLongClickListener(Message message) {
+        CharSequence[] options = {"Reakcja", "Edytuj", "Usuń"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wybierz opcję")
+                .setItems(options, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            CharSequence[] emojis = new CharSequence[]{"😊", "😂", "❤️", "😢", "👍", "👎"};
+                            builder
+                                    .setTitle("Wybierz emotkę")
+                                    .setItems(emojis, (dialog2, which2) -> {
+                                        String emoji = (String) emojis[which];
+                                        RequestBody body = RequestBody.create(
+                                                MediaType.parse("application/json"),
+                                                "{\n  \"emoji\": \"" + emoji +  "\"\n}"
+                                        );
+
+                                        // Wywołanie API Retrofit
+                                        Call<Void> callCreateReaction = channelService.createReaction(
+                                                "Bearer "+token.getAccessToken(),
+                                                message.getChannelId(),
+                                                message.getId(),
+                                                body
+                                        );
+
+                                        callCreateReaction.enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                                if (response.isSuccessful()) {
+                                                    Log.d("CommunityActivity", "createReaction - wysłano");
+                                                } else {
+                                                    Log.d("CommunityActivity", "Błąd tworzenia reakcji " + response.code() + " " + response.message());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Void> call, Throwable t) {
+                                                Log.d("CommunityActivity", "Błąd wykonywania usługi " + Arrays.toString(t.getStackTrace()));
+                                            }
+                                        });
+                                    })
+                                    .create()
+                                    .show();
+                            break;
+                        case 1:
+                            // Edytuj wiadomość
+                            break;
+                        case 2:
+                            // Usuń wiadomość
+                            break;
+                    }
+                })
+                .create()
+                .show();
+    }
     /**
-     * Add user to Role's assignment in create Role form
+     * Add user to Role's assignment ONLY in create Role form
      * @param user - clicked user from RecyclerView
      */
     @Override

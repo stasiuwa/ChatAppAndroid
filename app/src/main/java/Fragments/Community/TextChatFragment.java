@@ -2,6 +2,7 @@ package Fragments.Community;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,6 +40,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class TextChatFragment extends Fragment{
     MessageListener messageListener;
+
+    Retrofit retrofit;
+    ChannelService channelService;
 
     MessageAdapter messageAdapter;
     MessageViewModel messageViewModel;
@@ -91,6 +95,12 @@ public class TextChatFragment extends Fragment{
         }
         TextView chatName = view.findViewById(R.id.textChatName);
         chatName.setText(getArguments().getString("channelName"));
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(env.api)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+        channelService = retrofit.create(ChannelService.class);
 
 //        Displaying messages
         messageViewModel = new ViewModelProvider(requireActivity()).get(MessageViewModel.class);

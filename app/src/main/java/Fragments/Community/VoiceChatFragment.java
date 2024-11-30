@@ -104,9 +104,7 @@ public class VoiceChatFragment extends Fragment {
 
             if (connected){
                 if (!liveKitToken.matches("")){
-//                    connectToLiveKit(liveKitToken);
-                    Toast.makeText(getContext(), liveKitToken, Toast.LENGTH_SHORT).show();
-
+                    connectToLiveKit(liveKitToken);
                     connectButton.setText(R.string.disconnect);
                     connectButton.setTextColor(getResources().getColor(R.color.red));
                 } else {
@@ -125,7 +123,7 @@ public class VoiceChatFragment extends Fragment {
     }
 
     private void connectToLiveKit(String token){
-
+        Toast.makeText(getContext(), liveKitToken, Toast.LENGTH_SHORT).show();
     }
 
     @Override

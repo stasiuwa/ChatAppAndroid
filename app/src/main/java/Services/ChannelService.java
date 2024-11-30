@@ -3,11 +3,8 @@ package Services;
 import java.util.List;
 
 import Data.DTO.ChannelDTO;
-import Data.DTO.ChannelResponseDTO;
 import Data.DTO.LiveKitTokenResponse;
-import Data.DTO.RoleResponseDTO;
 import Data.Models.Message;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,7 +25,7 @@ public interface ChannelService {
     Call<ChannelDTO> createChannel(
             @Header("Authorization") String token,
             @Path("communityId") long communityId,
-            @Body RequestBody requestBody
+            @Body RequestBody channel
             );
 
     @PUT("/api/channels/{channelId}")
@@ -60,8 +57,25 @@ public interface ChannelService {
     Call<Message> createMessage(
             @Header("Authorization") String token,
             @Path("channelId") long channelId,
-            @Part("message") RequestBody requestBody
+            @Part("message") RequestBody message
 //            @Part("file") MultipartBody.Part file
+    );
+
+    @POST("/api/channels/{channelId}/messages/{messageId}/reactions")
+    Call<Void> createReaction(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId,
+            @Path("messageId") long messageId,
+            @Body RequestBody emoji
+    );
+
+    @Multipart
+    @DELETE("/api/channels/{channelId}/messages/{messageId}/reactions")
+    Call<Void> deleteReaction(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId,
+            @Path("messageId") long messageId,
+            @Part("emoji") RequestBody emoji
     );
 
     @GET("/api/channels/{channelId}/voice/join")

@@ -3,29 +3,20 @@ package Adapters;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.szampchat.R;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import Data.Models.Message;
-import Data.Models.User;
-import DataAccess.ViewModels.UserViewModel;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -38,7 +29,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     long userId;
 
     private LayoutInflater layoutInflater;
-    private OnItemClickListener onItemClickListener;
+    private MessageAdapterListener messageAdapterListener;
 
     public MessageAdapter(Activity activity) {
         this.activity = activity;
@@ -49,13 +40,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.userId = sharedPreferences.getLong("userId", 0);
 
         try {
-            onItemClickListener = (OnItemClickListener) activity;
+            messageAdapterListener = (MessageAdapterListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(e.getMessage() + " - must implement MessageAdapter.OnItemClickListener interface");
         }
     }
-    public interface OnItemClickListener {
+    public interface MessageAdapterListener {
         void onItemClickListener(Message message);
+        void onItemLongClickListener(Message message);
     }
 
     public void setMessagesList(List<Message> messagesList) {
@@ -113,6 +105,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((ReceivedMessageHolder) holder).bind(message);
                 break;
         }
+        holder.itemView.setOnLongClickListener(v->{
+            messageAdapterListener.onItemLongClickListener(message);
+            return true;
+        });
     }
 
 
