@@ -46,4 +46,6 @@
     <string name="roleNameInput">Podaj nazwę roli</string>
     <string name="createRole">TWORZENIE ROLI</string>
     <string name="setRoleUsers">Przydziel użytkowników</string>
+    <string name="connect">POŁĄCZ</string>
+    <string name="disconnect">ROZŁĄCZ</string>
 </resources>

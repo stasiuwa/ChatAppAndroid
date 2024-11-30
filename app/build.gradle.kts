@@ -43,6 +43,7 @@ dependencies {
     implementation("androidx.room:room-testing:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
 
+
     implementation("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
@@ -54,6 +55,15 @@ dependencies {
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+
+    // https://mvnrepository.com/artifact/com.github.davidliu/audioswitch
+//    implementation("com.github.davidliu:audioswitch:89582c47c9a04c62f90aa5e57251af4800a6")
+
+
+//    implementation("io.livekit:livekit-android:2.10.0")
+//    implementation ("io.livekit:livekit-android-compose-components:1.3.0")
+
     implementation("com.auth0.android:jwtdecode:2.0.1")
     implementation("com.google.android.gms:play-services-auth:20.0.1")
 

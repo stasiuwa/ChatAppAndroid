@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import Adapters.UserAdapter;
 import DataAccess.ViewModels.UserViewModel;
 
+// TODO przy edycji roli trzeba wczytać i zaznacyć użytkowników którzy ją posiadają
 public class TechFragment extends Fragment {
     long communityId;
 

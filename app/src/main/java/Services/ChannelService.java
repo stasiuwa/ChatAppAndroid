@@ -4,6 +4,7 @@ import java.util.List;
 
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
+import Data.DTO.LiveKitTokenResponse;
 import Data.DTO.RoleResponseDTO;
 import Data.Models.Message;
 import okhttp3.MultipartBody;
@@ -62,6 +63,13 @@ public interface ChannelService {
             @Part("message") RequestBody requestBody
 //            @Part("file") MultipartBody.Part file
     );
+
+    @GET("/api/channels/{channelId}/voice/join")
+    Call<LiveKitTokenResponse> joinVoiceChannel(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId
+    );
+
     @DELETE("/api/channels/{channelId}/messages/{messageId}")
     Call<Void> deleteMessage(
             @Header("Authorization") String token,

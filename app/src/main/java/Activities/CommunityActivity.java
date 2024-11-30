@@ -473,8 +473,8 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
     /**
-     * Handle LongClick on specific role from RecyclerView - display edit form
-     * @param role
+     * Handle LongClick on specific role from RecyclerView to display create role fragment with loaded role data
+     * @param role - long clicked role
      */
     @Override
     public void onItemLongClickListener(Role role) {
