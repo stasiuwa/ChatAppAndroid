@@ -1,9 +1,11 @@
-package Config;
+package Events;
 
 import android.util.Log;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+
+import Config.env;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.CompositeByteBuf;

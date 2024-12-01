@@ -31,7 +31,7 @@ import Adapters.ChannelAdapter;
 import Adapters.MessageAdapter;
 import Adapters.RoleAdapter;
 import Adapters.UserAdapter;
-import Config.RSocketConnection;
+import Events.RSocketConnection;
 import Config.env;
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
@@ -56,13 +56,12 @@ import Fragments.Community.VoiceChatFragment;
 import Fragments.Settings.ChannelsSettingsFragment;
 import Fragments.Settings.SettingsFragment;
 import Fragments.Settings.TechFragment;
+import Events.RSocketEventHandler;
 import Services.ChannelService;
 import Services.CommunityService;
-import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,6 +91,7 @@ public class CommunityActivity extends AppCompatActivity implements
 
     long communityID;
     long userId;
+
     ChannelViewModel channelViewModel;
     RoleViewModel roleViewModel;
     UserViewModel userViewModel;
@@ -152,7 +152,7 @@ public class CommunityActivity extends AppCompatActivity implements
         token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
         userId = sharedPreferences.getLong("userId", 0);
 
-
+        RSocketEventHandler rSocketEventHandler = new RSocketEventHandler(this, token.getAccessToken(), communityID, userId);
 
         channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
         roleViewModel = new ViewModelProvider(this).get(RoleViewModel.class);
@@ -175,8 +175,8 @@ public class CommunityActivity extends AppCompatActivity implements
 
             subscriber = rSocketConnection.requestStream("/community/" + communityID + "/messages")
                     .subscribe(
-                            event -> Log.d("CommunityActivity", "Otrzymano event: " + event),
-                            error -> Log.e("CommunityActivity", "Błąd subskrypcji", error),
+                            rSocketEventHandler::handleEvent,
+                            rSocketEventHandler::handleError,
                             () -> Log.d("CommunityActivity", "Subskrypcja zakończona")
                     );
         }).start();
