@@ -84,6 +84,11 @@ public class RSocketEventHandler {
         this.channelViewModel = provider.get(ChannelViewModel.class);
         this.messageViewModel = provider.get(MessageViewModel.class);
     }
+
+    /**
+     * Retrieve event type from RSocket stream and pass it to specific function
+     * @param event - event message from server
+     */
     public void handleEvent(String event){
         Log.d("RSocketEventHandler", "Otrzymano event: " + event);
         try {
@@ -115,10 +120,20 @@ public class RSocketEventHandler {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Handle errors from server RSocket stream
+     * @param error
+     */
     public void handleError(Throwable error){
         Log.e("RSocketEventHandler", "Błąd subskrypcji", error);
     }
 
+    /**
+     * Handle MESSAGE _(ACTION)_EVENT
+     * @param action part of event's message "name" after MESSAGE_
+     * @param eventData - whole event's message
+     */
     private void handleMessageEvent(String action, String eventData) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -142,7 +157,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń CHANNEL
+    /**
+     * Handle CHANNEL_(ACTION)_EVENT
+     * @param action part of event's message "name" after CHANNEL
+     * @param eventData - whole event's message
+     */
     private void handleChannelEvent(String action, String eventData) {
         switch (action) {
             case "CREATE_EVENT":
@@ -163,7 +182,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń USER
+    /**
+     * Handle USER_(ACTION)_EVENT
+     * @param action part of event's message "name" after USER
+     * @param eventData - whole event's message
+     */
     private void handleUserEvent(String action, String eventData) {
         switch (action) {
             case "UPDATE_EVENT":
@@ -176,7 +199,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń COMMUNITY
+    /**
+     * Handle COMMUNITY_(ACTION)_EVENT
+     * @param action part of event's message "name" after COMMUNITY
+     * @param eventData - whole event's message
+     */
     private void handleCommunityEvent(String action, String eventData) {
         switch (action) {
             case "DELETE_EVENT":
@@ -193,7 +220,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń MEMBER
+    /**
+     * Handle MEMBER_(ACTION)_EVENT
+     * @param action part of event's message "name" after MEMBER
+     * @param eventData - whole event's message
+     */
     private void handleMemberEvent(String action, String eventData) {
         switch (action) {
             case "CREATE_EVENT":
@@ -210,7 +241,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń REACTION
+    /**
+     * Handle REACTION_(ACTION)_EVENT
+     * @param action part of event's message "name" after REACTION
+     * @param eventData - whole event's message
+     */
     private void handleReactionEvent(String action, String eventData) {
         switch (action) {
             case "CREATE_EVENT":
@@ -227,7 +262,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń ROLE
+    /**
+     * Handle ROLE_(ACTION)_EVENT
+     * @param action part of event's message "name" after ROLE
+     * @param eventData - whole event's message
+     */
     private void handleRoleEvent(String action, String eventData) {
         switch (action) {
             case "CREATE_EVENT":
@@ -248,7 +287,11 @@ public class RSocketEventHandler {
         }
     }
 
-    // Obsługa zdarzeń PARTICIPANT
+    /**
+     * Handle PARTICIPANT_(ACTION)_EVENT
+     * @param action part of event's message "name" after PARTICIPANT
+     * @param eventData - whole event's message
+     */
     private void handleParticipantEvent(String action, String eventData) {
         switch (action) {
             case "CREATE_EVENT":
@@ -265,10 +308,25 @@ public class RSocketEventHandler {
         }
     }
 
+    /**
+     * MESSAGE_ - first part
+     * CREATE_EVENT - second part
+     * Handle unknown "name" part
+     * @param name - first part of event's message
+     * @param eventData - whole event's message
+     */
     private void handleUnknownEvent(String name, String eventData) {
         Log.d("RSocketEventHandler", "Nieznane zdarzenie: " + name + "\ndane: " + eventData);
     }
 
+    /**
+     * MESSAGE_ - first part
+     * CREATE_EVENT - second part
+     * Handle unknown event action,
+     * @param category - first part of event's message "name"
+     * @param action - second part
+     * @param eventData - whole event's message
+     */
     private void handleUnknownAction(String category, String action, String eventData) {
         Log.d("RSocketEventHandler", "Nieznana akcja " + category + ": " + action + "\ndane: " + eventData);
     }
