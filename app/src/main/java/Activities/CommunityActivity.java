@@ -172,7 +172,7 @@ public class CommunityActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 }
             }
-
+//            observing queue /community/id/messages
             subscriber = rSocketConnection.requestStream("/community/" + communityID + "/messages")
                     .subscribe(
                             rSocketEventHandler::handleEvent,
@@ -640,7 +640,7 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
     /**
-     * Send DELETE request to server to remove role from server, on success also from RoleViewModel
+     * Send DELETE request to server to remove role from server, on success delete also from Room via RolesViewModel
      * @param role - specific role to delete
      */
     @Override
@@ -666,8 +666,14 @@ public class CommunityActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Fetch messages for text channel. If lastMessageId is set, fetch messages older than this specific and save to Room via MessageViewModel.
+     * @param channelId - text channel to retrieve messages
+     * @param lastMessageId - id of message to fetch older messages
+     */
     @Override
     public void loadMessagesFromServer(long channelId, Long lastMessageId) {
+//        TODO sprawdzic czy lastmessageId jest inne niz null, wtedy zrobic calla na drugi endpoint z ChannelService
         Call<List<Message>> callFetchMessages = channelService.getFirstMessagesForChannel(
                 "Bearer "+token.getAccessToken(),
                 channelId,
@@ -691,6 +697,11 @@ public class CommunityActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * Send user's message to server API endpoint and create new Message in Room via MessageViewModel.
+     * @param text - text of message
+     * @param channelId - text chat id
+     */
     @Override
     public void sendMessage(String text, long channelId) {
         RequestBody body = RequestBody.create(
