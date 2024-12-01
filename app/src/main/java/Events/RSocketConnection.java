@@ -37,6 +37,10 @@ public class RSocketConnection {
     public boolean isConnected() {
         return isConnected;
     }
+
+    /**
+     * Create RSocket connection to server publisher
+     */
     public void connect() {
 
         if (token == null || token.isEmpty()) {
@@ -65,6 +69,10 @@ public class RSocketConnection {
         });
     }
 
+    /**
+     * Observe specific queue/stream from server RSocket publisher
+     * @param path - URL to specific queue/stream
+     */
     public Flux<String> requestStream(String path) {
         if (rSocket == null || !isConnected) {
             return Flux.error(new IllegalStateException("RSocket connection is not established"));
@@ -82,6 +90,10 @@ public class RSocketConnection {
                 .log();
     }
 
+    /**
+     * Encode Authorization Header
+     * @param token - jwt token
+     */
     private byte[] encodeBearer(String token) {
         ByteBuf metadata = AuthMetadataCodec.encodeMetadata(
                 ByteBufAllocator.DEFAULT,
@@ -101,6 +113,9 @@ public class RSocketConnection {
         return result;
     }
 
+    /**
+     * Disconnect from RSocket server
+     */
     public void close() {
         if (rSocket != null) {
             rSocket.dispose();
@@ -108,6 +123,10 @@ public class RSocketConnection {
         }
     }
 
+    /**
+     * Encode URL to RSocket queue/stream
+     * @param path - URL to queue/stream
+     */
     private ByteBuf encodeRoute(String path) {
 
         CompositeByteBuf compositeMetadata = ByteBufAllocator.DEFAULT.compositeBuffer();

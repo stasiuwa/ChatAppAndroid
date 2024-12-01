@@ -164,7 +164,7 @@ public class CommunityActivity extends AppCompatActivity implements
         new Thread(() -> {
 
             rSocketConnection.connect();
-
+//            Wait for RSocket to connect
             while (!rSocketConnection.isConnected()) {
                 try {
                     Thread.sleep(100);
