@@ -31,6 +31,7 @@ import Adapters.ChannelAdapter;
 import Adapters.MessageAdapter;
 import Adapters.RoleAdapter;
 import Adapters.UserAdapter;
+import Config.RSocketConnection;
 import Config.env;
 import Data.DTO.ChannelDTO;
 import Data.DTO.ChannelResponseDTO;
@@ -57,8 +58,11 @@ import Fragments.Settings.SettingsFragment;
 import Fragments.Settings.TechFragment;
 import Services.ChannelService;
 import Services.CommunityService;
+import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,36 +103,35 @@ public class CommunityActivity extends AppCompatActivity implements
     Button settingsButton, homeButton;
 
     Token token = new Token();
+    public Disposable subscriber;
 
     Retrofit retrofit;
     CommunityService communityService;
     ChannelService channelService;
+
+    RSocketConnection rSocketConnection;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (rSocketConnection != null) {
+            rSocketConnection.close();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_community);
+
         homeButton = findViewById(R.id.communityHomeButton);
         settingsButton = findViewById(R.id.communitySettingsButton);
         navbar = findViewById(R.id.bottom_navbar);
-        channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
-        roleViewModel = new ViewModelProvider(this).get(RoleViewModel.class);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
 
-//        Bundle storing community data
+        //        Bundle storing community data
         communityBundle = new Bundle();
-//        Load token from SharedPreferences
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("communityId", communityID);
-        editor.apply();
-
-        token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
-        userId = sharedPreferences.getLong("userId", 0);
-
-//        Load Community id and name from intent
+        //        Load Community id and name from intent
         Intent intent = getIntent();
         if (intent.hasExtra("communityID")) {
             communityID = intent.getLongExtra("communityID", 1);
@@ -140,6 +143,43 @@ public class CommunityActivity extends AppCompatActivity implements
             communityBundle.putString("communityName", communityName);
         } else Log.d("CommunityActivity", "communityName wasn't passed to activity!");
 
+//        Load token from SharedPreferences
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("app_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("communityId", communityID);
+        editor.apply();
+
+        token.setAccessToken(sharedPreferences.getString("token", "TOKEN NOT FOUND"));
+        userId = sharedPreferences.getLong("userId", 0);
+
+
+
+        channelViewModel = new ViewModelProvider(this).get(ChannelViewModel.class);
+        roleViewModel = new ViewModelProvider(this).get(RoleViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+
+//        SETUP subscriber to server RSocket event publisher
+        rSocketConnection = new RSocketConnection(token.getAccessToken());
+        new Thread(() -> {
+
+            rSocketConnection.connect();
+
+            while (!rSocketConnection.isConnected()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            subscriber = rSocketConnection.requestStream("/community/" + communityID + "/messages")
+                    .subscribe(
+                            event -> Log.d("CommunityActivity", "Otrzymano event: " + event),
+                            error -> Log.e("CommunityActivity", "Błąd subskrypcji", error),
+                            () -> Log.d("CommunityActivity", "Subskrypcja zakończona")
+                    );
+        }).start();
 //        Calling API for full info about Community - channels, roles, members.
         retrofit = new Retrofit.Builder()
                 .baseUrl(env.api)
@@ -151,6 +191,7 @@ public class CommunityActivity extends AppCompatActivity implements
 
         getCommunityFullInfo();
         setupNavbar(communityBundle);
+
 
 //        Button that changes present fragment to SettingsFragment and hides
 //        Pass to SettingsFragment info to display extended options to set (Createing roles, channels etc)
@@ -167,9 +208,10 @@ public class CommunityActivity extends AppCompatActivity implements
 //            Hide settings button after displaying SettingsFragment
             settingsButton.setVisibility(View.INVISIBLE);
         });
-
 //        Button that returns to main page of Community, changes fragment to CommunityWelcomeFragment
-        homeButton.setOnClickListener(v -> setupWelcomeFragment());
+        homeButton.setOnClickListener(v -> {
+            setupWelcomeFragment();
+        });
     }
 
     private void setupWelcomeFragment(){
