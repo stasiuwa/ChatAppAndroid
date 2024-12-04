@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,6 +28,7 @@ import java.util.List;
 import Adapters.ChannelAdapter;
 import Data.DTO.ChannelType;
 import Data.Models.Channel;
+import Data.Models.User;
 import DataAccess.ViewModels.ChannelViewModel;
 
 public class ChannelsSettingsFragment extends Fragment {
@@ -119,16 +121,27 @@ public class ChannelsSettingsFragment extends Fragment {
             channelType = ChannelType.TEXT_CHANNEL;
             createChannelDialog.show();
         });
+        User user = new User();
+
+
 
         dialogButton.setOnClickListener(v -> {
             String channelName = dialogEditText.getText().toString();
             if (channelName.matches("")) dialogLayout.setError("Podaj nazwę kanału!");
             else {
-                channelsListener.addChannel(channelName, channelType.name());
-                createChannelDialog.dismiss();
+                if (canPerformAction("CHANNEL_CREATE", user.getRoles())) {
+                    channelsListener.addChannel(channelName, channelType.name());
+                    createChannelDialog.dismiss();
+                } else {
+                    Toast.makeText(getContext(), "Brak uprawnień!", Toast.LENGTH_SHORT);
+                }
             }
         });
 
         return view;
+    }
+
+    private boolean canPerformAction(String action, List<Long> permissions){
+        return true;
     }
 }

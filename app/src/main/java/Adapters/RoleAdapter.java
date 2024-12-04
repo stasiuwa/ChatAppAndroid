@@ -41,7 +41,9 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         try {
             onItemClickListener = (RoleAdapter.OnItemClickListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(e.getMessage() + " must implements RoleAdapter.OnItemClickListener and OnItemLongClickListener interface");
+            throw new ClassCastException(e.getMessage() +
+                    " must implements RoleAdapter.OnItemClickListener and OnItemLongClickListener interface"
+            );
         }
     }
 
@@ -118,7 +120,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
     public ItemTouchHelper.SimpleCallback getItemTouchHelperCallback() {
         return new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            public boolean onMove(
+                    @NonNull RecyclerView recyclerView,
+                    @NonNull RecyclerView.ViewHolder viewHolder,
+                    @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 

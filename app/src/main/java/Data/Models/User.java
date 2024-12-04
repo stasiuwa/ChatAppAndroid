@@ -32,8 +32,6 @@ public class User {
     @TypeConverters(Data.Models.TypeConverters.class)
     public List<Long> communitiesList;
 
-
-
     @ColumnInfo(name = "Username")
     @JsonProperty("username")
     public String username;

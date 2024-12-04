@@ -17,14 +17,11 @@ import Data.Models.Community;
 public interface CommunityDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addCommunity(Community community);
-
     @Update
     void updateCommunity(Community community);
-
     @Transaction
     @Query("SELECT * FROM communities")
     LiveData<List<Community>> getAllCommunities();
-
     @Delete
     void deleteCommunity(Community community);
 }

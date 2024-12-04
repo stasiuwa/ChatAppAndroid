@@ -34,7 +34,6 @@ public interface CommunityService {
     @POST("/api/communities")
     Call<Community> createCommunity(
             @Header("Authorization") String token,
-//            @Part("file") MultipartBody.Part file, // narazie nie dziala, jebac te pliki
             @Part("community") RequestBody community // JSON
             );
 

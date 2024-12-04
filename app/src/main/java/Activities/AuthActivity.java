@@ -199,6 +199,7 @@ public class AuthActivity extends AppCompatActivity
      * @param context - interface where to save token
      * @param token - jwt token
      */
+//    TODO przeniesc token do Keystore?
     public void saveToken(Context context, String token){
         SharedPreferences sharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

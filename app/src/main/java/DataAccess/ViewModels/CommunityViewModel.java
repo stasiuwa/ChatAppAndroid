@@ -27,10 +27,10 @@ public class CommunityViewModel extends AndroidViewModel {
     }
 
     public void addCommunity(Community community){
-        communityRepository.addCommunity(communityRepository.mapCommunity(community));
+        communityRepository.addCommunity(community);
     }
     public void updateCommunity(Community community){
-        communityRepository.updateCommunity(communityRepository.mapCommunity(community));
+        communityRepository.updateCommunity(community);
     }
     public void deleteCommunity(Community community){
         communityRepository.deleteCommunity(community);

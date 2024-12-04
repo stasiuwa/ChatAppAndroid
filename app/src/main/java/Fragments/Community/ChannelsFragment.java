@@ -42,12 +42,11 @@ public class ChannelsFragment extends Fragment {
             throw new NullPointerException("communityID from fragment's arguments is null");
         }
         channelType = getArguments().getString("type");
-        if (channelType.matches("")) Log.d("ChannelsFragment", "Brak typu kanałów przekazanego w Arguments");
-
         channelAdapter = new ChannelAdapter(requireActivity(), false);
         channelViewModel = new ViewModelProvider(requireActivity()).get(ChannelViewModel.class);
 
 
+        if (channelType.matches("")) Log.d("ChannelsFragment", "Brak typu kanałów przekazanego w Arguments");
         channelViewModel.getChannelsFromCommunity(communityID)
                 .observe(getViewLifecycleOwner(), channels -> {
                     if (channels != null) {

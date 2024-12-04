@@ -53,11 +53,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
         holder.setUsername(user.getUsername());
-
         if (selectedUsers.contains(user.getUserId())) {
-            holder.itemView.setBackgroundColor(activity.getResources().getColor(R.color.light_green)); // Use your color
+            holder.itemView.setBackgroundColor(activity.getResources().getColor(R.color.light_green));
         } else {
-            holder.itemView.setBackgroundColor(activity.getResources().getColor(R.color.colorBackgroundNight)); // Use default color
+            holder.itemView.setBackgroundColor(activity.getResources().getColor(R.color.colorBackgroundNight));
         }
     }
 

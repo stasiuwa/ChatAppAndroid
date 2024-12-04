@@ -28,17 +28,12 @@ public interface ChannelService {
             @Body RequestBody channel
             );
 
-    @PUT("/api/channels/{channelId}")
-    Call<ChannelDTO> editChannel(
-            @Header("Authorization") String token,
-            @Path("channelId") long channelId
-    );
-
     @DELETE("/api/channels/{channelId}")
     Call<Void> deleteChannel(
             @Header("Authorization") String token,
             @Path("channelId") long channelId
     );
+
     @GET("/api/channels/{channelId}/messages")
     Call<List<Message>> getFirstMessagesForChannel(
             @Header("Authorization") String token,
@@ -51,6 +46,11 @@ public interface ChannelService {
             @Path("channelId") long channelId,
             @Query("limit") int limit,
             @Query("before") Long lastMessageId
+    );
+    @PUT("/api/channels/{channelId}")
+    Call<ChannelDTO> editChannel(
+            @Header("Authorization") String token,
+            @Path("channelId") long channelId
     );
     @Multipart
     @POST("/api/channels/{channelId}/messages")

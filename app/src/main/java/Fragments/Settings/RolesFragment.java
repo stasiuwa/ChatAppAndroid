@@ -59,19 +59,17 @@ public class RolesFragment extends Fragment {
             throw new NullPointerException("communityID from fragment's arguments is null");
         }
 
+
         roleViewModel = new ViewModelProvider(requireActivity()).get(RoleViewModel.class);
         roleAdapter = new RoleAdapter(requireActivity());
-
         roleViewModel.getRolesForCommunity(communityId).observe(getViewLifecycleOwner(), roles -> {
             if (roles != null){
                 roleAdapter.setRoleList(roles);
             }
         });
-
         RecyclerView recyclerView = view.findViewById(R.id.roleRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(roleAdapter);
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(roleAdapter.getItemTouchHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 

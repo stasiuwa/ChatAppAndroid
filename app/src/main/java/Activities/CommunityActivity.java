@@ -78,16 +78,6 @@ public class CommunityActivity extends AppCompatActivity implements
         TechFragment.RolesListener,
         TextChatFragment.MessageListener
 {
-    private static final String[] PERMISSIONS = {
-            "ADMINISTRATOR",   // Bit 0
-            "ROLE_MODIFY",     // Bit 1
-            "INVITE_CREATE",   // Bit 2
-            "CHANNEL_CREATE",  // Bit 3
-            "CHANNEL_MODIFY",  // Bit 4
-            "MESSAGE_CREATE",  // Bit 5
-            "MESSAGE_DELETE",  // Bit 6
-            "REACTION_CREATE"  // Bit 7
-    };
 
     long communityID;
     long userId;
@@ -229,7 +219,10 @@ public class CommunityActivity extends AppCompatActivity implements
     private void setupNavbar(Bundle communityBundle){
         navbar.setOnItemSelectedListener( item -> {
             if (item.getItemId() == R.id.navbar_menu_chats) {
-                this.getSupportFragmentManager().popBackStack("uniqueFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                this.getSupportFragmentManager().popBackStack(
+                        "uniqueFrag",
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                );
                 communityBundle.putString("type", ChannelType.TEXT_CHANNEL.name());
                 ChannelsFragment channelsFragment = new ChannelsFragment();
                 channelsFragment.setArguments(communityBundle);
@@ -297,7 +290,6 @@ public class CommunityActivity extends AppCompatActivity implements
 
                         userViewModel.addUser(user);
                     }
-
                     setupWelcomeFragment();
 
                 } else {
@@ -426,19 +418,19 @@ public class CommunityActivity extends AppCompatActivity implements
         CharSequence[] options = {"Reakcja", "Edytuj", "Usuń"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Wybierz opcję")
-                .setItems(options, (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            CharSequence[] emojis = new CharSequence[]{"😊", "😂", "❤️", "😢", "👍", "👎"};
-                            builder
-                                    .setTitle("Wybierz emotkę")
-                                    .setItems(emojis, (dialog2, which2) -> {
-                                        String emoji = (String) emojis[which];
-                                        RequestBody body = RequestBody.create(
-                                                MediaType.parse("application/json"),
-                                                "{\n  \"emoji\": \"" + emoji +  "\"\n}"
-                                        );
+                                                builder.setTitle("Wybierz opcję")
+                                                        .setItems(options, (dialog, which) -> {
+                                                            switch (which) {
+                                                                case 0:
+                                                                    CharSequence[] emojis = new CharSequence[]{"😊", "😂", "❤️", "😢", "👍", "👎"};
+                                                                    builder
+                                                                            .setTitle("Wybierz emotkę")
+                                                                            .setItems(emojis, (dialog2, which2) -> {
+                                                                                String emoji = (String) emojis[which];
+                                                                                RequestBody body = RequestBody.create(
+                                                                                        MediaType.parse("application/json"),
+                                                                                        "{\n  \"emoji\": \"" + emoji +  "\"\n}"
+                                                                                );
 
                                         // Wywołanie API Retrofit
                                         Call<Void> callCreateReaction = channelService.createReaction(
@@ -537,14 +529,10 @@ public class CommunityActivity extends AppCompatActivity implements
         final Dialog roleDetailsDialog = new Dialog(this);
 
         StringBuilder permissions = new StringBuilder();
-
-        // Iterujemy przez bity liczby permissionsValue
-        for (int i = 0; i < PERMISSIONS.length; i++) {
-            if ((role.getPermissionOverwrites() & (1L << i)) != 0) {  // Sprawdzamy, czy bit jest ustawiony
-                if (permissions.length() > 0) {
-                    permissions.append("\n");
-                }
-                permissions.append(PERMISSIONS[i]);
+        for (int i = 0; i < env.PERMISSIONS.length; i++) {
+            if ((role.getPermissionOverwrites() & (1L << i)) != 0) {
+                if (permissions.length() > 0) permissions.append("\n");
+                permissions.append(env.PERMISSIONS[i]);
             }
         }
         if (String.valueOf(permissions).isEmpty()) permissions.append("BRAK");

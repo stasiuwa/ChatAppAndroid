@@ -21,21 +21,6 @@ public class CommunityRepository {
         dao = mCommunityDB.communityDAO();
         allCommunities = dao.getAllCommunities();
     }
-    /**
-     * Mapping CommunityDTO to Community for Room Database
-     * @param community object to mapping
-     * @return new Community object
-     */
-    public Community mapCommunity(Community community){
-        return new Community(
-                community.getCommunityID(),
-                community.getCommunityName(),
-                community.getOwnerID(),
-                community.getImageUrl(),
-                community.getBasePermissions()
-        );
-    }
-//    Communities
     public void addCommunity(Community community){
         CommunityDB.databaseWriteExecutor.execute(() -> {
             dao.addCommunity(community);

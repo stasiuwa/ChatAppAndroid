@@ -59,20 +59,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return (messagesList != null) ? messagesList.size() : 0;
     }
-
+    //        TODO poprawic logige xd sprawdzania czy wiadomosc wyslana przez uzytkownika zalogowanego do aplikacji.
     @Override
     public int getItemViewType(int position) {
         Message message = (Message) messagesList.get(position);
-//        TODO poprawic logige xd sprawdzania czy wiadomosc wyslana przez uzytkownika zalogowanego do aplikacji.
-        if (message.getUserId() == userId) {
-            return VIEW_TYPE_MESSAGE_SENT;
-        }
-//        else if (message.getUserId() == 0){
-//            return VIEW_TYPE_SYSTEM_MESSAGE;
-//        }
-        else {
-            return VIEW_TYPE_MESSAGE_RECEIVED;
-        }
+        if (message.getUserId() == userId) return VIEW_TYPE_MESSAGE_SENT;
+        else return VIEW_TYPE_MESSAGE_RECEIVED;
+
     }
 
     @NonNull
@@ -84,10 +77,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             view = layoutInflater.inflate(R.layout.item_list_message_sent, parent, false);
             return new SentMessageHolder(view);
         }
-//        else if (viewType == VIEW_TYPE_SYSTEM_MESSAGE) {
-//            view = layoutInflater.inflate(R.layout.item_list_message_system, parent, false);
-//            return new ReceivedMessageHolder(view);
-//        }
         else {
             view = layoutInflater.inflate(R.layout.item_list_message_received, parent, false);
             return new ReceivedMessageHolder(view);

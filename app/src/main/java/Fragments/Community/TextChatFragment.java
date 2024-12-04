@@ -108,7 +108,9 @@ public class TextChatFragment extends Fragment{
 
         messageAdapter = new MessageAdapter(requireActivity());
         RecyclerView recyclerView = view.findViewById(R.id.messagesRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(messageAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -121,9 +123,7 @@ public class TextChatFragment extends Fragment{
                 }
             }
         });
-
         messageListener.loadMessagesFromServer(chatID, null);
-
         messageViewModel.getAllMessagesFromChannel(chatID).observe(getViewLifecycleOwner(), messages -> {
             if (messages != null){
                 messageAdapter.setMessagesList(messages);
@@ -135,6 +135,7 @@ public class TextChatFragment extends Fragment{
         Button sendMessageButton = view.findViewById(R.id.messageSendButton);
         sendMessageButton.setOnClickListener(v -> {
             messageListener.sendMessage(messageText.getText().toString(), chatID);
+            recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
 //            Clear messageText value and focus
             messageText.getText().clear();
             messageText.clearFocus();

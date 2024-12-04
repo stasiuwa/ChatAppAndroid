@@ -100,11 +100,8 @@ public class TechFragment extends Fragment {
             permissions = getArguments().getLong("permissions", 0);
             roleId = getArguments().getLong("roleId", 0);
             roleName = getArguments().getString("roleName", "UNKNOWN");
-
             roleNameInput.setText(roleName);
-
             createRoleTitle.setText("EDYCJA ROLI");
-
             setting1Switch.setChecked((permissions & (1L << 0)) != 0);
             setting2Switch.setChecked((permissions & (1L << 1)) != 0);
             setting3Switch.setChecked((permissions & (1L << 2)) != 0);
@@ -147,8 +144,8 @@ public class TechFragment extends Fragment {
             if (roleName.matches("")){
                 roleNameLayout.setError("Podaj nazwe roli!");
             } else {
-                long permissionOverwrites = 0;
 
+                long permissionOverwrites = 224;
                 if (setting1Switch.isChecked()) permissionOverwrites |= 1L << 0;
                 if (setting2Switch.isChecked()) permissionOverwrites |= 1L << 1;
                 if (setting3Switch.isChecked()) permissionOverwrites |= 1L << 2;
@@ -157,7 +154,6 @@ public class TechFragment extends Fragment {
                 if (setting6Switch.isChecked()) permissionOverwrites |= 1L << 5;
                 if (setting7Switch.isChecked()) permissionOverwrites |= 1L << 6;
                 if (setting8Switch.isChecked()) permissionOverwrites |= 1L << 7;
-
                 rolesListener.addRole(roleName, permissionOverwrites, userAdapter.getSelectedUsers());
 
                 Bundle fragmentArgs = new Bundle();

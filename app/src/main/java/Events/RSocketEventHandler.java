@@ -95,7 +95,7 @@ public class RSocketEventHandler {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(event);
             String eventName = jsonNode.get("name").asText();
-            String[] parts = eventName.split("_", 2); // Rozdziel nazwę na dwie części: [Kategoria, Akcja]
+            String[] parts = eventName.split("_", 2);
             if (parts.length < 2) {
                 handleUnknownEvent(eventName, event);
                 return;
